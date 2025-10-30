@@ -6,95 +6,93 @@
 <title>LifeTrack Dashboard</title>
 <style>
   :root{
-    --accent-color:#5063f2;
+    --accent:#5063f2;
     --bg:#f6f8fb;
-    --card-border:#e6e8f2;
+    --card:#e6e8f2;
     --text:#0f1724;
     --muted:#6b7280;
-    --font-family:"Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
-    --font-size:16px;
-    --brightness:1;
+    --font:"Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+    --fs:16px;
   }
   *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; font-family:var(--font-family); font-size:var(--font-size);
-    background:var(--bg); color:var(--text); filter:brightness(var(--brightness));
-  }
-  .container{ max-width:420px; margin:14px auto; padding:14px; }
-  .topbar{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-  .settings-icon{ width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:#fff; border:1.2px solid var(--card-border); cursor:pointer; }
-  .header{ flex:1; background:linear-gradient(135deg,var(--accent-color),#7b61ff); color:#fff; padding:14px; border-radius:10px; text-align:center; }
-  .quick-actions{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:12px 0 18px; }
-  .action-card{ background:#fff; border-radius:12px; padding:14px; display:flex; align-items:center; justify-content:center; min-height:70px; cursor:pointer; border:1.2px solid var(--card-border); font-weight:700; }
-  .screen{ display:none; background:#fff; padding:14px; border-radius:12px; border:1px solid var(--card-border); margin-bottom:14px; text-align:center; }
-  .visible{ display:block; }
-  .btn{ width:100%; max-width:340px; padding:12px 14px; border-radius:12px; border:none; background:var(--accent-color); color:#fff; font-weight:800; cursor:pointer; margin:6px 0; }
-  input, select{ width:100%; max-width:340px; padding:10px; border-radius:10px; border:1.2px solid var(--card-border); margin:6px auto; }
-  .chatbox{ height:220px; overflow:auto; text-align:left; border:1px solid #eef2ff; padding:10px; border-radius:10px; margin-bottom:10px; background:#fbfdff; }
-  #tipsContainer, #medicalFileList { text-align:left; display:none; max-height:320px; overflow:auto; border:1px solid var(--card-border); padding:8px; border-radius:8px; margin-top:10px; background:#fff; }
-  .file-row{ display:flex; justify-content:space-between; align-items:center; padding:8px 4px; border-bottom:1px dashed #f1f5ff; gap:8px; }
-  .file-row button{ padding:6px 8px; border:none; border-radius:8px; cursor:pointer; }
-  .view-btn{ background:#2b6ef6; color:#fff; }
-  .remove-btn{ background:#ef4444; color:#fff; }
-  .file-meta{ font-size:12px; color:var(--muted); }
+  body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:420px;margin:16px auto;padding:14px}
+  .top{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+  .gear{width:44px;height:44px;border-radius:10px;background:#fff;border:1px solid var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .header{flex:1;padding:12px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7b61ff);color:#fff;text-align:center}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}
+  .card{background:#fff;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;min-height:70px;cursor:pointer;border:1px solid var(--card);font-weight:700}
+  .screen{display:none;background:#fff;padding:12px;border-radius:10px;border:1px solid var(--card);margin-bottom:12px}
+  .btn{display:block;width:100%;max-width:340px;margin:8px auto;padding:11px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:800;cursor:pointer}
+  input,select{display:block;width:100%;max-width:340px;margin:8px auto;padding:10px;border-radius:8px;border:1px solid var(--card)}
+  .chatbox{height:220px;overflow:auto;border:1px solid #eef2ff;padding:10px;border-radius:8px;background:#fbfdff}
+  .meta-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+  #tipsCont,#fileList{display:none;max-height:320px;overflow:auto;border:1px solid var(--card);padding:8px;border-radius:8px;background:#fff}
+  .file-row{display:flex;justify-content:space-between;align-items:center;padding:8px 6px;border-bottom:1px dashed #f1f5ff}
+  .file-row button{margin-left:8px;padding:6px 8px;border-radius:8px;border:0;cursor:pointer}
+  .view{background:#2b6ef6;color:#fff}
+  .rem{background:#ef4444;color:#fff}
+  .todo-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--card);border-radius:8px;margin:8px 0;background:#fff}
+  canvas{display:block;margin:10px auto;max-width:100%}
+  .legend{font-size:13px;color:#333;margin:6px 0}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="topbar">
-    <div class="settings-icon" id="settingsIcon" title="App Settings">⚙️</div>
+<div class="wrap">
+  <div class="top">
+    <div class="gear" id="gear">⚙️</div>
     <div class="header">
-      <h1 style="margin:0">LifeTrack Dashboard</h1>
-      <div style="font-weight:600; opacity:0.95">Welcome User</div>
+      <h2 style="margin:0">LifeTrack Dashboard</h2>
+      <div style="opacity:0.95;font-weight:600">Welcome</div>
     </div>
   </div>
 
-  <div class="quick-actions" id="actionGrid">
-    <div class="action-card" onclick="showScreen('chatbot')">💬 Chatbot</div>
-    <div class="action-card" onclick="showScreen('graph')">📊 Mood Graph</div>
-    <div class="action-card" onclick="showScreen('reminders')">✅ Reminders</div>
-    <div class="action-card" onclick="showScreen('timer')">⏱ Timer</div>
-    <div class="action-card" onclick="openMedicalPicker()">📂 Upload Medical Files</div>
-    <div class="action-card" onclick="showScreen('hydration')">💧 Hydration</div>
-    <div class="action-card" onclick="showScreen('sleep')">🌙 Sleep</div>
-    <div class="action-card" onclick="showScreen('meals')">🍽 Meals</div>
+  <div class="grid" id="quickGrid">
+    <div class="card" onclick="show('chat')">💬 Chatbot</div>
+    <div class="card" onclick="show('mood')">📊 Mood</div>
+    <div class="card" onclick="show('rem')">✅ Reminders</div>
+    <div class="card" onclick="show('timer')">⏱ Timer</div>
+    <div class="card" onclick="openPicker()">📂 Upload Medical Files</div>
+    <div class="card" onclick="show('hydration')">💧 Hydration</div>
+    <div class="card" onclick="show('sleep')">🌙 Sleep</div>
+    <div class="card" onclick="show('meals')">🍽 Meals</div>
   </div>
 
-  <input id="medicalFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" multiple style="display:none"/>
-  <div id="medicalFileList"></div>
+  <!-- hidden file input for browsers -->
+  <input id="fileInput" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" style="display:none">
+  <div id="fileList"></div>
 
-  <!-- Chatbot -->
-  <div class="screen" id="chatbot">
-    <h3>Simple Chatbot</h3>
-    <div class="chatbox" id="chatbox"></div>
-    <button class="btn" onclick="sendQuick('weather')">🌦 Weather</button>
-    <button class="btn" onclick="sendQuick('joke')">😂 Joke</button>
-    <button class="btn" onclick="sendQuick('study')">📚 Study Tip</button>
+  <!-- Chat -->
+  <div class="screen" id="chat">
+    <h3>Chatbot</h3>
+    <div id="chatbox" class="chatbox"></div>
+    <button class="btn" onclick="botQuick('weather')">🌦 Weather</button>
+    <button class="btn" onclick="botQuick('joke')">😂 Joke</button>
+    <button class="btn" onclick="botQuick('tip')">📚 Study Tip</button>
   </div>
 
   <!-- Mood -->
-  <div class="screen" id="graph">
-    <h3>Mood Graph</h3>
-    <p>Log mood 1–10</p>
-    <button class="btn" onclick="promptMood()">Enter mood</button>
-    <p>Mood: <strong id="moodValue">5</strong></p>
-    <canvas id="moodChart" width="360" height="160"></canvas>
+  <div class="screen" id="mood">
+    <h3>Mood</h3>
+    <p>Enter mood 1–10</p>
+    <button class="btn" onclick="enterMood()">Enter mood</button>
+    <p>Current: <strong id="moodValue">5</strong></p>
+    <canvas id="moodCanvas" width="360" height="140"></canvas>
   </div>
 
   <!-- Reminders -->
-  <div class="screen" id="reminders">
+  <div class="screen" id="rem">
     <h3>Reminders</h3>
-    <input id="newReminder" type="text" placeholder="Add reminder"/>
-    <button class="btn" onclick="addReminder()">Add</button>
-    <div id="todoList"></div>
+    <input id="remText" type="text" placeholder="Reminder text">
+    <button class="btn" onclick="addRem()">Add</button>
+    <div id="remList"></div>
   </div>
 
   <!-- Timer -->
   <div class="screen" id="timer">
-    <h3>Focus Timer</h3>
-    <input id="minutes" type="number" placeholder="Minutes"/>
-    <select id="alarmChoice"><option value="alarm1">Beep</option><option value="alarm2">Marimba</option><option value="alarm3">Bell</option></select>
+    <h3>Timer</h3>
+    <input id="minutes" type="number" placeholder="Minutes">
+    <select id="alarmSel"><option value="alarm1">Beep</option><option value="alarm2">Marimba</option><option value="alarm3">Bell</option></select>
     <button class="btn" onclick="startTimer()">Start</button>
     <div id="countdown" style="margin-top:8px"></div>
     <audio id="alarm1" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
@@ -104,76 +102,79 @@
 
   <!-- Hydration -->
   <div class="screen" id="hydration">
-    <h3>Hydration Monitor</h3>
-    <input id="waterGoal" type="number" placeholder="Daily goal (ml)" value="2000"/>
-    <input id="waterIntake" type="number" placeholder="Log intake (ml)" value="250"/>
-    <button class="btn" onclick="logWater()">Add intake</button>
-    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
+    <h3>Hydration</h3>
+    <input id="goalWater" type="number" placeholder="Daily goal ml" value="2000">
+    <input id="logWater" type="number" placeholder="Log intake ml" value="250">
+    <button class="btn" onclick="addWater()">Add intake</button>
+    <div class="meta-row">
       <div>Consumed: <strong id="waterConsumed">0</strong> ml</div>
       <div>Remaining: <strong id="waterRemaining">2000</strong> ml</div>
     </div>
-    <input id="waterInterval" type="number" placeholder="Reminder interval (minutes)" value="60"/>
-    <button class="btn" onclick="startWaterReminders()">Start reminders</button>
-    <button class="btn" onclick="stopWaterReminders()">Stop reminders</button>
-    <canvas id="waterChart" width="360" height="120" style="margin-top:10px"></canvas>
+    <input id="waterInterval" type="number" placeholder="Reminder min" value="60">
+    <button class="btn" onclick="startHydration()">Start reminders</button>
+    <button class="btn" onclick="stopHydration()">Stop reminders</button>
+    <canvas id="waterCanvas" width="360" height="100"></canvas>
   </div>
 
   <!-- Sleep -->
   <div class="screen" id="sleep">
-    <h3>Sleep Analytics</h3>
-    <input id="sleepTime" type="time"/>
-    <input id="wakeTime" type="time"/>
+    <h3>Sleep</h3>
+    <input id="sleepStart" type="time">
+    <input id="sleepEnd" type="time">
     <button class="btn" onclick="logSleep()">Log sleep</button>
-    <p>Last: <strong id="lastSleepDuration">0h 0m</strong></p>
-    <p>7-day avg: <strong id="avgSleepDuration">0h 0m</strong></p>
-    <canvas id="sleepChart" width="360" height="120"></canvas>
+    <p>Last: <strong id="lastSleep">0h 0m</strong></p>
+    <p>7-day avg: <strong id="avgSleep">0h 0m</strong></p>
+    <canvas id="sleepCanvas" width="360" height="100"></canvas>
   </div>
 
   <!-- Meals -->
   <div class="screen" id="meals">
-    <h3>Meal Tracking</h3>
-    <input id="mealName" type="text" placeholder="Meal name"/>
-    <input id="mealPortion" type="number" placeholder="Portion (ml or g)"/>
-    <input id="mealCalories" type="number" placeholder="Calories (kcal)"/>
+    <h3>Meals</h3>
+    <input id="mealName" type="text" placeholder="Meal name">
+    <input id="mealPortion" type="number" placeholder="Portion (ml/g)">
+    <input id="mealCalories" type="number" placeholder="Calories (kcal)">
     <button class="btn" onclick="addMeal()">Add meal</button>
-    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
-      <div>Today kcal: <strong id="todayCalories">0</strong></div>
+    <div class="meta-row">
+      <div>Today kcal: <strong id="todayKcal">0</strong></div>
       <div>Today portions: <strong id="todayPortions">0</strong></div>
     </div>
-    <p style="margin-top:10px">Recent entries</p>
+
+    <p>Recent</p>
     <div id="mealList"></div>
 
-    <p style="margin-top:12px">Healthy tips</p>
-    <button class="btn" onclick="toggleTips()">Show/Hide 50 Healthy Food Tips</button>
-    <div id="tipsContainer"></div>
+    <button class="btn" onclick="toggleTips()">Show/Hide 50 Tips</button>
+    <div id="tipsCont"></div>
 
-    <p style="margin-top:12px">Meal chart</p>
-    <canvas id="mealsChart" width="360" height="240" style="border-radius:8px;background:#fff"></canvas>
+    <p>Meal pie</p>
+    <canvas id="pieCanvas" width="360" height="240" style="background:#fff;border-radius:8px"></canvas>
   </div>
 </div>
 
 <script>
 /* ---------- Utilities ---------- */
-function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-  const el = document.getElementById(id); if(el) el.style.display = 'block';
-  hideTips(); hideMedicalFiles();
-}
+function $(id){ return document.getElementById(id) }
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.style.display='none'); const el=$(id); if(el) el.style.display='block'; hideTips(); hideFiles(); }
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
-/* ---------- Init ---------- */
+/* ---------- Initialization ---------- */
+let waterConsumed = 0, waterTimer = null;
+let mood = 5, moodCanvas, moodCtx;
+let sleepLogs = [];
+let selectedFiles = [];
+
 window.onload = function(){
-  // default visible
-  showScreen('chatbot');
+  // show default
+  show('chat');
+  moodCanvas = $('moodCanvas'); moodCtx = moodCanvas.getContext('2d');
   // restore water
-  try{ waterConsumed = Number(localStorage.getItem('waterConsumed')||0); }catch(e){ waterConsumed = 0; }
+  try{ waterConsumed = Number(localStorage.getItem('lt_water')||0) }catch(e){ waterConsumed=0 }
   updateWaterUI();
-  drawMoodChart();
-  drawSleepChart();
+  drawMood();
+  drawSleep();
   renderMeals();
 };
 
-/* ---------- Chatbot (50 jokes, 50 tips) ---------- */
+/* ---------- Chatbot content ---------- */
 const jokes = [
   "Why don’t skeletons fight? They don’t have the guts!",
   "Why did the math book look sad? It had too many problems.",
@@ -227,7 +228,7 @@ const jokes = [
   "Why did the belt get arrested? It held up a pair of pants!",
   "Why did the computer sneeze? It had a virus!"
 ];
-const studyTips = [
+const tips = [
   "Break study sessions into 25-minute chunks with 5-minute breaks.",
   "Teach what you learn — explaining helps retention.",
   "Use flashcards for active recall.",
@@ -279,145 +280,132 @@ const studyTips = [
   "Reflect on what worked and what didn’t.",
   "Balance study with exercise and relaxation."
 ];
-function sendQuick(type){
-  const chatbox = document.getElementById('chatbox');
-  let userText="", reply="";
-  if(type==='weather'){ userText="What's the weather?"; reply="Sunny and 28°C (example)."; }
-  else if(type==='joke'){ userText="Tell me a joke"; reply=jokes[Math.floor(Math.random()*jokes.length)]; }
-  else if(type==='study'){ userText="Give me a study tip"; reply=studyTips[Math.floor(Math.random()*studyTips.length)]; }
-  chatbox.innerHTML += `<p style="margin:6px 0"><strong>You:</strong> ${escapeHtml(userText)}</p><p style="margin:6px 0"><strong>Bot:</strong> ${escapeHtml(reply)}</p>`;
-  chatbox.scrollTop = chatbox.scrollHeight;
+function botQuick(t){
+  const box = $('chatbox');
+  let user='', reply='';
+  if(t==='weather'){ user="What's the weather?"; reply="Sunny and 28°C (example)."; }
+  else if(t==='joke'){ user="Tell me a joke"; reply=jokes[Math.floor(Math.random()*jokes.length)]; }
+  else { user="Study tip"; reply=tips[Math.floor(Math.random()*tips.length)]; }
+  box.innerHTML += `<p style="margin:6px 0"><strong>You:</strong> ${escapeHtml(user)}</p><p style="margin:6px 0"><strong>Bot:</strong> ${escapeHtml(reply)}</p>`;
+  box.scrollTop = box.scrollHeight;
 }
 
 /* ---------- Reminders ---------- */
-function addReminder(){
-  const text = document.getElementById('newReminder').value.trim();
-  if(!text) return;
-  const container = document.getElementById('todoList');
-  const el = document.createElement('div'); el.className='todo-item';
-  el.innerHTML = `<span>${escapeHtml(text)}</span><div><button onclick="this.closest('.todo-item').remove()">Delete</button></div>`;
-  container.prepend(el);
-  document.getElementById('newReminder').value='';
-}
-
-/* ---------- Mood chart ---------- */
-let moodValue = 5;
-function promptMood(){
-  const value = prompt("Enter mood 1-10:","5");
-  const num = Number(value);
-  if(num>=1 && num<=10){ moodValue = num; document.getElementById('moodValue').textContent = num; drawMoodChart(); }
-  else alert("Enter a number 1-10");
-}
-function drawMoodChart(){
-  const canvas = document.getElementById('moodChart'); const ctx = canvas.getContext('2d');
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  const width = (moodValue/10) * (canvas.width-40);
-  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-color') || '#5063f2';
-  ctx.fillRect(20, canvas.height/2-20, width, 40);
-  ctx.fillStyle = '#555'; ctx.font = '14px system-ui';
-  ctx.fillText(`Mood: ${moodValue}`, 20, canvas.height/2-30);
+function addRem(){
+  const t=$('remText').value.trim(); if(!t) return;
+  const el=document.createElement('div'); el.className='todo-item'; el.innerHTML=`<div>${escapeHtml(t)}</div><div><button onclick="this.closest('.todo-item').remove()">Delete</button></div>`;
+  $('remList').prepend(el); $('remText').value='';
 }
 
 /* ---------- Timer ---------- */
 function startTimer(){
-  const minutes = parseInt(document.getElementById('minutes').value,10);
-  if(isNaN(minutes)||minutes<=0) return alert('Enter minutes');
-  let seconds = minutes*60;
-  const countdown = document.getElementById('countdown');
-  const choice = document.getElementById('alarmChoice').value;
-  const alarm = document.getElementById(choice);
-  const t = setInterval(()=>{
-    const m = Math.floor(seconds/60), s = seconds%60;
-    countdown.textContent = `${m}:${s<10?'0':''}${s}`;
-    if(--seconds < 0){ clearInterval(t); try{ alarm.currentTime=0; alarm.play(); }catch(e){} countdown.textContent = 'Done'; }
-  },1000);
+  const m = parseInt($('minutes').value,10); if(isNaN(m)||m<=0) return alert('Enter minutes');
+  let s = m*60; const out=$('countdown');
+  const choice = $('alarmSel').value;
+  const alarm = $(choice);
+  const id = setInterval(()=>{ const mm=Math.floor(s/60), ss=s%60; out.textContent = `${mm}:${ss<10?'0':''}${ss}`; if(--s<0){ clearInterval(id); try{ alarm.currentTime=0; alarm.play(); }catch(e){} out.textContent='Done' }},1000);
 }
 
 /* ---------- Hydration ---------- */
-let waterConsumed = 0; let waterReminderTimer = null;
-function updateWaterUI(){ const goal = Number(document.getElementById('waterGoal').value || 0); document.getElementById('waterConsumed').textContent = waterConsumed; document.getElementById('waterRemaining').textContent = Math.max(goal-waterConsumed,0); drawWaterChart(goal, waterConsumed); }
-function logWater(){ const intake = Number(document.getElementById('waterIntake').value || 0); if(intake<=0) return alert('Enter ml'); waterConsumed += intake; try{ localStorage.setItem('waterConsumed', String(waterConsumed)); }catch(e){} updateWaterUI(); }
-function startWaterReminders(){ const mins = Number(document.getElementById('waterInterval').value || 0); if(mins<=0) return alert('Enter minutes'); if(waterReminderTimer) clearInterval(waterReminderTimer); waterReminderTimer = setInterval(()=> alert('Hydration reminder'), mins*60000); alert('Hydration reminders started'); }
-function stopWaterReminders(){ if(waterReminderTimer){ clearInterval(waterReminderTimer); waterReminderTimer=null; alert('Hydration reminders stopped'); } }
-function drawWaterChart(goal, consumed){ const canvas=document.getElementById('waterChart'); const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); const ratio = goal>0? Math.min(consumed/goal,1):0; const w = (canvas.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20, canvas.height/2-12, w, 24); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w, canvas.height/2-12, canvas.width-40-w, 24); ctx.fillStyle='#555'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`, 20, canvas.height/2-20); }
+let hydrationReminder = null;
+function updateWaterUI(){
+  const goal = Number($('goalWater').value||0);
+  $('waterConsumed').textContent = waterConsumed;
+  $('waterRemaining').textContent = Math.max(goal-waterConsumed,0);
+  drawWater();
+}
+function addWater(){ const v=Number($('logWater').value||0); if(v<=0) return alert('Enter ml'); waterConsumed+=v; try{ localStorage.setItem('lt_water', String(waterConsumed)); }catch(e){} updateWaterUI(); }
+function startHydration(){ const m=Number($('waterInterval').value||0); if(m<=0) return alert('Enter minutes'); if(hydrationReminder) clearInterval(hydrationReminder); hydrationReminder = setInterval(()=> alert('Hydration reminder'), m*60000); alert('Hydration reminders started'); }
+function stopHydration(){ if(hydrationReminder){ clearInterval(hydrationReminder); hydrationReminder = null; alert('Hydration reminders stopped'); } }
+function drawWater(){
+  const canvas=$('waterCanvas'), ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const goal=Number($('goalWater').value||0), consumed=waterConsumed;
+  const ratio = goal>0? Math.min(consumed/goal,1):0;
+  const w = (canvas.width-40)*ratio;
+  ctx.fillStyle='#34d399'; ctx.fillRect(20, canvas.height/2-10, w, 20);
+  ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w, canvas.height/2-10, canvas.width-40-w, 20);
+  ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`, 20, canvas.height/2-18);
+}
 
 /* ---------- Sleep ---------- */
-const sleepLogs = [];
 function logSleep(){
-  const s=document.getElementById('sleepTime').value, w=document.getElementById('wakeTime').value;
-  if(!s||!w) return alert('Select both');
-  const [sh,sm]=s.split(':').map(Number), [wh,wm]=w.split(':').map(Number);
-  let start=sh*60+sm, end=wh*60+wm; if(end<=start) end+=24*60;
-  const mins=end-start, hours=mins/60;
-  document.getElementById('lastSleepDuration').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`;
-  const today = new Date().toISOString().slice(0,10);
-  sleepLogs.push({date:today, hours});
-  const last7 = sleepLogs.slice(-7); const avg = last7.reduce((a,b)=>a+b.hours,0)/last7.length;
-  document.getElementById('avgSleepDuration').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`;
-  drawSleepChart();
+  const s=$('sleepStart').value, e=$('sleepEnd').value; if(!s||!e) return alert('Select times');
+  const [sh,sm]=s.split(':').map(Number), [eh,em]=e.split(':').map(Number);
+  let start = sh*60+sm, end = eh*60+em; if(end<=start) end+=24*60;
+  const mins = end-start, hours = mins/60;
+  $('lastSleep').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`;
+  const d = new Date().toISOString().slice(0,10);
+  sleepLogs.push({date:d,hours});
+  const last7 = sleepLogs.slice(-7);
+  const avg = last7.reduce((a,b)=>a+b.hours,0)/ (last7.length||1);
+  $('avgSleep').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`;
+  drawSleep();
 }
-function drawSleepChart(){ const canvas=document.getElementById('sleepChart'); const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); const last7 = sleepLogs.slice(-7); if(!last7.length) return; const barW = Math.max(14, (canvas.width-40)/last7.length - 8); last7.forEach((l,i)=>{ const h = Math.min(12, l.hours)/12 * (canvas.height-40); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+8), canvas.height-20-h, barW, h); ctx.fillStyle='#555'; ctx.font='10px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+8), canvas.height-6); }); }
+function drawSleep(){
+  const c=$('sleepCanvas'), ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  const last7 = sleepLogs.slice(-7); if(!last7.length) return;
+  const barW = Math.max(12, (c.width-40)/last7.length - 6);
+  last7.forEach((l,i)=>{ const h = Math.min(12,l.hours)/12 * (c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+6), c.height-12-h, barW, h); ctx.fillStyle='#333'; ctx.font='10px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+6), c.height-2); });
+}
 
-/* ---------- Meals: storage, list, pie chart ---------- */
-function getTodayKey(){ return 'meals_' + (new Date().toISOString().slice(0,10)); }
-function loadMeals(){ try{ return JSON.parse(localStorage.getItem(getTodayKey())||'[]'); }catch(e){ return []; } }
-function saveMeals(list){ localStorage.setItem(getTodayKey(), JSON.stringify(list)); }
+/* ---------- Meals: storage & list ---------- */
+function mealsKey(){ return 'lt_meals_' + (new Date()).toISOString().slice(0,10) }
+function loadMeals(){ try{ return JSON.parse(localStorage.getItem(mealsKey())||'[]') }catch(e){ return [] } }
+function saveMeals(list){ localStorage.setItem(mealsKey(), JSON.stringify(list)) }
 function renderMeals(){
-  const list = loadMeals(); const container = document.getElementById('mealList'); container.innerHTML=''; let totalCalories=0, totalPortions=0;
-  list.slice().reverse().forEach(m=>{ const el=document.createElement('div'); el.className='todo-item'; el.style.display='flex'; el.style.justifyContent='space-between'; el.style.alignItems='center'; el.style.padding='8px'; el.style.border='1px solid var(--card-border)'; el.style.borderRadius='8px'; el.style.margin='6px 0'; el.innerHTML = `<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div class="file-meta">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div><div><button onclick="removeMeal(${m.id})">Delete</button></div>`; container.appendChild(el); totalCalories += Number(m.calories||0); totalPortions += Number(m.portion||0); });
-  document.getElementById('todayCalories').textContent = totalCalories;
-  document.getElementById('todayPortions').textContent = totalPortions;
-  drawMealsPie(totalCalories);
+  const list=loadMeals(), container=$('mealList'); container.innerHTML=''; let totalC=0,totalP=0;
+  list.slice().reverse().forEach(m=>{
+    const div=document.createElement('div'); div.className='todo-item';
+    div.innerHTML=`<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div style="font-size:12px;color:${'#6b7280'}">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div><div><button onclick="removeMeal(${m.id})">Delete</button></div>`;
+    container.appendChild(div);
+    totalC += Number(m.calories||0); totalP += Number(m.portion||0);
+  });
+  $('todayKcal').textContent = totalC; $('todayPortions').textContent = totalP;
+  drawPie(totalC);
 }
 function addMeal(){
-  const name = document.getElementById('mealName').value.trim();
-  const portion = Number(document.getElementById('mealPortion').value||0);
-  const calories = Number(document.getElementById('mealCalories').value||0);
+  const name=$('mealName').value.trim(), portion=Number($('mealPortion').value||0), calories=Number($('mealCalories').value||0);
   if(!name) return alert('Enter meal name');
-  const list = loadMeals(); list.push({id:Date.now(), name, portion, calories, ts:Date.now()}); saveMeals(list);
-  document.getElementById('mealName').value=''; document.getElementById('mealPortion').value=''; document.getElementById('mealCalories').value='';
+  const list=loadMeals(); list.push({id:Date.now(),name,portion,calories,ts:Date.now()}); saveMeals(list);
+  $('mealName').value=''; $('mealPortion').value=''; $('mealCalories').value='';
   renderMeals();
 }
-function removeMeal(id){ let list = loadMeals(); list = list.filter(m=>m.id !== id); saveMeals(list); renderMeals(); }
+function removeMeal(id){
+  let list=loadMeals(); list=list.filter(x=>x.id!==id); saveMeals(list); renderMeals();
+}
 
-/* ---------- Pie chart implementation (reliable) ---------- */
-function drawMealsPie(totalCalories){
-  const canvas = document.getElementById('mealsChart'); const ctx = canvas.getContext('2d');
+/* ---------- Full circular pie drawing (consumed vs remaining) ---------- */
+function drawPie(totalCalories){
+  const canvas=$('pieCanvas'), ctx=canvas.getContext('2d');
   ctx.clearRect(0,0,canvas.width,canvas.height);
   const target = 2000;
   const consumed = Math.min(totalCalories, target);
   const remaining = Math.max(target - consumed, 0);
-  const centerX = canvas.width/2;
-  const centerY = canvas.height/2;
-  const radius = Math.min(canvas.width, canvas.height) * 0.35;
+  const slices = [{label:'Consumed', value:consumed, color:'#ff9f43'},{label:'Remaining', value:remaining, color:'#e9eefb'}];
+  const total = slices.reduce((s,x)=>s+x.value,0) || 1;
+  const cx = canvas.width/2, cy = canvas.height/2, r = Math.min(canvas.width, canvas.height) * 0.38;
+  let start = -Math.PI/2;
   // background
-  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
-  // draw consumed slice
-  const start = -Math.PI/2;
-  const consumedAngle = (consumed / (consumed + remaining || 1)) * Math.PI*2;
-  const endConsumed = start + consumedAngle;
-  // consumed
-  ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, start, endConsumed); ctx.closePath();
-  ctx.fillStyle = '#ff9f43'; ctx.fill();
-  // remaining
-  ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, endConsumed, start + Math.PI*2); ctx.closePath();
-  ctx.fillStyle = '#e9eefb'; ctx.fill();
-  // donut hole
-  ctx.beginPath(); ctx.fillStyle = '#fff'; ctx.arc(centerX, centerY, radius*0.55, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  slices.forEach(s=>{
+    const angle = (s.value/total) * Math.PI * 2;
+    const end = start + angle;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath();
+    ctx.fillStyle = s.color; ctx.fill();
+    ctx.strokeStyle='#ffffff'; ctx.lineWidth=1; ctx.stroke();
+    start = end;
+  });
   // center text
-  ctx.fillStyle = '#333'; ctx.font = 'bold 14px system-ui'; ctx.textAlign = 'center';
-  ctx.fillText(`${consumed} kcal`, centerX, centerY - 6);
-  ctx.font = '12px system-ui'; ctx.fillText(`of ${target} kcal`, centerX, centerY + 14);
+  ctx.fillStyle='#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center';
+  ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14);
   // legend
-  const legendX = 12, legendY = 12;
-  ctx.fillStyle = '#ff9f43'; ctx.fillRect(legendX, legendY, 12, 12);
-  ctx.fillStyle = '#333'; ctx.font = '12px system-ui'; ctx.textAlign = 'left'; ctx.fillText(`Consumed ${consumed} kcal`, legendX + 18, legendY + 10);
-  ctx.fillStyle = '#e9eefb'; ctx.fillRect(legendX, legendY + 18, 12, 12);
-  ctx.fillStyle = '#333'; ctx.fillText(`Remaining ${remaining} kcal`, legendX + 18, legendY + 30);
+  ctx.textAlign='left'; const lx=12, ly=12;
+  slices.forEach((s,i)=>{ const y = ly + i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); });
 }
 
-/* ---------- Tips (50) ---------- */
-const mealTips = [
+/* ---------- Tips display ---------- */
+const tipList = [
   "Eat a colorful plate — fruits and vegetables of different colors.",
   "Include lean protein with every meal (eggs, legumes, fish, chicken).",
   "Choose whole grains over refined grains.",
@@ -471,52 +459,66 @@ const mealTips = [
   "Use smaller plates to help portion control.",
   "Celebrate small nutrition wins each day."
 ];
-function toggleTips(){
-  const c=document.getElementById('tipsContainer');
-  if(c.style.display==='block'){ c.style.display='none'; c.innerHTML=''; return; }
-  c.innerHTML = mealTips.map((t,i)=>`<div style="padding:8px 6px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${escapeHtml(t)}</div>`).join('');
-  c.style.display='block';
-}
-function hideTips(){ const c=document.getElementById('tipsContainer'); c.style.display='none'; c.innerHTML=''; }
+function toggleTips(){ const c=$('tipsCont'); if(c.style.display==='block'){ c.style.display='none'; c.innerHTML=''; return } c.innerHTML = tipList.map((t,i)=>`<div style="padding:6px 4px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${escapeHtml(t)}</div>`).join(''); c.style.display='block' }
+function hideTips(){ const c=$('tipsCont'); c.style.display='none'; c.innerHTML='' }
 
-/* ---------- Medical file picker (browser + WebView signal) ---------- */
-let selectedFiles = [];
-function openMedicalPicker(){
-  const input = document.getElementById('medicalFile');
-  try{ input.value=''; input.click(); setTimeout(()=>{ if(!input.files.length) sendToApp({action:"REQUEST_FILE_PICKER"}); },600); }catch(e){ sendToApp({action:"REQUEST_FILE_PICKER"}); }
+/* ---------- File picker (browser + AppInventor signal) ---------- */
+function openPicker(){
+  const input = $('fileInput');
+  try{
+    input.value=''; input.click();
+    setTimeout(()=>{ if(!input.files.length){ // likely blocked in WebViewer
+      sendToApp({action:'REQUEST_FILE_PICKER'});
+    }},600);
+  }catch(e){
+    sendToApp({action:'REQUEST_FILE_PICKER'});
+  }
 }
-document.getElementById('medicalFile').addEventListener('change', function(){
+$('fileInput').addEventListener('change', function(){
   const files = Array.from(this.files||[]);
   if(!files.length) return;
   selectedFiles = selectedFiles.concat(files);
-  displaySelectedFiles(selectedFiles);
+  showFiles(selectedFiles);
   sendToApp({medicalFiles: selectedFiles.map(f=>({name:f.name,size:f.size,type:f.type}))});
 });
-function displaySelectedFiles(files){
-  const list = document.getElementById('medicalFileList');
-  list.style.display = 'block'; list.innerHTML = '';
-  files.forEach((f,idx)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div class="file-meta">${Math.round(f.size/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div>`; const actions=document.createElement('div'); const v=document.createElement('button'); v.className='view-btn'; v.textContent='View'; v.onclick=()=>{ const url=URL.createObjectURL(f); window.open(url,'_blank'); setTimeout(()=>URL.revokeObjectURL(url),60000); }; const r=document.createElement('button'); r.className='remove-btn'; r.textContent='Remove'; r.onclick=()=>{ selectedFiles.splice(idx,1); displaySelectedFiles(selectedFiles); sendToApp({medicalFiles:selectedFiles.map(x=>({name:x.name,size:x.size,type:x.type}))}); }; actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); list.appendChild(row); });
+function showFiles(list){
+  const box = $('fileList'); box.style.display='block'; box.innerHTML='';
+  list.forEach((f,i)=>{
+    const row = document.createElement('div'); row.className='file-row';
+    row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round(f.size/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div>`;
+    const actions = document.createElement('div');
+    const v = document.createElement('button'); v.className='view'; v.textContent='View'; v.onclick=()=>{ const url=URL.createObjectURL(f); window.open(url,'_blank'); setTimeout(()=>URL.revokeObjectURL(url),60000); };
+    const r = document.createElement('button'); r.className='rem'; r.textContent='Remove'; r.onclick=()=>{ selectedFiles.splice(i,1); showFiles(selectedFiles); sendToApp({medicalFiles:selectedFiles.map(x=>({name:x.name,size:x.size,type:x.type}))}); };
+    actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); box.appendChild(row);
+  });
 }
-function hideMedicalFiles(){ const list=document.getElementById('medicalFileList'); list.style.display='none'; list.innerHTML=''; }
-function sendToApp(obj){ const json = JSON.stringify(obj); try{ if(window.AppInventor && typeof window.AppInventor.setWebViewString==='function') window.AppInventor.setWebViewString(json); }catch(e){} try{ if(window.WebViewInterface && typeof window.WebViewInterface.postMessage==='function') window.WebViewInterface.postMessage(json); }catch(e){} try{ if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor && typeof window.webkit.messageHandlers.AppInventor.postMessage==='function') window.webkit.messageHandlers.AppInventor.postMessage(json); }catch(e){} }
-
-/* ---------- Expose a small handler for App Inventor to send JSON back (if needed) ---------- */
-window.addEventListener('message', function(e){
-  try{
-    const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-    if(data && data.medicalFiles) displaySelectedFilesFromJson(data.medicalFiles);
-  }catch(err){}
-});
-function displaySelectedFilesFromJson(list){
-  // list is array of {name,size,type,uri} from App Inventor; show names
-  const container = document.getElementById('medicalFileList'); container.style.display='block'; container.innerHTML='';
-  list.forEach((f,idx)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML=`<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div class="file-meta">${Math.round((f.size||0)/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div><div><button class="view-btn" onclick="openUri('${escapeHtml(f.uri||'')}')">Open</button><button class="remove-btn" onclick="this.closest('.file-row').remove()">Remove</button></div>`; container.appendChild(row); });
+function hideFiles(){ const b=$('fileList'); b.style.display='none'; b.innerHTML='' }
+function sendToApp(obj){
+  const json = JSON.stringify(obj);
+  try{ if(window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') window.AppInventor.setWebViewString(json); }catch(e){}
+  try{ if(window.WebViewInterface && typeof window.WebViewInterface.postMessage === 'function') window.WebViewInterface.postMessage(json); }catch(e){}
+  try{ if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor && typeof window.webkit.messageHandlers.AppInventor.postMessage === 'function') window.webkit.messageHandlers.AppInventor.postMessage(json); }catch(e){}
+}
+// allow App Inventor to post a message (webview implementations vary)
+window.addEventListener('message', function(ev){ try{ const data = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data; if(data && data.medicalFiles) displayFilesFromJson(data.medicalFiles); }catch(e){} });
+function displayFilesFromJson(list){
+  // expected list of objects {name,size,type,uri}
+  const box = $('fileList'); box.style.display='block'; box.innerHTML='';
+  list.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round((f.size||0)/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div><div><button class="view" onclick="openUri('${escapeHtml(f.uri||'')}')">Open</button><button class="rem" onclick="this.closest('.file-row').remove()">Remove</button></div>`; box.appendChild(row); });
 }
 function openUri(u){ if(!u) return alert('No URI'); try{ window.open(u,'_blank'); }catch(e){ alert('Cannot open URI'); } }
 
-/* ---------- Storage helper to persist meals and update pie on load ---------- */
-function renderMealsOnLoad(){ renderMeals(); }
-renderMealsOnLoad();
+/* ---------- Helpers for drawing ---------- */
+function drawMood(){ const c=$('moodCanvas'), ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const w=(mood/10) * (c.width-40); ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#5063f2'; ctx.fillRect(20, c.height/2-16, w, 32); ctx.fillStyle='#333'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${mood}`, 20, c.height/2-26) }
+function enterMood(){ const v = prompt('Enter mood 1-10','5'); const n=Number(v); if(n>=1 && n<=10){ mood=n; $('moodValue').textContent = n; drawMood(); } else alert('Enter 1-10') }
+
+/* ---------- Expose small API if needed ---------- */
+window.LifeTrack = { addMeal, renderMeals, sendToApp };
+
+/* ---------- Ensure functions available in older WebViews ---------- */
+try{ if(!window.AppInventor) window.AppInventor = window.AppInventor || {}; }catch(e){}
+
+/* ---------- End ---------- */
 </script>
 </body>
 </html>
