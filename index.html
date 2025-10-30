@@ -20,56 +20,21 @@
   body{
     margin:0; font-family:var(--font-family); font-size:var(--font-size);
     background:var(--bg); color:var(--text); filter:brightness(var(--brightness));
-    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
   }
   .container{ max-width:420px; margin:14px auto; padding:14px; }
   .topbar{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-  .settings-icon{
-    width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center;
-    background:#fff; border:1.2px solid var(--card-border); cursor:pointer; box-shadow:0 6px 16px rgba(16,24,40,0.06);
-    font-size:20px;
-  }
-  .header{
-    flex:1; background:linear-gradient(135deg,var(--accent-color),#7b61ff);
-    color:#fff; padding:14px; border-radius:10px; text-align:center; box-shadow:0 12px 34px rgba(16,24,40,0.10);
-  }
-  .header h1{ margin:0; font-size:24px; font-weight:800; }
-  .header p{ margin:6px 0 0; font-weight:600; font-size:14px; opacity:0.95; }
-
-  .settings-panel{ display:none; background:#fff; padding:12px; border-radius:10px; border:1px solid var(--card-border); margin-bottom:12px; box-shadow:0 10px 24px rgba(16,24,40,0.06); }
-  .settings-row{ display:flex; flex-direction:column; gap:8px; margin-bottom:10px; text-align:left; }
-  .settings-row label{ font-weight:700; font-size:13px; color:var(--text); }
-  .font-sample{ margin-top:6px; padding:8px; border-radius:8px; background:#fbfdff; border:1px dashed #eef2ff; color:var(--muted); font-size:14px; }
-
+  .settings-icon{ width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:#fff; border:1.2px solid var(--card-border); cursor:pointer; }
+  .header{ flex:1; background:linear-gradient(135deg,var(--accent-color),#7b61ff); color:#fff; padding:14px; border-radius:10px; text-align:center; }
   .quick-actions{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:12px 0 18px; }
-  .action-card{
-    background:#fff; border-radius:12px; padding:14px; display:flex; align-items:center; justify-content:center;
-    text-align:center; min-height:80px; cursor:pointer; border:1.2px solid var(--card-border);
-    box-shadow:0 8px 20px rgba(16,24,40,0.06); font-weight:700; color:var(--text);
-  }
-  .action-card:active{ transform:scale(0.98); }
-
-  .screen{ display:none; background:#fff; padding:14px; border-radius:12px; border:1px solid var(--card-border); box-shadow:0 8px 24px rgba(16,24,40,0.06); margin-bottom:14px; text-align:center; }
-  h3{ margin:6px 0 12px; font-size:18px; }
-  .sub-label{ color:var(--muted); font-size:13px; margin-bottom:8px; }
-
+  .action-card{ background:#fff; border-radius:12px; padding:14px; display:flex; align-items:center; justify-content:center; min-height:70px; cursor:pointer; border:1.2px solid var(--card-border); font-weight:700; }
+  .screen{ display:none; background:#fff; padding:14px; border-radius:12px; border:1px solid var(--card-border); margin-bottom:14px; text-align:center; }
+  .visible{ display:block; }
+  .btn{ width:100%; max-width:340px; padding:12px 14px; border-radius:12px; border:none; background:var(--accent-color); color:#fff; font-weight:800; cursor:pointer; margin:6px 0; }
+  input, select{ width:100%; max-width:340px; padding:10px; border-radius:10px; border:1.2px solid var(--card-border); margin:6px auto; }
   .chatbox{ height:220px; overflow:auto; text-align:left; border:1px solid #eef2ff; padding:10px; border-radius:10px; margin-bottom:10px; background:#fbfdff; }
-  .input-area{ display:flex; flex-direction:column; gap:8px; align-items:center; }
-
-  .btn{ width:100%; max-width:340px; padding:12px 14px; border-radius:12px; border:none; background:var(--accent-color); color:#fff; font-weight:800; cursor:pointer; box-shadow:0 8px 20px rgba(80,99,242,0.16); font-size:15px; }
-  input[type="text"], input[type="number"], input[type="time"], select, input[type="range"], input[type="color"]{
-    width:100%; max-width:340px; padding:10px; border-radius:10px; border:1.2px solid var(--card-border); font-size:14px; margin:6px auto;
-  }
-  .todo-item{ display:flex; justify-content:space-between; align-items:center; border-radius:8px; padding:8px; border:1px solid var(--card-border); margin:8px 0; background:#fff; }
-  .todo-item button{ background:#ef4444; color:#fff; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; }
-
-  .summary{ display:flex; gap:10px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
-  .summary .stat{ background:#fbfdff; padding:8px 12px; border-radius:8px; font-weight:800; color:var(--text); border:1px solid #eef2ff; font-size:14px; }
-  canvas{ max-width:100%; margin:8px 0; }
-
   #tipsContainer, #medicalFileList { text-align:left; display:none; max-height:320px; overflow:auto; border:1px solid var(--card-border); padding:8px; border-radius:8px; margin-top:10px; background:#fff; }
   .file-row{ display:flex; justify-content:space-between; align-items:center; padding:8px 4px; border-bottom:1px dashed #f1f5ff; gap:8px; }
-  .file-row button{ padding:8px 10px; border:none; border-radius:8px; cursor:pointer; }
+  .file-row button{ padding:6px 8px; border:none; border-radius:8px; cursor:pointer; }
   .view-btn{ background:#2b6ef6; color:#fff; }
   .remove-btn{ background:#ef4444; color:#fff; }
   .file-meta{ font-size:12px; color:var(--muted); }
@@ -80,253 +45,135 @@
   <div class="topbar">
     <div class="settings-icon" id="settingsIcon" title="App Settings">⚙️</div>
     <div class="header">
-      <h1>LifeTrack Dashboard</h1>
-      <p>Welcome User</p>
+      <h1 style="margin:0">LifeTrack Dashboard</h1>
+      <div style="font-weight:600; opacity:0.95">Welcome User</div>
     </div>
   </div>
 
-  <div class="settings-panel" id="settingsPanel" aria-hidden="true">
-    <h3>App Settings</h3>
-    <div class="settings-row">
-      <label for="fontSizeRange">Font size</label>
-      <input id="fontSizeRange" type="range" min="12" max="22" step="1" />
-      <div class="font-sample" id="fontSample">Sample text — font size updates live</div>
-    </div>
-    <div class="settings-row">
-      <label for="fontSelect">Font family</label>
-      <select id="fontSelect">
-        <option value='"Segoe UI", Roboto, system-ui, -apple-system, sans-serif'>System UI (default)</option>
-        <option value='Georgia, "Times New Roman", Times, serif'>Georgia (serif)</option>
-        <option value='"Helvetica Neue", Arial, sans-serif'>Helvetica Neue / Arial</option>
-        <option value='"Courier New", Courier, monospace'>Courier New (monospace)</option>
-        <option value='"Trebuchet MS", "Segoe UI", sans-serif'>Trebuchet</option>
-      </select>
-      <div class="font-sample" id="fontFamilySample">Sample text — font family updates live</div>
-    </div>
-    <div class="settings-row">
-      <label for="themeColor">Theme color</label>
-      <input id="themeColor" type="color" value="#5063f2" />
-    </div>
-    <div class="settings-row">
-      <label for="brightnessRange">App brightness</label>
-      <input id="brightnessRange" type="range" min="0.6" max="1.4" step="0.05" />
-    </div>
-    <div style="display:flex; gap:8px; margin-top:6px;">
-      <button class="btn" id="saveSettingsBtn">Save</button>
-      <button class="btn" id="resetSettingsBtn" style="background:#ef4444">Reset</button>
-    </div>
-  </div>
-
-  <div class="quick-actions">
+  <div class="quick-actions" id="actionGrid">
     <div class="action-card" onclick="showScreen('chatbot')">💬 Chatbot</div>
     <div class="action-card" onclick="showScreen('graph')">📊 Mood Graph</div>
     <div class="action-card" onclick="showScreen('reminders')">✅ Reminders</div>
     <div class="action-card" onclick="showScreen('timer')">⏱ Timer</div>
     <div class="action-card" onclick="openMedicalPicker()">📂 Upload Medical Files</div>
-    <div class="action-card" onclick="showScreen('hydration')">💧 Hydration Monitor</div>
-    <div class="action-card" onclick="showScreen('sleep')">🌙 Sleep Analytics</div>
-    <div class="action-card" onclick="showScreen('meals')">🍽 Meal Tracking</div>
+    <div class="action-card" onclick="showScreen('hydration')">💧 Hydration</div>
+    <div class="action-card" onclick="showScreen('sleep')">🌙 Sleep</div>
+    <div class="action-card" onclick="showScreen('meals')">🍽 Meals</div>
   </div>
 
-  <!-- Hidden input for normal browsers (multi-file) -->
   <input id="medicalFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" multiple style="display:none"/>
   <div id="medicalFileList"></div>
 
-  <!-- Screens -->
+  <!-- Chatbot -->
   <div class="screen" id="chatbot">
     <h3>Simple Chatbot</h3>
     <div class="chatbox" id="chatbox"></div>
-    <div class="input-area">
-      <button class="btn" onclick="sendQuick('weather')">🌦 Weather</button>
-      <button class="btn" onclick="sendQuick('joke')">😂 Joke</button>
-      <button class="btn" onclick="sendQuick('study')">📚 Study Tip</button>
-    </div>
+    <button class="btn" onclick="sendQuick('weather')">🌦 Weather</button>
+    <button class="btn" onclick="sendQuick('joke')">😂 Joke</button>
+    <button class="btn" onclick="sendQuick('study')">📚 Study Tip</button>
   </div>
 
+  <!-- Mood -->
   <div class="screen" id="graph">
     <h3>Mood Graph</h3>
-    <p class="sub-label">Log a 1–10 mood score and track it visually.</p>
+    <p>Log mood 1–10</p>
     <button class="btn" onclick="promptMood()">Enter mood</button>
     <p>Mood: <strong id="moodValue">5</strong></p>
     <canvas id="moodChart" width="360" height="160"></canvas>
   </div>
 
+  <!-- Reminders -->
   <div class="screen" id="reminders">
     <h3>Reminders</h3>
-    <input id="newReminder" type="text" placeholder="Add reminder (e.g., call family)"/>
+    <input id="newReminder" type="text" placeholder="Add reminder"/>
     <button class="btn" onclick="addReminder()">Add</button>
     <div id="todoList"></div>
   </div>
 
+  <!-- Timer -->
   <div class="screen" id="timer">
     <h3>Focus Timer</h3>
     <input id="minutes" type="number" placeholder="Minutes"/>
-    <select id="alarmChoice">
-      <option value="alarm1">Beep</option>
-      <option value="alarm2">Marimba</option>
-      <option value="alarm3">Analog bell</option>
-    </select>
+    <select id="alarmChoice"><option value="alarm1">Beep</option><option value="alarm2">Marimba</option><option value="alarm3">Bell</option></select>
     <button class="btn" onclick="startTimer()">Start</button>
-    <div id="countdown" style="margin-top:10px;"></div>
+    <div id="countdown" style="margin-top:8px"></div>
     <audio id="alarm1" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
     <audio id="alarm2" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2e6f3e9b4b.mp3"></audio>
     <audio id="alarm3" src="https://cdn.pixabay.com/download/audio/2021/09/30/audio_2c9b5f3b3d.mp3"></audio>
   </div>
 
+  <!-- Hydration -->
   <div class="screen" id="hydration">
     <h3>Hydration Monitor</h3>
-    <p class="sub-label">Set daily goal (ml), log intake (ml), and reminders (minutes).</p>
     <input id="waterGoal" type="number" placeholder="Daily goal (ml)" value="2000"/>
     <input id="waterIntake" type="number" placeholder="Log intake (ml)" value="250"/>
-    <button class="btn" onclick="logWater()">Add intake (ml)</button>
-    <div class="summary" style="margin-top:12px;">
-      <div class="stat">Consumed: <span id="waterConsumed">0</span> ml</div>
-      <div class="stat">Remaining: <span id="waterRemaining">2000</span> ml</div>
+    <button class="btn" onclick="logWater()">Add intake</button>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
+      <div>Consumed: <strong id="waterConsumed">0</strong> ml</div>
+      <div>Remaining: <strong id="waterRemaining">2000</strong> ml</div>
     </div>
     <input id="waterInterval" type="number" placeholder="Reminder interval (minutes)" value="60"/>
     <button class="btn" onclick="startWaterReminders()">Start reminders</button>
     <button class="btn" onclick="stopWaterReminders()">Stop reminders</button>
-    <canvas id="waterChart" width="360" height="160"></canvas>
+    <canvas id="waterChart" width="360" height="120" style="margin-top:10px"></canvas>
   </div>
 
+  <!-- Sleep -->
   <div class="screen" id="sleep">
     <h3>Sleep Analytics</h3>
-    <p class="sub-label">Log sleep/wake times. View last night and 7-day average.</p>
     <input id="sleepTime" type="time"/>
     <input id="wakeTime" type="time"/>
     <button class="btn" onclick="logSleep()">Log sleep</button>
-    <p>Last duration: <strong id="lastSleepDuration">0h 0m</strong></p>
-    <p>7-day average: <strong id="avgSleepDuration">0h 0m</strong></p>
-    <canvas id="sleepChart" width="360" height="160"></canvas>
+    <p>Last: <strong id="lastSleepDuration">0h 0m</strong></p>
+    <p>7-day avg: <strong id="avgSleepDuration">0h 0m</strong></p>
+    <canvas id="sleepChart" width="360" height="120"></canvas>
   </div>
 
+  <!-- Meals -->
   <div class="screen" id="meals">
     <h3>Meal Tracking</h3>
-    <p class="sub-label">Add meal name, portion (ml or g), calories. Persistent per-day.</p>
-    <input id="mealName" type="text" placeholder="Meal name (e.g., Breakfast - Oats)"/>
+    <input id="mealName" type="text" placeholder="Meal name"/>
     <input id="mealPortion" type="number" placeholder="Portion (ml or g)"/>
     <input id="mealCalories" type="number" placeholder="Calories (kcal)"/>
     <button class="btn" onclick="addMeal()">Add meal</button>
-    <div class="summary" style="margin-top:12px;">
-      <div class="stat">Today kcal: <span id="todayCalories">0</span></div>
-      <div class="stat">Today portions: <span id="todayPortions">0</span></div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
+      <div>Today kcal: <strong id="todayCalories">0</strong></div>
+      <div>Today portions: <strong id="todayPortions">0</strong></div>
     </div>
-    <p class="muted">Recent entries</p>
+    <p style="margin-top:10px">Recent entries</p>
     <div id="mealList"></div>
-    <p class="muted" style="margin-top:12px;">Healthy eating tips</p>
+
+    <p style="margin-top:12px">Healthy tips</p>
     <button class="btn" onclick="toggleTips()">Show/Hide 50 Healthy Food Tips</button>
     <div id="tipsContainer"></div>
-    <canvas id="mealsChart" width="360" height="160" style="margin-top:10px;"></canvas>
+
+    <p style="margin-top:12px">Meal chart</p>
+    <canvas id="mealsChart" width="360" height="240" style="border-radius:8px;background:#fff"></canvas>
   </div>
 </div>
 
 <script>
-/* ---------- Reliable navigation ---------- */
+/* ---------- Utilities ---------- */
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 function showScreen(id){
-  // Hide all screens
   document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-  // Show the requested one
-  const el = document.getElementById(id);
-  if(el) el.style.display = 'block';
-  // Close floating panels
+  const el = document.getElementById(id); if(el) el.style.display = 'block';
   hideTips(); hideMedicalFiles();
-  const sp = document.getElementById('settingsPanel');
-  if(sp) sp.style.display = 'none';
 }
 
-/* ---------- Settings ---------- */
-const SETTINGS_KEY = 'lifetrack_settings_v3';
-function loadSettings(){ try{ const raw=localStorage.getItem(SETTINGS_KEY); return raw?JSON.parse(raw):null; }catch(e){ return null; } }
-function saveSettings(obj){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(obj)); }catch(e){} }
-function applySettings(obj){
-  if(!obj) return;
-  if(obj.fontSize){ document.documentElement.style.setProperty('--font-size', obj.fontSize+'px'); document.getElementById('fontSample').style.fontSize = obj.fontSize+'px'; }
-  if(obj.fontFamily){ document.documentElement.style.setProperty('--font-family', obj.fontFamily); document.getElementById('fontFamilySample').style.fontFamily = obj.fontFamily; }
-  if(obj.themeColor){ document.documentElement.style.setProperty('--accent-color', obj.themeColor); document.getElementById('themeColor').value = obj.themeColor; }
-  if(obj.brightness){ document.documentElement.style.setProperty('--brightness', obj.brightness); document.getElementById('brightnessRange').value = obj.brightness; }
-}
-function initSettingsUI(){
-  const saved = loadSettings();
-  const defaults = {
-    fontSize: saved?.fontSize || 16,
-    fontFamily: saved?.fontFamily || getComputedStyle(document.documentElement).getPropertyValue('--font-family').trim() || '"Segoe UI", Roboto, system-ui, -apple-system, sans-serif',
-    themeColor: saved?.themeColor || '#5063f2',
-    brightness: saved?.brightness || 1
-  };
-  applySettings(defaults);
-  document.getElementById('fontSizeRange').value = defaults.fontSize;
-  document.getElementById('fontSelect').value = defaults.fontFamily;
-  document.getElementById('brightnessRange').value = defaults.brightness;
-  document.getElementById('settingsIcon').onclick = ()=>{
-    const panel = document.getElementById('settingsPanel');
-    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-    document.querySelectorAll('.screen').forEach(s=>s.style.display='none');
-    hideTips(); hideMedicalFiles();
-  };
-  document.getElementById('fontSizeRange').oninput = (e)=>{ document.documentElement.style.setProperty('--font-size', e.target.value+'px'); document.getElementById('fontSample').style.fontSize = e.target.value+'px'; };
-  document.getElementById('fontSelect').onchange = (e)=>{ document.documentElement.style.setProperty('--font-family', e.target.value); document.getElementById('fontFamilySample').style.fontFamily = e.target.value; };
-  document.getElementById('themeColor').oninput = (e)=> document.documentElement.style.setProperty('--accent-color', e.target.value);
-  document.getElementById('brightnessRange').oninput = (e)=> document.documentElement.style.setProperty('--brightness', e.target.value);
-  document.getElementById('saveSettingsBtn').onclick = ()=>{
-    const obj = {
-      fontSize: Number(document.getElementById('fontSizeRange').value),
-      fontFamily: document.getElementById('fontSelect').value,
-      themeColor: document.getElementById('themeColor').value,
-      brightness: Number(document.getElementById('brightnessRange').value)
-    };
-    saveSettings(obj); applySettings(obj); alert('Settings saved.');
-  };
-  document.getElementById('resetSettingsBtn').onclick = ()=>{ localStorage.removeItem(SETTINGS_KEY); location.reload(); };
-}
+/* ---------- Init ---------- */
+window.onload = function(){
+  // default visible
+  showScreen('chatbot');
+  // restore water
+  try{ waterConsumed = Number(localStorage.getItem('waterConsumed')||0); }catch(e){ waterConsumed = 0; }
+  updateWaterUI();
+  drawMoodChart();
+  drawSleepChart();
+  renderMeals();
+};
 
-/* ---------- Medical files (multi-file + App Inventor bridge signal) ---------- */
-let selectedFiles = [];
-function openMedicalPicker(){
-  const input = document.getElementById('medicalFile');
-  // Try browser picker first
-  try{
-    input.value = '';
-    input.click();
-    // If blocked (e.g., some WebViews), also signal the app
-    setTimeout(()=>{ if(!input.files.length){ sendToApp({action:"REQUEST_FILE_PICKER"}); } }, 600);
-  }catch(e){
-    sendToApp({action:"REQUEST_FILE_PICKER"});
-  }
-}
-document.getElementById('medicalFile').addEventListener('change', function(){
-  const files = Array.from(this.files || []);
-  if(!files.length) return;
-  selectedFiles = selectedFiles.concat(files);
-  displaySelectedFilesFromFiles(selectedFiles);
-  sendToApp({medicalFiles: selectedFiles.map(f=>({name:f.name,size:f.size,type:f.type}))});
-});
-function displaySelectedFilesFromFiles(files){
-  const list = document.getElementById('medicalFileList');
-  list.style.display = 'block';
-  list.innerHTML = '';
-  files.forEach((f, idx)=>{
-    const row = document.createElement('div'); row.className='file-row';
-    const left = document.createElement('div');
-    left.innerHTML = `<div style="font-weight:800">${escapeHtml(f.name)}</div><div class="file-meta">${Math.round(f.size/1024)} KB • ${escapeHtml(f.type||'unknown')}</div>`;
-    const actions = document.createElement('div');
-    const viewBtn = document.createElement('button'); viewBtn.className='view-btn'; viewBtn.textContent='View';
-    viewBtn.onclick = ()=>{ const url = URL.createObjectURL(f); window.open(url,'_blank'); setTimeout(()=>URL.revokeObjectURL(url),60000); };
-    const removeBtn = document.createElement('button'); removeBtn.className='remove-btn'; removeBtn.textContent='Remove';
-    removeBtn.onclick = ()=>{ selectedFiles.splice(idx,1); displaySelectedFilesFromFiles(selectedFiles); sendToApp({medicalFiles: selectedFiles.map(x=>({name:x.name,size:x.size,type:x.type}))}); };
-    actions.appendChild(viewBtn); actions.appendChild(removeBtn);
-    row.appendChild(left); row.appendChild(actions);
-    list.appendChild(row);
-  });
-}
-function hideMedicalFiles(){ const list=document.getElementById('medicalFileList'); list.style.display='none'; list.innerHTML=''; }
-function sendToApp(obj){
-  const json = JSON.stringify(obj);
-  try{ if(window.AppInventor && typeof window.AppInventor.setWebViewString==='function'){ window.AppInventor.setWebViewString(json); } }catch(e){}
-  try{ if(window.WebViewInterface && typeof window.WebViewInterface.postMessage==='function'){ window.WebViewInterface.postMessage(json); } }catch(e){}
-  try{ if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor && typeof window.webkit.messageHandlers.AppInventor.postMessage==='function'){ window.webkit.messageHandlers.AppInventor.postMessage(json); } }catch(e){}
-}
-
-/* ---------- Chatbot: 50 jokes, 50 study tips ---------- */
+/* ---------- Chatbot (50 jokes, 50 tips) ---------- */
 const jokes = [
   "Why don’t skeletons fight? They don’t have the guts!",
   "Why did the math book look sad? It had too many problems.",
@@ -430,11 +277,7 @@ const studyTips = [
   "Stay positive — mindset matters.",
   "Track your time to find patterns.",
   "Reflect on what worked and what didn’t.",
-  "Balance study with exercise and relaxation.",
-  "Study in short daily blocks instead of long sessions.",
-  "Set a stop time and stick to it.",
-  "Use active recall before re-reading.",
-  "Test yourself without notes regularly."
+  "Balance study with exercise and relaxation."
 ];
 function sendQuick(type){
   const chatbox = document.getElementById('chatbox');
@@ -451,14 +294,13 @@ function addReminder(){
   const text = document.getElementById('newReminder').value.trim();
   if(!text) return;
   const container = document.getElementById('todoList');
-  const el = document.createElement('div');
-  el.className='todo-item';
+  const el = document.createElement('div'); el.className='todo-item';
   el.innerHTML = `<span>${escapeHtml(text)}</span><div><button onclick="this.closest('.todo-item').remove()">Delete</button></div>`;
   container.prepend(el);
   document.getElementById('newReminder').value='';
 }
 
-/* ---------- Mood chart (canvas, no external libs) ---------- */
+/* ---------- Mood chart ---------- */
 let moodValue = 5;
 function promptMood(){
   const value = prompt("Enter mood 1-10:","5");
@@ -469,9 +311,9 @@ function promptMood(){
 function drawMoodChart(){
   const canvas = document.getElementById('moodChart'); const ctx = canvas.getContext('2d');
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  const color = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#5063f2';
   const width = (moodValue/10) * (canvas.width-40);
-  ctx.fillStyle = color; ctx.fillRect(20, canvas.height/2-20, width, 40);
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-color') || '#5063f2';
+  ctx.fillRect(20, canvas.height/2-20, width, 40);
   ctx.fillStyle = '#555'; ctx.font = '14px system-ui';
   ctx.fillText(`Mood: ${moodValue}`, 20, canvas.height/2-30);
 }
@@ -492,109 +334,86 @@ function startTimer(){
 }
 
 /* ---------- Hydration ---------- */
-let waterConsumed = 0; let waterReminderTimer=null;
-function updateWaterUI(){
-  const goal = Number(document.getElementById('waterGoal').value || 0);
-  document.getElementById('waterConsumed').textContent = waterConsumed;
-  document.getElementById('waterRemaining').textContent = Math.max(goal - waterConsumed, 0);
-  drawWaterChart(goal, waterConsumed);
-}
-function logWater(){
-  const intake = Number(document.getElementById('waterIntake').value || 0);
-  if(intake<=0) return alert('Enter ml value');
-  waterConsumed += intake;
-  try{ localStorage.setItem('waterConsumed', String(waterConsumed)); }catch(e){}
-  updateWaterUI();
-}
-function startWaterReminders(){
-  const mins = Number(document.getElementById('waterInterval').value || 0);
-  if(mins<=0) return alert('Enter minutes interval');
-  if(waterReminderTimer) clearInterval(waterReminderTimer);
-  waterReminderTimer = setInterval(()=> alert(`Hydration reminder: drink ${document.getElementById('waterIntake').value||250} ml`), mins*60000);
-  alert('Hydration reminders started');
-}
+let waterConsumed = 0; let waterReminderTimer = null;
+function updateWaterUI(){ const goal = Number(document.getElementById('waterGoal').value || 0); document.getElementById('waterConsumed').textContent = waterConsumed; document.getElementById('waterRemaining').textContent = Math.max(goal-waterConsumed,0); drawWaterChart(goal, waterConsumed); }
+function logWater(){ const intake = Number(document.getElementById('waterIntake').value || 0); if(intake<=0) return alert('Enter ml'); waterConsumed += intake; try{ localStorage.setItem('waterConsumed', String(waterConsumed)); }catch(e){} updateWaterUI(); }
+function startWaterReminders(){ const mins = Number(document.getElementById('waterInterval').value || 0); if(mins<=0) return alert('Enter minutes'); if(waterReminderTimer) clearInterval(waterReminderTimer); waterReminderTimer = setInterval(()=> alert('Hydration reminder'), mins*60000); alert('Hydration reminders started'); }
 function stopWaterReminders(){ if(waterReminderTimer){ clearInterval(waterReminderTimer); waterReminderTimer=null; alert('Hydration reminders stopped'); } }
-function drawWaterChart(goal, consumed){
-  const canvas = document.getElementById('waterChart'); const ctx = canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height);
-  const remaining = Math.max(goal - consumed, 0);
-  const total = Math.max(goal, consumed + remaining);
-  const consumedW = (consumed/total)*(canvas.width-40);
-  ctx.fillStyle='#34d399'; ctx.fillRect(20, canvas.height/2-20, consumedW, 40);
-  ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+consumedW, canvas.height/2-20, (remaining/total)*(canvas.width-40), 40);
-  ctx.fillStyle='#555'; ctx.font='12px system-ui';
-  ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`, 20, canvas.height/2-30);
-}
+function drawWaterChart(goal, consumed){ const canvas=document.getElementById('waterChart'); const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); const ratio = goal>0? Math.min(consumed/goal,1):0; const w = (canvas.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20, canvas.height/2-12, w, 24); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w, canvas.height/2-12, canvas.width-40-w, 24); ctx.fillStyle='#555'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`, 20, canvas.height/2-20); }
 
 /* ---------- Sleep ---------- */
-const sleepLogs=[]; 
+const sleepLogs = [];
 function logSleep(){
   const s=document.getElementById('sleepTime').value, w=document.getElementById('wakeTime').value;
-  if(!s||!w) return alert('Select both times');
+  if(!s||!w) return alert('Select both');
   const [sh,sm]=s.split(':').map(Number), [wh,wm]=w.split(':').map(Number);
   let start=sh*60+sm, end=wh*60+wm; if(end<=start) end+=24*60;
   const mins=end-start, hours=mins/60;
   document.getElementById('lastSleepDuration').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`;
   const today = new Date().toISOString().slice(0,10);
   sleepLogs.push({date:today, hours});
-  const last7 = sleepLogs.slice(-7);
-  const avg = last7.reduce((a,b)=>a+b.hours,0)/last7.length;
+  const last7 = sleepLogs.slice(-7); const avg = last7.reduce((a,b)=>a+b.hours,0)/last7.length;
   document.getElementById('avgSleepDuration').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`;
   drawSleepChart();
 }
-function drawSleepChart(){
-  const canvas = document.getElementById('sleepChart'); const ctx = canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height);
-  const last7 = sleepLogs.slice(-7);
-  const barW = Math.max(16, (canvas.width-40)/Math.max(last7.length,1)-8);
-  last7.forEach((l,i)=>{
-    const h = Math.min(12, l.hours) / 12 * (canvas.height-40);
-    ctx.fillStyle = '#7b61ff';
-    ctx.fillRect(20 + i*(barW+8), canvas.height-20-h, barW, h);
-    ctx.fillStyle = '#555'; ctx.font='10px system-ui';
-    ctx.fillText(l.date.slice(5), 20 + i*(barW+8), canvas.height-6);
-  });
-}
+function drawSleepChart(){ const canvas=document.getElementById('sleepChart'); const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); const last7 = sleepLogs.slice(-7); if(!last7.length) return; const barW = Math.max(14, (canvas.width-40)/last7.length - 8); last7.forEach((l,i)=>{ const h = Math.min(12, l.hours)/12 * (canvas.height-40); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+8), canvas.height-20-h, barW, h); ctx.fillStyle='#555'; ctx.font='10px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+8), canvas.height-6); }); }
 
-/* ---------- Meals ---------- */
+/* ---------- Meals: storage, list, pie chart ---------- */
 function getTodayKey(){ return 'meals_' + (new Date().toISOString().slice(0,10)); }
 function loadMeals(){ try{ return JSON.parse(localStorage.getItem(getTodayKey())||'[]'); }catch(e){ return []; } }
 function saveMeals(list){ localStorage.setItem(getTodayKey(), JSON.stringify(list)); }
 function renderMeals(){
-  const list = loadMeals();
-  const container = document.getElementById('mealList'); container.innerHTML='';
-  let totalCalories=0, totalPortions=0;
-  list.slice().reverse().forEach(m=>{
-    const el=document.createElement('div'); el.className='todo-item';
-    el.innerHTML = `<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div class="file-meta">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div>
-    <div><button onclick="removeMeal(${m.id})">Delete</button></div>`;
-    container.appendChild(el);
-    totalCalories += Number(m.calories||0); totalPortions += Number(m.portion||0);
-  });
+  const list = loadMeals(); const container = document.getElementById('mealList'); container.innerHTML=''; let totalCalories=0, totalPortions=0;
+  list.slice().reverse().forEach(m=>{ const el=document.createElement('div'); el.className='todo-item'; el.style.display='flex'; el.style.justifyContent='space-between'; el.style.alignItems='center'; el.style.padding='8px'; el.style.border='1px solid var(--card-border)'; el.style.borderRadius='8px'; el.style.margin='6px 0'; el.innerHTML = `<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div class="file-meta">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div><div><button onclick="removeMeal(${m.id})">Delete</button></div>`; container.appendChild(el); totalCalories += Number(m.calories||0); totalPortions += Number(m.portion||0); });
   document.getElementById('todayCalories').textContent = totalCalories;
   document.getElementById('todayPortions').textContent = totalPortions;
-  drawMealsChart(totalCalories);
+  drawMealsPie(totalCalories);
 }
 function addMeal(){
-  const name=document.getElementById('mealName').value.trim();
-  const portion=Number(document.getElementById('mealPortion').value||0);
-  const calories=Number(document.getElementById('mealCalories').value||0);
+  const name = document.getElementById('mealName').value.trim();
+  const portion = Number(document.getElementById('mealPortion').value||0);
+  const calories = Number(document.getElementById('mealCalories').value||0);
   if(!name) return alert('Enter meal name');
-  const list=loadMeals(); const entry={id:Date.now(), name, portion, calories, ts:Date.now()};
-  list.push(entry); saveMeals(list);
+  const list = loadMeals(); list.push({id:Date.now(), name, portion, calories, ts:Date.now()}); saveMeals(list);
   document.getElementById('mealName').value=''; document.getElementById('mealPortion').value=''; document.getElementById('mealCalories').value='';
   renderMeals();
 }
-function removeMeal(id){
-  let list=loadMeals(); list=list.filter(m=>m.id!==id); saveMeals(list); renderMeals();
-}
-function drawMealsChart(total){
-  const target=2000; const canvas=document.getElementById('mealsChart'); const ctx=canvas.getContext('2d');
+function removeMeal(id){ let list = loadMeals(); list = list.filter(m=>m.id !== id); saveMeals(list); renderMeals(); }
+
+/* ---------- Pie chart implementation (reliable) ---------- */
+function drawMealsPie(totalCalories){
+  const canvas = document.getElementById('mealsChart'); const ctx = canvas.getContext('2d');
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  const consumed = Math.min(target, total); const remaining = Math.max(target-consumed,0);
-  const sum = target; const consumedW = (consumed/sum)*(canvas.width-40);
-  ctx.fillStyle='#ff9f43'; ctx.fillRect(20, canvas.height/2-20, consumedW, 40);
-  ctx.fillStyle='#e9eefb'; ctx.fillRect(20+consumedW, canvas.height/2-20, (remaining/sum)*(canvas.width-40), 40);
-  ctx.fillStyle='#555'; ctx.font='12px system-ui';
-  ctx.fillText(`Consumed: ${total} kcal / Target: ${target} kcal`, 20, canvas.height/2-30);
+  const target = 2000;
+  const consumed = Math.min(totalCalories, target);
+  const remaining = Math.max(target - consumed, 0);
+  const centerX = canvas.width/2;
+  const centerY = canvas.height/2;
+  const radius = Math.min(canvas.width, canvas.height) * 0.35;
+  // background
+  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  // draw consumed slice
+  const start = -Math.PI/2;
+  const consumedAngle = (consumed / (consumed + remaining || 1)) * Math.PI*2;
+  const endConsumed = start + consumedAngle;
+  // consumed
+  ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, start, endConsumed); ctx.closePath();
+  ctx.fillStyle = '#ff9f43'; ctx.fill();
+  // remaining
+  ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, endConsumed, start + Math.PI*2); ctx.closePath();
+  ctx.fillStyle = '#e9eefb'; ctx.fill();
+  // donut hole
+  ctx.beginPath(); ctx.fillStyle = '#fff'; ctx.arc(centerX, centerY, radius*0.55, 0, Math.PI*2); ctx.fill();
+  // center text
+  ctx.fillStyle = '#333'; ctx.font = 'bold 14px system-ui'; ctx.textAlign = 'center';
+  ctx.fillText(`${consumed} kcal`, centerX, centerY - 6);
+  ctx.font = '12px system-ui'; ctx.fillText(`of ${target} kcal`, centerX, centerY + 14);
+  // legend
+  const legendX = 12, legendY = 12;
+  ctx.fillStyle = '#ff9f43'; ctx.fillRect(legendX, legendY, 12, 12);
+  ctx.fillStyle = '#333'; ctx.font = '12px system-ui'; ctx.textAlign = 'left'; ctx.fillText(`Consumed ${consumed} kcal`, legendX + 18, legendY + 10);
+  ctx.fillStyle = '#e9eefb'; ctx.fillRect(legendX, legendY + 18, 12, 12);
+  ctx.fillStyle = '#333'; ctx.fillText(`Remaining ${remaining} kcal`, legendX + 18, legendY + 30);
 }
 
 /* ---------- Tips (50) ---------- */
@@ -660,26 +479,44 @@ function toggleTips(){
 }
 function hideTips(){ const c=document.getElementById('tipsContainer'); c.style.display='none'; c.innerHTML=''; }
 
-/* ---------- Utils ---------- */
-function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+/* ---------- Medical file picker (browser + WebView signal) ---------- */
+let selectedFiles = [];
+function openMedicalPicker(){
+  const input = document.getElementById('medicalFile');
+  try{ input.value=''; input.click(); setTimeout(()=>{ if(!input.files.length) sendToApp({action:"REQUEST_FILE_PICKER"}); },600); }catch(e){ sendToApp({action:"REQUEST_FILE_PICKER"}); }
+}
+document.getElementById('medicalFile').addEventListener('change', function(){
+  const files = Array.from(this.files||[]);
+  if(!files.length) return;
+  selectedFiles = selectedFiles.concat(files);
+  displaySelectedFiles(selectedFiles);
+  sendToApp({medicalFiles: selectedFiles.map(f=>({name:f.name,size:f.size,type:f.type}))});
+});
+function displaySelectedFiles(files){
+  const list = document.getElementById('medicalFileList');
+  list.style.display = 'block'; list.innerHTML = '';
+  files.forEach((f,idx)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div class="file-meta">${Math.round(f.size/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div>`; const actions=document.createElement('div'); const v=document.createElement('button'); v.className='view-btn'; v.textContent='View'; v.onclick=()=>{ const url=URL.createObjectURL(f); window.open(url,'_blank'); setTimeout(()=>URL.revokeObjectURL(url),60000); }; const r=document.createElement('button'); r.className='remove-btn'; r.textContent='Remove'; r.onclick=()=>{ selectedFiles.splice(idx,1); displaySelectedFiles(selectedFiles); sendToApp({medicalFiles:selectedFiles.map(x=>({name:x.name,size:x.size,type:x.type}))}); }; actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); list.appendChild(row); });
+}
+function hideMedicalFiles(){ const list=document.getElementById('medicalFileList'); list.style.display='none'; list.innerHTML=''; }
+function sendToApp(obj){ const json = JSON.stringify(obj); try{ if(window.AppInventor && typeof window.AppInventor.setWebViewString==='function') window.AppInventor.setWebViewString(json); }catch(e){} try{ if(window.WebViewInterface && typeof window.WebViewInterface.postMessage==='function') window.WebViewInterface.postMessage(json); }catch(e){} try{ if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor && typeof window.webkit.messageHandlers.AppInventor.postMessage==='function') window.webkit.messageHandlers.AppInventor.postMessage(json); }catch(e){} }
 
-/* ---------- Init (ensure default visible and charts drawn) ---------- */
-window.onload = function(){
-  // Make chatbot visible by default
-  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-  const first = document.getElementById('chatbot'); if(first) first.style.display = 'block';
+/* ---------- Expose a small handler for App Inventor to send JSON back (if needed) ---------- */
+window.addEventListener('message', function(e){
+  try{
+    const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+    if(data && data.medicalFiles) displaySelectedFilesFromJson(data.medicalFiles);
+  }catch(err){}
+});
+function displaySelectedFilesFromJson(list){
+  // list is array of {name,size,type,uri} from App Inventor; show names
+  const container = document.getElementById('medicalFileList'); container.style.display='block'; container.innerHTML='';
+  list.forEach((f,idx)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML=`<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div class="file-meta">${Math.round((f.size||0)/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div><div><button class="view-btn" onclick="openUri('${escapeHtml(f.uri||'')}')">Open</button><button class="remove-btn" onclick="this.closest('.file-row').remove()">Remove</button></div>`; container.appendChild(row); });
+}
+function openUri(u){ if(!u) return alert('No URI'); try{ window.open(u,'_blank'); }catch(e){ alert('Cannot open URI'); } }
 
-  initSettingsUI();
-
-  // Restore hydration
-  try{ waterConsumed = Number(localStorage.getItem('waterConsumed')||0); }catch(e){ waterConsumed=0; }
-  updateWaterUI();
-
-  // Draw charts once
-  drawMoodChart();
-  drawSleepChart();
-  renderMeals();
-};
+/* ---------- Storage helper to persist meals and update pie on load ---------- */
+function renderMealsOnLoad(){ renderMeals(); }
+renderMealsOnLoad();
 </script>
 </body>
 </html>
