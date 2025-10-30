@@ -26,13 +26,11 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:var(--ui-font);f
 input,select,textarea{width:100%;padding:9px;border-radius:8px;border:1px solid var(--card);background:linear-gradient(180deg,#fff,#fbfdff)}
 .screen{display:none;margin-bottom:12px}
 .screen.visible{display:block}
-.chatbox{height:220px;overflow:auto;border-radius:8px;padding:10px;border:1px solid #eef4ff;background:linear-gradient(180deg,#fff,#fcfdff)}
+.chatbox{height:320px;overflow:auto;border-radius:8px;padding:10px;border:1px solid #eef4ff;background:linear-gradient(180deg,#fff,#fcfdff)}
 .small{font-size:13px;color:var(--muted)}
 .todo-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;border:1px solid var(--card);margin:8px 0;background:linear-gradient(180deg,#fff,#fbfdff)}
 canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
 .settings-panel{position:fixed;left:12px;right:12px;top:70px;background:var(--surface);padding:12px;border-radius:12px;border:1px solid var(--card);box-shadow:0 20px 50px rgba(16,24,40,0.12);z-index:999;display:none}
-.dropzone{border:2px dashed #e1f0ff;padding:12px;border-radius:8px;text-align:center;color:var(--muted);background:linear-gradient(180deg,#fff,#fbfdff)}
-.file-row{display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px dashed #f1f5ff}
 @media (max-width:880px){ .layout{grid-template-columns:1fr} .left{position:static} }
 </style>
 </head>
@@ -59,7 +57,7 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
             <div class="tile" id="settingsTile"><div class="label">⚙️ App settings</div></div>
             <div class="tile" data-target="hydration"><div class="label">💧 Hydration</div></div>
             <div class="tile" data-target="sleep"><div class="label">🌙 Sleep</div></div>
-            <div class="tile" data-target="meals"><div class="label">🍽 Meals</div></div>
+            <div class="tile" data-target="charts"><div class="label">📈 Charts</div></div>
           </div>
         </div>
 
@@ -75,9 +73,11 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
       <main>
         <section class="card screen visible" id="chat">
           <div id="chatbox" class="chatbox" aria-live="polite"></div>
-          <div style="display:flex;gap:8px;margin-top:10px">
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
             <button class="btn" id="btnJoke">Random joke</button>
             <button class="btn" id="btnTip">Study tip</button>
+            <button class="btn" id="btnAllJokes">Show 50 jokes</button>
+            <button class="btn" id="btnAllTips">Show 50 tips</button>
           </div>
         </section>
 
@@ -97,7 +97,8 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
 
         <section class="card screen" id="timer">
           <input id="minutes" type="number" placeholder="Minutes" />
-          <select id="alarmSelect" style="margin-top:8px"></select>
+          <label class="small" style="margin-top:8px;display:block">Choose ringtone</label>
+          <select id="alarmSelect"></select>
           <div style="display:flex;gap:8px;margin-top:8px">
             <button class="btn" id="startTimerBtn">Start</button>
             <button class="btn" id="stopTimerBtn" style="background:#ef4444">Stop</button>
@@ -126,18 +127,17 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
           <canvas id="sleepChart" width="720" height="120" style="margin-top:8px"></canvas>
         </section>
 
-        <section class="card screen" id="meals">
-          <input id="mealName" placeholder="Meal name" />
-          <input id="mealPortion" type="number" placeholder="Portion (g or ml)" />
-          <input id="mealCalories" type="number" placeholder="Calories (kcal)" />
-          <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="addMealBtn">Add meal</button></div>
-          <div style="display:flex;justify-content:space-between;margin-top:8px">
-            <div>Today kcal: <strong id="todayCalories">0</strong></div>
-            <div>Portions: <strong id="todayPortions">0</strong></div>
-          </div>
-          <div id="mealList" style="margin-top:8px"></div>
-          <div style="margin-top:12px"><button class="btn" id="toggleTipsBtn">Show 50 Healthy Food Tips</button><div id="tipsCont" style="margin-top:8px;display:none"></div></div>
-          <canvas id="mealsPie" width="720" height="260" style="margin-top:12px"></canvas>
+        <section class="card screen" id="charts">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:700">Charts</div>
+            <div><button class="btn" id="refreshCharts">Refresh</button></div>
+         </div>
+         <div style="margin-top:12px">
+           <canvas id="mealsBar" width="720" height="220"></canvas>
+         </div>
+         <div style="margin-top:12px">
+           <canvas id="sleepBar" width="720" height="140"></canvas>
+         </div>
         </section>
 
       </main>
@@ -164,44 +164,30 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
         <option value="'Open Sans', system-ui, sans-serif">Open Sans</option>
       </select>
 
+      <label class="small">Font size (px)</label>
       <input id="fontSize" type="range" min="12" max="22" value="16" />
+
+      <label class="small">App brightness</label>
       <input id="appBrightness" type="range" min="0.5" max="1.3" step="0.05" value="1" />
     </div>
   </div>
 
 <script>
-/* Core: removed upload/medical file flow and replaced tile with App settings.
-   Focus fixes for mobile meal add: robust handlers, read values directly on tap/click,
-   clear inputs after storing, persist meals to localStorage per-day.
-*/
-
+/* Utilities */
 const $ = id => document.getElementById(id);
 function esc(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-/* Screen open/close */
+/* Screen navigation */
 document.getElementById('quickGrid').addEventListener('pointerup', e=>{
-  const tile = e.target.closest('.tile');
-  if(!tile) return;
+  const tile = e.target.closest('.tile'); if(!tile) return;
   const target = tile.getAttribute('data-target');
   if(target){
     document.querySelectorAll('.screen.visible').forEach(s=>s.classList.remove('visible'));
-    const screen = document.getElementById(target);
-    if(!screen) return;
-    screen.classList.add('visible');
-    const closer = (ev) => {
-      const interactive = ev.target.closest('button,input,select,textarea,.todo-item,.file-row,.tile');
-      if(interactive) return;
-      screen.removeEventListener('pointerup', closer);
-      screen.classList.remove('visible');
-    };
-    screen.addEventListener('pointerup', closer);
-    screen.scrollIntoView({behavior:'smooth',block:'center'});
-  }
+    const screen = document.getElementById(target); if(!screen) return;
+    screen.classList.add('visible'); screen.scrollIntoView({behavior:'smooth',block:'center'});
+  } else if(tile.id === 'settingsTile'){ toggleSettings(true); }
 });
-
-/* Settings open from both header and tile */
 $('settingsToggle').addEventListener('pointerup', ()=> toggleSettings(true));
-$('settingsTile').addEventListener('pointerup', ()=> toggleSettings(true));
 $('closeSettings').addEventListener('pointerup', ()=> toggleSettings(false));
 function toggleSettings(force){
   const p = $('settingsPanel');
@@ -209,8 +195,8 @@ function toggleSettings(force){
   p.setAttribute('aria-hidden', p.style.display !== 'block');
 }
 
-/* Persisted settings */
-const SETTINGS_KEY = 'lt_settings_final_v1';
+/* Settings persistence & live apply */
+const SETTINGS_KEY = 'lt_settings_final_v2';
 function loadSettings(){ try{ return JSON.parse(localStorage.getItem(SETTINGS_KEY)||'null'); }catch(e){ return null; } }
 function saveSettings(cfg){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(cfg)); }catch(e){} }
 function applySettings(cfg){
@@ -231,22 +217,46 @@ function applySettings(cfg){
   });
 })();
 
-/* 50 jokes and 50 study tips */
+/* 50 jokes and 50 tips (chatbot) */
 const jokes = [
 "Why don’t skeletons fight? They don’t have the guts!","Why did the math book look sad? It had too many problems.","Why can’t your nose be 12 inches long? Because then it would be a foot!","Why did the scarecrow win an award? He was outstanding in his field!","What do you call fake spaghetti? An impasta!","Why did the bicycle fall over? It was two-tired!","Why don’t eggs tell jokes? They’d crack each other up!","What do you call cheese that isn’t yours? Nacho cheese!","Why did the golfer bring two pairs of pants? In case he got a hole in one!","Why did the tomato blush? It saw the salad dressing!","Why don’t scientists trust atoms? Because they make up everything!","Why did the cookie go to the doctor? It was feeling crummy!","Why did the computer go to therapy? It had too many bytes!","Why did the student eat his homework? The teacher said it was a piece of cake!","Why did the cat sit on the computer? To keep an eye on the mouse!","Why did the banana go to the party? Because it was a-peeling!","Why did the chicken join a band? Because it had the drumsticks!","Why did the fish blush? Because it saw the ocean’s bottom!","Why did the frog take the bus? His car got toad!","Why did the bee get married? Because he found his honey!","Why did the pencil go to the principal’s office? It had a point to make!","Why did the broom get a promotion? It swept the competition!","Why did the grape stop in the road? It ran out of juice!","Why did the light bulb go to school? To get a little brighter!","Why did the duck get a job? He was tired of winging it!","Why did the elephant bring a suitcase? He was going on a trunk trip!","Why did the calendar apply for a job? It wanted to work full time!","Why did the robot go on vacation? It needed to recharge!","Why did the donut go to therapy? It felt empty inside!","Why did the dog sit in the shade? He didn’t want to be a hot dog!","Why did the astronaut break up? He needed space!","Why did the fish get bad grades? Because it was below sea level!","Why did the cow go to space? To see the moooon!","Why did the skeleton skip the dance? He had no body to go with!","Why did the kangaroo stop coffee? It made him too jumpy!","Why did the snowman call a cab? He had a meltdown!","Why did the pirate buy an eye patch? He couldn’t afford an iPhone!","Why did the balloon go near the needle? To pop the question!","Why did the horse go behind the tree? To change his jockeys!","Why did the snail paint an S on his car? So people would say, ‘Look at that S-car go!’","Why did the giraffe get bad grades? He had his head in the clouds!","Why did the owl get promoted? He was a real hoot!","Why did the mirror fail the test? It couldn’t reflect well!","Why did the volcano get a promotion? It was on fire!","Why did the sandwich go to the gym? To get shredded!"
 ];
 const studyTips = [
 "Break study sessions into 25-minute chunks with 5-minute breaks.","Teach what you learn — explaining helps retention.","Use flashcards for active recall.","Review material within 24 hours.","Create a distraction-free study space.","Set clear goals for each session.","Use mnemonic devices.","Practice past papers under timed conditions.","Summarize notes in your own words.","Use diagrams and mind maps.","Sleep well — memory consolidates during rest.","Stay hydrated and eat brain-friendly foods.","Avoid multitasking.","Use spaced repetition.","Study at your peak energy time.","Group study for tough topics.","Use apps like Anki or Quizlet.","Record yourself explaining topics.","Color-code notes.","Reward yourself after tasks.","Spread learning over days, not cramming.","Apply the Feynman technique.","Take movement/stretch breaks.","Turn off notifications.","Use background music if it helps.","Make a weekly checklist.","Start with the hardest subject.","Use real-world examples.","Ask questions to deepen understanding.","Use sticky notes for key facts.","Teach a friend or sibling.","Watch short explainer videos.","Keep a study journal.","Visualize exam success.","Don’t hesitate to ask for help.","Stay consistent with daily effort.","Use analogies to simplify.","Practice writing essays.","Limit social media.","Use timers to stay on track.","Keep your desk tidy.","Drink water before and during study.","Use site blockers for focus.","Make your own quizzes.","Combine words + visuals (dual coding).","Celebrate small wins.","Stay positive — mindset matters.","Track your time to find patterns.","Reflect on what worked and what didn’t.","Balance study with exercise and relaxation."
 ];
-function appendChat(label, text){ const box=$('chatbox'); const el=document.createElement('div'); el.style.margin='8px 0'; el.innerHTML=`<div style="font-weight:700">${esc(label)}:</div><div style="margin-top:6px">${esc(text)}</div>`; box.appendChild(el); box.scrollTop = box.scrollHeight; }
+
+function appendChat(label, text){
+  const box = $('chatbox');
+  const el = document.createElement('div');
+  el.style.margin='8px 0';
+  el.innerHTML = `<div style="font-weight:700">${esc(label)}:</div><div style="margin-top:6px">${esc(text)}</div>`;
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
 $('btnJoke').addEventListener('pointerup', ()=> appendChat('Joke', jokes[Math.floor(Math.random()*jokes.length)]));
 $('btnTip').addEventListener('pointerup', ()=> appendChat('Tip', studyTips[Math.floor(Math.random()*studyTips.length)]));
+$('btnAllJokes').addEventListener('pointerup', ()=> {
+  // show all 50 jokes as a compact list
+  const box = $('chatbox'); const el = document.createElement('div');
+  el.style.margin='8px 0'; el.innerHTML = `<div style="font-weight:700">All jokes:</div><div style="margin-top:6px">${jokes.map((j,i)=>`${i+1}. ${esc(j)}`).join('<br/>')}</div>`;
+  box.appendChild(el); box.scrollTop = box.scrollHeight;
+});
+$('btnAllTips').addEventListener('pointerup', ()=> {
+  const box = $('chatbox'); const el = document.createElement('div');
+  el.style.margin='8px 0'; el.innerHTML = `<div style="font-weight:700">All study tips:</div><div style="margin-top:6px">${studyTips.map((t,i)=>`${i+1}. ${esc(t)}`).join('<br/>')}</div>`;
+  box.appendChild(el); box.scrollTop = box.scrollHeight;
+});
 
 /* Reminders */
-$('addRemBtn').addEventListener('pointerup', ()=>{ const t=$('remText').value.trim(); if(!t) return; const r=document.createElement('div'); r.className='todo-item'; r.innerHTML=`<div>${esc(t)}</div><div><button class="btn" data-action="del-rem" style="background:#ef4444">Delete</button></div>`; $('remList').prepend(r); $('remText').value=''; });
-$('remList').addEventListener('pointerup', e=>{ const b=e.target.closest('button[data-action="del-rem"]'); if(!b) return; b.closest('.todo-item').remove(); });
+$('addRemBtn').addEventListener('pointerup', ()=>{
+  const t = $('remText').value.trim(); if(!t) return;
+  const r = document.createElement('div'); r.className='todo-item';
+  r.innerHTML = `<div>${esc(t)}</div><div><button class="btn" data-action="del-rem" style="background:#ef4444">Delete</button></div>`;
+  $('remList').prepend(r); $('remText').value='';
+});
+$('remList').addEventListener('pointerup', e=>{ const b = e.target.closest('button[data-action="del-rem"]'); if(!b) return; b.closest('.todo-item').remove(); });
 
-/* Timer & ringtones */
+/* Timer & ringtones (10) */
 const ringtones = [
   {id:'r1',label:'Beep',src:'https://actions.google.com/sounds/v1/alarms/beep_short.ogg'},
   {id:'r2',label:'Marimba',src:'https://cdn.pixabay.com/download/audio/2022/03/15/audio_2e6f3e9b4b.mp3'},
@@ -260,133 +270,106 @@ const ringtones = [
   {id:'r10',label:'Alert',src:'https://cdn.pixabay.com/download/audio/2022/02/20/audio_ab3a610f7f.mp3'}
 ];
 const alarmSelect = $('alarmSelect');
-ringtones.forEach(r=>{ const o=document.createElement('option'); o.value=r.id; o.textContent=r.label; alarmSelect.appendChild(o); const a=document.createElement('audio'); a.id=r.id; a.preload='auto'; a.src=r.src; document.body.appendChild(a); });
+ringtones.forEach(r=>{
+  const o = document.createElement('option'); o.value=r.id; o.textContent=r.label; alarmSelect.appendChild(o);
+  const a = document.createElement('audio'); a.id = r.id; a.preload='auto'; a.src = r.src; document.body.appendChild(a);
+});
 let timerInterval = null;
-$('startTimerBtn').addEventListener('pointerup', ()=>{ const mins=Number($('minutes').value||0); if(!mins||mins<=0) return alert('Enter minutes'); let secs=Math.round(mins*60), disp=$('countdown'), choice=alarmSelect.value; if(timerInterval) clearInterval(timerInterval); timerInterval=setInterval(()=>{ const m=Math.floor(secs/60), s=secs%60; disp.textContent=`${m}:${s<10?'0':''}${s}`; if(secs-- <=0){ clearInterval(timerInterval); timerInterval=null; disp.textContent='Done'; try{ const a=document.getElementById(choice); if(a){ a.currentTime=0; a.play().catch(()=>{}); } }catch(e){} } },1000); });
+$('startTimerBtn').addEventListener('pointerup', ()=>{
+  const mins = Number($('minutes').value||0); if(!mins||mins<=0) return alert('Enter minutes');
+  let secs = Math.round(mins*60); const disp = $('countdown'); const choice = alarmSelect.value;
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(()=>{
+    const m = Math.floor(secs/60), s = secs%60;
+    disp.textContent = `${m}:${s<10?'0':''}${s}`;
+    if(secs-- <= 0){
+      clearInterval(timerInterval); timerInterval=null; disp.textContent='Done';
+      try{ const a = document.getElementById(choice); if(a){ a.currentTime=0; a.play().catch(()=>{}); } }catch(e){}
+    }
+  },1000);
+});
 $('stopTimerBtn').addEventListener('pointerup', ()=>{ if(timerInterval){ clearInterval(timerInterval); timerInterval=null; $('countdown').textContent='Stopped'; } });
 
-/* Hydration */
+/* Hydration (keeps) */
 let hydrationTimer = null;
-(function initHyd(){ try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water=0 } $('waterConsumed').textContent = window._lt_water; $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0)-window._lt_water,0); drawWater(); updateLeftTotals(); })();
-$('addWaterBtn').addEventListener('pointerup', ()=>{ const v=Number($('logWater').value||0); if(!v) return alert('Enter ml'); window._lt_water=(window._lt_water||0)+v; localStorage.setItem('lt_water', String(window._lt_water)); $('waterConsumed').textContent=window._lt_water; $('waterRemaining').textContent=Math.max(Number($('goalWater').value||0)-window._lt_water,0); drawWater(); updateLeftTotals(); });
-$('startHydBtn').addEventListener('pointerup', ()=>{ const mins=Number($('waterInterval').value||0); if(!mins) return alert('Enter minutes'); if(hydrationTimer) clearInterval(hydrationTimer); hydrationTimer=setInterval(()=> alert('Hydration reminder'), mins*60000); alert('Hydration reminders started'); });
+(function initHyd(){ try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water = 0; } $('waterConsumed').textContent = window._lt_water; $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0)-window._lt_water,0); drawWater(); })();
+$('addWaterBtn').addEventListener('pointerup', ()=>{ const v = Number($('logWater').value||0); if(!v) return alert('Enter ml'); window._lt_water = (window._lt_water||0) + v; localStorage.setItem('lt_water', String(window._lt_water)); $('waterConsumed').textContent = window._lt_water; $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0)-window._lt_water,0); drawWater(); updateLeftTotals(); });
+$('startHydBtn').addEventListener('pointerup', ()=>{ const mins = Number($('waterInterval').value||0); if(!mins) return alert('Enter minutes'); if(hydrationTimer) clearInterval(hydrationTimer); hydrationTimer = setInterval(()=> alert('Hydration reminder'), mins*60000); alert('Hydration reminders started'); });
 $('stopHydBtn').addEventListener('pointerup', ()=>{ if(hydrationTimer){ clearInterval(hydrationTimer); hydrationTimer=null; alert('Hydration reminders stopped'); }});
-function drawWater(){ const c=$('waterCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal=Number($('goalWater').value||0); const consumed=Number(window._lt_water||0); const ratio=goal>0?Math.min(consumed/goal,1):0; const w=(c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20,c.height/2-12,w,24); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w,c.height/2-12,c.width-40-w,24); ctx.fillStyle='#334155'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`,20,c.height/2-18); }
+function drawWater(){ const c = $('waterCanvas'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal = Number($('goalWater').value||0); const consumed = Number(window._lt_water||0); const ratio = goal>0?Math.min(consumed/goal,1):0; const w = (c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20,c.height/2-12,w,24); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w,c.height/2-12,c.width-40-w,24); ctx.fillStyle='#334155'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`,20,c.height/2-18); }
 
-/* Sleep */
+/* Sleep (keeps) */
 let sleepLogs = [];
-$('logSleepBtn').addEventListener('pointerup', ()=>{ const s=$('sleepTime').value, w=$('wakeTime').value; if(!s||!w) return alert('Select times'); const [sh,sm]=s.split(':').map(Number), [wh,wm]=w.split(':').map(Number); let start=sh*60+sm, end=wh*60+wm; if(end<=start) end+=24*60; const mins=end-start, hours=mins/60; $('lastSleepDuration').textContent=`${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`; const today=new Date().toISOString().slice(0,10); sleepLogs.push({date:today,hours}); const last7=sleepLogs.slice(-7); const avg=last7.reduce((a,b)=>a+b.hours,0)/(last7.length||1); $('avgSleepDuration').textContent=`${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`; drawSleep(); });
-function drawSleep(){ const c=$('sleepChart'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7=sleepLogs.slice(-7); if(!last7.length) return; const barW=Math.max(18,(c.width-40)/last7.length - 8); last7.forEach((l,i)=>{ const h=Math.min(12,l.hours)/12*(c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+8), c.height-12-h, barW, h); ctx.fillStyle='#334155'; ctx.font='11px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+8), c.height-2); }); }
+$('logSleepBtn').addEventListener('pointerup', ()=>{ const s = $('sleepTime').value, w = $('wakeTime').value; if(!s||!w) return alert('Select times'); const [sh,sm] = s.split(':').map(Number), [wh,wm] = w.split(':').map(Number); let start = sh*60+sm, end = wh*60+wm; if(end<=start) end+=24*60; const mins = end-start, hours = mins/60; $('lastSleepDuration').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`; const today = new Date().toISOString().slice(0,10); sleepLogs.push({date:today,hours}); const last7 = sleepLogs.slice(-7); const avg = last7.reduce((a,b)=>a+b.hours,0)/(last7.length||1); $('avgSleepDuration').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`; drawSleep(); });
+function drawSleep(){ const c = $('sleepChart'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7 = sleepLogs.slice(-7); if(!last7.length) return; const barW = Math.max(18,(c.width-40)/last7.length - 8); last7.forEach((l,i)=>{ const h = Math.min(12,l.hours)/12*(c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+8), c.height-12-h, barW, h); ctx.fillStyle='#334155'; ctx.font='11px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+8), c.height-2); }); }
 
-/* Meals - robust mobile-friendly implementation */
+/* Meal logging removed from UI; we still keep a small internal daily list (used by charts) */
 function mealsKey(){ return 'lt_meals_' + (new Date()).toISOString().slice(0,10); }
 function loadMeals(){ try{ return JSON.parse(localStorage.getItem(mealsKey())||'[]'); }catch(e){ return []; } }
 function saveMeals(list){ try{ localStorage.setItem(mealsKey(), JSON.stringify(list)); }catch(e){} }
-function renderMeals(){
-  const list = loadMeals(); const container = $('mealList'); container.innerHTML=''; let totalC=0, totalP=0;
-  list.slice().reverse().forEach(m=>{
-    const row = document.createElement('div'); row.className='todo-item';
-    row.innerHTML = `<div style="text-align:left"><strong>${esc(m.name)}</strong><div style="font-size:12px;color:var(--muted)">${esc(m.portion)} unit • ${esc(m.calories)} kcal</div></div><div><button class="btn" style="background:#ef4444" data-delete="${m.id}">Delete</button></div>`;
-    container.appendChild(row);
-    totalC += Number(m.calories||0); totalP += Number(m.portion||0);
+
+/* Charts: show last-day meals (if any) and sleep bars */
+function drawMealsBar(){
+  const meals = loadMeals();
+  const c = $('mealsBar'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  if(!meals.length){ ctx.fillStyle='#6b7280'; ctx.font='14px system-ui'; ctx.textAlign='center'; ctx.fillText('No meal data (meal tracker removed). If you import meals externally, they will appear here.', c.width/2, c.height/2); return; }
+  const list = meals.slice(-12);
+  const padding = 40; const w = c.width - padding*2; const h = c.height - padding*2;
+  const maxCal = Math.max(...list.map(m=>m.calories||0), 100);
+  const barWidth = Math.max(16, (w / list.length) * 0.7);
+  list.forEach((m,i)=>{
+    const x = padding + i * (w / list.length) + ((w / list.length) - barWidth)/2;
+    const barH = (m.calories / maxCal) * h;
+    const y = padding + (h - barH);
+    ctx.fillStyle = '#ff9f43';
+    ctx.fillRect(x, y, barWidth, barH);
+    ctx.fillStyle = '#111827'; ctx.font='11px system-ui'; ctx.textAlign='center';
+    const label = m.name.length>10 ? m.name.slice(0,10)+'…' : m.name;
+    ctx.fillText(label, x + barWidth/2, padding + h + 14);
+    ctx.fillText((m.calories||0) + ' kcal', x + barWidth/2, y - 6);
   });
-  $('todayCalories').textContent = totalC; $('todayPortions').textContent = totalP; updateLeftTotals(); drawMealsPie(totalC);
 }
-
-/* The handler below is written carefully to address WebViewer/mobile quirks:
-   - Reads values synchronously when user taps Add
-   - Validates name and numeric fields
-   - Saves to localStorage keyed by today's date
-   - Clears inputs after saving
-   - Uses both pointerup and click to maximize compatibility
-*/
-function addMealHandler(){
-  // Read values directly
-  const nameEl = $('mealName');
-  const portionEl = $('mealPortion');
-  const caloriesEl = $('mealCalories');
-
-  // On some WebView setups, input composition may require finalizing; small delay if composition present
-  // But we must not depend on async; read current values
-  const name = (nameEl.value || '').trim();
-  const portion = Number(portionEl.value || 0);
-  const calories = Number(caloriesEl.value || 0);
-
-  if(!name){ alert('Enter meal name'); nameEl.focus(); return; }
-
-  const list = loadMeals();
-  const item = { id: Date.now(), name, portion, calories, ts: Date.now() };
-  list.push(item);
-  saveMeals(list);
-
-  // Clear inputs (avoids some WebView retaining previous input and confusing user)
-  nameEl.value = '';
-  portionEl.value = '';
-  caloriesEl.value = '';
-
-  // Re-render and provide immediate feedback
-  renderMeals();
-  // Small visual confirmation
-  try{ appendChat('System', `Added meal "${item.name}" (${item.calories} kcal)`); }catch(e){}
-}
-
-// Attach both pointerup and click to be safe
-$('addMealBtn').addEventListener('pointerup', addMealHandler);
-$('addMealBtn').addEventListener('click', addMealHandler);
-
-/* Delete meal */
-$('mealList').addEventListener('pointerup', function(e){
-  const btn = e.target.closest('button[data-delete]');
-  if(!btn) return;
-  const id = Number(btn.getAttribute('data-delete'));
-  let list = loadMeals(); list = list.filter(m=>m.id !== id); saveMeals(list); renderMeals();
-});
-
-/* Draw meals pie */
-function drawMealsPie(totalCalories){
-  const c = $('mealsPie'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
-  const target = 2000; const consumed = Math.max(0, Math.min(totalCalories||0,target)); const remaining = Math.max(0,target-consumed);
-  const slices = [{label:'Consumed',value:consumed,color:'#ff9f43'},{label:'Remaining',value:remaining,color:'#e9eefb'}];
-  const total = Math.max(1, slices.reduce((s,x)=>s+x.value,0)); const cx = c.width/2, cy = c.height/2, r = Math.min(c.width,c.height)*0.38; let start = -Math.PI/2;
-  slices.forEach(s=>{
-    const ang = (s.value/total) * Math.PI*2; const end = start + ang;
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle = s.color; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.stroke(); start = end;
+function drawSleepBar(){
+  const c = $('sleepBar'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  const last7 = sleepLogs.slice(-7);
+  if(!last7.length){ ctx.fillStyle='#6b7280'; ctx.font='14px system-ui'; ctx.textAlign='center'; ctx.fillText('No sleep data', c.width/2, c.height/2); return; }
+  const padding = 28; const w = c.width - padding*2; const h = c.height - padding*2;
+  const maxH = Math.max(...last7.map(s=>s.hours||0), 8);
+  const barW = Math.max(18, (w / last7.length) * 0.7);
+  last7.forEach((l,i)=>{
+    const x = padding + i * (w / last7.length) + ((w / last7.length) - barW)/2;
+    const barH = (l.hours / maxH) * h;
+    const y = padding + (h - barH);
+    ctx.fillStyle = '#7b61ff';
+    ctx.fillRect(x, y, barW, barH);
+    ctx.fillStyle = '#111827'; ctx.font='11px system-ui'; ctx.textAlign='center';
+    ctx.fillText(l.date.slice(5), x + barWidth/2 || x + barW/2, padding + h + 14);
+    ctx.fillText((l.hours||0).toFixed(1) + 'h', x + barW/2, y - 6);
   });
-  ctx.fillStyle = '#111827'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14);
 }
 
-/* Tips (50) */
-const mealTips = [
-"Eat a colorful plate — fruits and vegetables of different colors.","Include lean protein with every meal (eggs, legumes, fish, chicken).","Choose whole grains over refined grains.","Snack on nuts and seeds instead of chips.","Drink water before meals to prevent overeating.","Favor cooking at home to control ingredients.","Keep portion sizes moderate and consistent.","Include a source of healthy fat (avocado, olive oil).","Limit sugary drinks and choose water or herbal tea.","Eat fiber-rich foods to support digestion and satiety.","Plan meals ahead to avoid impulsive fast food.","Start the day with a balanced breakfast.","Combine protein and carbs for sustained energy.","Add vegetables to sandwiches and omelettes.","Use spices and herbs to flavor instead of salt.","Opt for low-fat dairy or dairy alternatives if needed.","Choose grilled, baked, or steamed foods over fried.","Choose fresh fruit or yogurt for dessert.","Include legumes as a low-cost protein option.","Rotate your protein sources for variety.","Read labels and avoid trans fats or excessive sugar.","Use healthy swaps like zucchini noodles for pasta.","Prepare simple salads with mixed greens and seeds.","Use hummus or Greek yogurt dips for veggies.","Keep healthy snacks visible and accessible.","Reduce processed meat intake; choose lean options.","Balance treats with healthier daily choices.","Have a small protein-rich snack before workouts.","Limit late-night heavy meals that disrupt sleep.","Add chia or flax seeds to smoothies for omega-3s.","Use brown rice or quinoa instead of white rice.","Include fermented foods for gut health (yogurt, idli).","Avoid skipping meals which can lead to overeating later.","Cook in batches and freeze portions for busy days.","Use baking, grilling or air-frying instead of deep frying.","Pick whole fruit instead of fruit juice.","Incorporate leafy greens daily (spinach, kale).","Opt for unsweetened nut butters and spreads.","Be mindful when eating — chew slowly and enjoy.","Limit sugary cereals; choose oats or muesli.","Choose beans and lentils as protein-rich mains.","Use citrus and vinegar for dressings instead of heavy creams.","Try meatless meals a few times a week.","Rotate seasonal vegetables for freshness and nutrients.","Store pre-cut veggies for faster healthy snacking.","Watch portion sizes of calorie-dense foods like nuts.","Seek balance: carbs, protein, fats, fiber every meal.","Plan a weekly menu to reduce decision fatigue."
-];
-$('toggleTipsBtn').addEventListener('pointerup', ()=>{
-  const c = $('tipsCont'); if(c.style.display === 'block'){ c.style.display='none'; c.innerHTML=''; return; } c.innerHTML = mealTips.map((t,i)=>`<div style="padding:8px 6px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${esc(t)}</div>`).join(''); c.style.display='block';
-});
+/* Refresh charts button */
+$('refreshCharts').addEventListener('pointerup', ()=>{ drawMealsBar(); drawSleepBar(); });
 
-/* Minor visuals & boot */
-function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const v = Number($('moodValue').textContent||5); const w = (v/10)*(c.width-40); ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#2163ff'; ctx.fillRect(20, c.height/2-18, w, 36); ctx.fillStyle='#0f1724'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${v}`,22,c.height/2-24); }
-function drawSleep(){ const c=$('sleepChart'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7 = sleepLogs.slice(-7); if(!last7.length) return; const barW = Math.max(18, (c.width-40)/last7.length - 8); last7.forEach((l,i)=>{ const h = Math.min(12,l.hours)/12 * (c.height-30); ctx.fillStyle = '#7b61ff'; ctx.fillRect(20 + i*(barW+8), c.height-12-h, barW, h); ctx.fillStyle = '#334155'; ctx.font='11px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+8), c.height-2); }); }
-
-/* Boot */
+/* Small visuals and boot */
+function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const v = Number($('moodValue').textContent||5); const w = (v/10)*(c.width-40); ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#2163ff'; ctx.fillRect(20,c.height/2-18,w,36); ctx.fillStyle='#0f1724'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${v}`,22,c.height/2-24); }
 (function boot(){
   try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water = 0; }
   $('waterConsumed').textContent = window._lt_water;
-  $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0) - window._lt_water, 0);
-  renderMeals();
-  drawMealsPie(Number($('todayCalories').textContent || 0));
-  drawWater();
-  drawMood();
-  drawSleep();
+  $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0)-window._lt_water,0);
+  drawWater(); drawMood(); drawMealsBar(); drawSleepBar();
+  // keyboard-friendly tiles
   document.querySelectorAll('.tile').forEach(t => t.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); t.click(); } }));
 })();
 
 function updateLeftTotals(){ $('todayCaloriesLeft').textContent = $('todayCalories').textContent || '0'; $('waterConsumedLeft').textContent = $('waterConsumed').textContent || '0'; }
 
-/* Simple bridging object for host if needed */
+/* Provide a lightweight import endpoint so host (App Inventor) can add meals if desired */
 window.LifeTrack = {
-  getMealsKey: mealsKey,
-  getMeals: loadMeals,
-  importMeals: function(list){ const current = loadMeals(); (list||[]).forEach(i=> current.push(i)); saveMeals(current); renderMeals(); }
+  importMeals: function(list){ // list = [{name,calories,portion,ts}]
+    const cur = loadMeals(); (list||[]).forEach(i=> cur.push(i)); saveMeals(cur); drawMealsBar();
+  },
+  getMeals: function(){ return loadMeals(); }
 };
 </script>
 </body>
