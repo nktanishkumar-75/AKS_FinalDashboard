@@ -1,437 +1,435 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>LifeTrack Dashboard — All Functions Working</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>LifeTrack — Mobile Fixed</title>
 <style>
-  :root{
-    --accent:#5063f2; --bg:#f6f8fb; --card:#e6e8f2; --text:#0f1724; --muted:#6b7280;
-    --font:"Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
-  }
+  :root{ --accent:#5063f2; --bg:#f6f8fb; --card:#e6e8f2; --text:#0f1724; --muted:#6b7280; --font:system-ui,-apple-system,Segoe UI,Roboto; }
   *{box-sizing:border-box}
-  body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-  .wrap{max-width:420px;margin:16px auto;padding:14px}
+  html,body{height:100%;margin:0;background:var(--bg);font-family:var(--font);-webkit-tap-highlight-color:transparent}
+  .wrap{max-width:420px;margin:12px auto;padding:12px;position:relative}
   .top{display:flex;gap:10px;align-items:center;margin-bottom:12px}
-  .gear{width:44px;height:44px;border-radius:10px;background:#fff;border:1px solid var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer}
-  .header{flex:1;padding:12px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7b61ff);color:#fff;text-align:center}
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}
-  .card{background:#fff;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;min-height:70px;cursor:pointer;border:1px solid var(--card);font-weight:700}
+  .gear{width:44px;height:44px;border-radius:10px;background:#fff;border:1px solid var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
+  .header{flex:1;padding:10px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7b61ff);color:#fff;text-align:center}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+  .card{background:#fff;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;min-height:70px;cursor:pointer;border:1px solid var(--card);font-weight:700;touch-action:manipulation}
   .screen{display:none;background:#fff;padding:12px;border-radius:10px;border:1px solid var(--card);margin-bottom:12px}
-  .btn{display:block;width:100%;max-width:340px;margin:8px auto;padding:11px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:800;cursor:pointer}
+  .visible{display:block}
+  .btn{display:block;width:100%;max-width:340px;margin:8px auto;padding:11px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;touch-action:manipulation}
   input,select,textarea{display:block;width:100%;max-width:340px;margin:8px auto;padding:10px;border-radius:8px;border:1px solid var(--card)}
-  .chatbox{height:220px;overflow:auto;border:1px solid #eef2ff;padding:10px;border-radius:8px;background:#fbfdff}
+  .chatbox{height:200px;overflow:auto;border:1px solid #eef2ff;padding:10px;border-radius:8px;background:#fbfdff}
   .meta-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-  #tipsCont,#fileList{display:none;max-height:320px;overflow:auto;border:1px solid var(--card);padding:8px;border-radius:8px;background:#fff}
+  #tipsCont,#fileList{display:none;max-height:300px;overflow:auto;border:1px solid var(--card);padding:8px;border-radius:8px;background:#fff}
   .file-row{display:flex;justify-content:space-between;align-items:center;padding:8px 6px;border-bottom:1px dashed #f1f5ff}
   .file-row button{margin-left:8px;padding:6px 8px;border-radius:8px;border:0;cursor:pointer}
   .view{background:#2b6ef6;color:#fff}
   .rem{background:#ef4444;color:#fff}
   .todo-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--card);border-radius:8px;margin:8px 0;background:#fff}
   canvas{display:block;margin:10px auto;max-width:100%}
+  .settings-panel{position:fixed;left:12px;right:12px;top:60px;background:#fff;border:1px solid var(--card);padding:12px;border-radius:12px;box-shadow:0 12px 30px rgba(16,24,40,0.12);z-index:999;display:none;max-width:420px;margin:0 auto}
+  .small{font-size:13px;color:var(--muted)}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="app">
   <div class="top">
-    <div class="gear" id="gear">⚙️</div>
-    <div class="header">
-      <h2 style="margin:0">LifeTrack Dashboard</h2>
-      <div style="opacity:0.95;font-weight:600">Welcome</div>
-    </div>
+    <div class="gear" id="settingsToggle" role="button" tabindex="0" aria-label="Settings">⚙️</div>
+    <div class="header"><h2 style="margin:0">LifeTrack</h2><div style="opacity:0.95;font-weight:600">Mobile ready</div></div>
   </div>
 
-  <div class="grid" id="quickGrid">
-    <div class="card" onclick="show('chat')">💬 Chatbot</div>
-    <div class="card" onclick="show('mood')">📊 Mood</div>
-    <div class="card" onclick="show('rem')">✅ Reminders</div>
-    <div class="card" onclick="show('timer')">⏱ Timer</div>
-    <div class="card" onclick="openPicker()">📂 Upload Medical Files</div>
-    <div class="card" onclick="show('hydration')">💧 Hydration</div>
-    <div class="card" onclick="show('sleep')">🌙 Sleep</div>
-    <div class="card" onclick="show('meals')">🍽 Meals</div>
+  <div class="grid" id="quickGrid" role="list">
+    <div class="card" data-target="chat" role="listitem" tabindex="0">💬 Chatbot</div>
+    <div class="card" data-target="mood" role="listitem" tabindex="0">📊 Mood</div>
+    <div class="card" data-target="rem" role="listitem" tabindex="0">✅ Reminders</div>
+    <div class="card" data-target="timer" role="listitem" tabindex="0">⏱ Timer</div>
+    <div class="card" id="uploadBtn" role="listitem" tabindex="0">📂 Upload Medical Files</div>
+    <div class="card" data-target="hydration" role="listitem" tabindex="0">💧 Hydration</div>
+    <div class="card" data-target="sleep" role="listitem" tabindex="0">🌙 Sleep</div>
+    <div class="card" data-target="meals" role="listitem" tabindex="0">🍽 Meals</div>
   </div>
 
-  <input id="fileInput" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" style="display:none">
-  <div id="fileList"></div>
+  <input id="fileInput" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" style="display:none"/>
+  <div id="fileList" aria-live="polite"></div>
 
-  <!-- Chat -->
-  <div class="screen" id="chat">
+  <!-- Screens -->
+  <section class="screen visible" id="chat">
     <h3>Chatbot</h3>
     <div id="chatbox" class="chatbox"></div>
-    <button class="btn" onclick="botQuick('weather')">🌦 Weather</button>
-    <button class="btn" onclick="botQuick('joke')">😂 Joke</button>
-    <button class="btn" onclick="botQuick('tip')">📚 Study Tip</button>
-  </div>
+    <button class="btn" id="btnWeather">🌦 Weather</button>
+    <button class="btn" id="btnJoke">😂 Joke</button>
+    <button class="btn" id="btnTip">📚 Study Tip</button>
+  </section>
 
-  <!-- Mood -->
-  <div class="screen" id="mood">
+  <section class="screen" id="mood">
     <h3>Mood</h3>
-    <p>Enter mood 1–10</p>
-    <button class="btn" onclick="enterMood()">Enter mood</button>
+    <p class="small">Log mood 1–10</p>
+    <button class="btn" id="enterMood">Enter mood</button>
     <p>Current: <strong id="moodValue">5</strong></p>
-    <canvas id="moodCanvas" width="360" height="140"></canvas>
-  </div>
+    <canvas id="moodCanvas" width="360" height="120"></canvas>
+  </section>
 
-  <!-- Reminders -->
-  <div class="screen" id="rem">
+  <section class="screen" id="rem">
     <h3>Reminders</h3>
-    <input id="remText" type="text" placeholder="Reminder text">
-    <button class="btn" onclick="addRem()">Add</button>
+    <input id="remText" type="text" placeholder="Reminder text"/>
+    <button class="btn" id="addRemBtn">Add</button>
     <div id="remList"></div>
-  </div>
+  </section>
 
-  <!-- Timer -->
-  <div class="screen" id="timer">
-    <h3>Timer</h3>
-    <input id="minutes" type="number" placeholder="Minutes">
-    <select id="alarmSel"><option value="alarm1">Beep</option><option value="alarm2">Marimba</option><option value="alarm3">Bell</option></select>
-    <button class="btn" onclick="startTimer()">Start</button>
+  <section class="screen" id="timer">
+    <h3>Focus Timer</h3>
+    <input id="minutes" type="number" placeholder="Minutes"/>
+    <label class="small">Choose ringtone</label>
+    <select id="alarmSelect" aria-label="Alarm ringtone"></select>
+    <button class="btn" id="startTimerBtn">Start</button>
     <div id="countdown" style="margin-top:8px"></div>
-    <audio id="alarm1" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
-    <audio id="alarm2" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2e6f3e9b4b.mp3"></audio>
-    <audio id="alarm3" src="https://cdn.pixabay.com/download/audio/2021/09/30/audio_2c9b5f3b3d.mp3"></audio>
-  </div>
 
-  <!-- Hydration -->
-  <div class="screen" id="hydration">
+    <!-- 10 ringtones -->
+    <audio id="alarm1" preload="auto" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
+    <audio id="alarm2" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2e6f3e9b4b.mp3"></audio>
+    <audio id="alarm3" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/09/30/audio_2c9b5f3b3d.mp3"></audio>
+    <audio id="alarm4" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/12/06/audio_7d2a6f9c6f.mp3"></audio>
+    <audio id="alarm5" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_24c7b3d98b.mp3"></audio>
+    <audio id="alarm6" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/08/03/audio_7f8f6f1a37.mp3"></audio>
+    <audio id="alarm7" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/12/08/audio_2c2f5e4b6a.mp3"></audio>
+    <audio id="alarm8" preload="auto" src="https://cdn.pixabay.com/download/audio/2023/01/13/audio_9c8d9e89ab.mp3"></audio>
+    <audio id="alarm9" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/10/11/audio_3e67b1d9c2.mp3"></audio>
+    <audio id="alarm10" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/02/20/audio_ab3a610f7f.mp3"></audio>
+  </section>
+
+  <section class="screen" id="hydration">
     <h3>Hydration</h3>
-    <input id="goalWater" type="number" placeholder="Daily goal ml" value="2000">
-    <input id="logWater" type="number" placeholder="Log intake ml" value="250">
-    <button class="btn" onclick="addWater()">Add intake</button>
-    <div class="meta-row">
-      <div>Consumed: <strong id="waterConsumed">0</strong> ml</div>
-      <div>Remaining: <strong id="waterRemaining">2000</strong></div>
-    </div>
-    <input id="waterInterval" type="number" placeholder="Reminder min" value="60">
-    <button class="btn" onclick="startHydration()">Start reminders</button>
-    <button class="btn" onclick="stopHydration()">Stop reminders</button>
+    <input id="goalWater" type="number" placeholder="Daily goal (ml)" value="2000"/>
+    <input id="logWater" type="number" placeholder="Log intake (ml)" value="250"/>
+    <button class="btn" id="addWaterBtn">Add intake</button>
+    <div class="meta-row"><div>Consumed: <strong id="waterConsumed">0</strong> ml</div><div>Remaining: <strong id="waterRemaining">2000</strong> ml</div></div>
+    <input id="waterInterval" type="number" placeholder="Reminder interval (minutes)" value="60"/>
+    <button class="btn" id="startHydBtn">Start reminders</button>
+    <button class="btn" id="stopHydBtn">Stop reminders</button>
     <canvas id="waterCanvas" width="360" height="100"></canvas>
-  </div>
+  </section>
 
-  <!-- Sleep -->
-  <div class="screen" id="sleep">
-    <h3>Sleep</h3>
-    <input id="sleepStart" type="time">
-    <input id="sleepEnd" type="time">
-    <button class="btn" onclick="logSleep()">Log sleep</button>
-    <p>Last: <strong id="lastSleep">0h 0m</strong></p>
-    <p>7-day avg: <strong id="avgSleep">0h 0m</strong></p>
-    <canvas id="sleepCanvas" width="360" height="100"></canvas>
-  </div>
+  <section class="screen" id="sleep">
+    <h3>Sleep Analytics</h3>
+    <input id="sleepTime" type="time"/>
+    <input id="wakeTime" type="time"/>
+    <button class="btn" id="logSleepBtn">Log sleep</button>
+    <p>Last duration: <strong id="lastSleepDuration">0h 0m</strong></p>
+    <p>7-day average: <strong id="avgSleepDuration">0h 0m</strong></p>
+    <canvas id="sleepChart" width="360" height="100"></canvas>
+  </section>
 
-  <!-- Meals -->
-  <div class="screen" id="meals">
-    <h3>Meals</h3>
-    <input id="mealName" type="text" placeholder="Meal name">
-    <input id="mealPortion" type="number" placeholder="Portion (ml/g)">
-    <input id="mealCalories" type="number" placeholder="Calories (kcal)">
-    <button class="btn" onclick="addMeal()">Add meal</button>
-    <div class="meta-row">
-      <div>Today kcal: <strong id="todayKcal">0</strong></div>
-      <div>Today portions: <strong id="todayPortions">0</strong></div>
-    </div>
-    <p>Recent</p>
-    <div id="mealList"></div>
-    <button class="btn" onclick="toggleTips()">Show/Hide 50 Healthy Tips</button>
+  <section class="screen" id="meals">
+    <h3>Meal Tracking</h3>
+    <input id="mealName" type="text" placeholder="Meal name"/>
+    <input id="mealPortion" type="number" placeholder="Portion (ml or g)"/>
+    <input id="mealCalories" type="number" placeholder="Calories (kcal)"/>
+    <button class="btn" id="addMealBtn">Add meal</button>
+    <div class="meta-row"><div>Today kcal: <strong id="todayCalories">0</strong></div><div>Today portions: <strong id="todayPortions">0</strong></div></div>
+    <p>Recent entries</p><div id="mealList"></div>
+    <button class="btn" id="toggleTipsBtn">Show/Hide 50 Healthy Food Tips</button>
     <div id="tipsCont"></div>
-    <p>Meal pie</p>
-    <canvas id="pieCanvas" width="360" height="240" style="background:#fff;border-radius:8px"></canvas>
+    <p>Meal pie</p><canvas id="mealsPie" width="360" height="240" style="background:#fff;border-radius:8px"></canvas>
+  </section>
+</div>
+
+<!-- Settings panel -->
+<div class="settings-panel" id="settingsPanel" role="dialog" aria-hidden="true">
+  <h3 style="margin:0 0 8px 0">App Settings</h3>
+  <div class="small">Font size</div>
+  <input id="fontSize" type="range" min="12" max="20" value="16"/>
+  <div class="small">Theme color</div>
+  <input id="themeColor" type="color" value="#5063f2"/>
+  <div style="display:flex;gap:8px;margin-top:10px">
+    <button class="btn" id="saveSettings">Save</button>
+    <button class="btn" id="resetSettings" style="background:#ef4444">Reset</button>
   </div>
 </div>
 
 <script>
-/* Utilities */
-function $(id){return document.getElementById(id)}
-function show(id){ document.querySelectorAll('.screen').forEach(s=>s.style.display='none'); const el=$(id); if(el) el.style.display='block'; hideTips(); hideFiles(); }
+/* ---------- Helpers ---------- */
+const $ = id => document.getElementById(id);
 function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('visible'));
+  const el = $(id);
+  if(el){ el.classList.add('visible'); el.style.display='block'; el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  hideSettings(); hideTips(); hideFiles();
+}
 
-/* State */
-let waterConsumed = 0, hydrationTimer = null;
-let sleepLogs = [];
-let selectedFiles = [];
+/* ---------- Make grid cards responsive on mobile ---------- */
+document.getElementById('quickGrid').addEventListener('pointerup', function(e){
+  const card = e.target.closest('.card');
+  if(!card) return;
+  const target = card.getAttribute('data-target');
+  if(target) showScreen(target);
+  else if(card.id === 'uploadBtn') openPicker();
+});
+document.getElementById('quickGrid').addEventListener('keydown', function(e){
+  if(e.key==='Enter' || e.key===' ') { e.preventDefault(); const card = e.target.closest('.card'); if(card){ const target = card.getAttribute('data-target'); if(target) showScreen(target); else if(card.id==='uploadBtn') openPicker(); } }
+});
 
-/* Init */
-window.onload = function(){
-  show('chat');
-  try{ waterConsumed = Number(localStorage.getItem('lt_water')||0) }catch(e){ waterConsumed = 0 }
-  updateWaterUI();
-  renderMeals();
-  drawPie(0);
-  drawMood();
-  drawSleep();
-};
+/* ---------- Settings panel ---------- */
+const settingsPanel = $('settingsPanel');
+function showSettings(){ settingsPanel.style.display='block'; settingsPanel.setAttribute('aria-hidden','false'); }
+function hideSettings(){ settingsPanel.style.display='none'; settingsPanel.setAttribute('aria-hidden','true'); }
+$('settingsToggle').addEventListener('pointerup', ()=> settingsPanel.style.display==='block' ? hideSettings() : showSettings());
+$('settingsToggle').addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); settingsPanel.style.display==='block' ? hideSettings() : showSettings(); } });
 
-/* Chatbot: 50 jokes, 50 study tips */
+const SETTINGS_KEY = 'lt_settings_v2';
+function loadSettings(){ try{ const s = localStorage.getItem(SETTINGS_KEY); return s ? JSON.parse(s) : null; }catch(e){ return null; } }
+function saveSettings(cfg){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(cfg)); }catch(e){} }
+function applySettings(cfg){
+  if(!cfg) return;
+  if(cfg.fontSize) document.documentElement.style.fontSize = cfg.fontSize + 'px';
+  if(cfg.themeColor) document.documentElement.style.setProperty('--accent', cfg.themeColor);
+}
+(function initSettings(){
+  const s = loadSettings();
+  if(s){ applySettings(s); $('fontSize').value = s.fontSize || 16; $('themeColor').value = s.themeColor || '#5063f2'; }
+  $('fontSize').addEventListener('input', e=> document.documentElement.style.fontSize = e.target.value + 'px');
+  $('themeColor').addEventListener('input', e=> document.documentElement.style.setProperty('--accent', e.target.value));
+  $('saveSettings').addEventListener('pointerup', ()=>{ const cfg = { fontSize:Number($('fontSize').value), themeColor:$('themeColor').value }; saveSettings(cfg); applySettings(cfg); alert('Settings saved'); hideSettings(); });
+  $('resetSettings').addEventListener('pointerup', ()=>{ localStorage.removeItem(SETTINGS_KEY); location.reload(); });
+})();
+
+/* ---------- Chatbot (50 jokes + 50 tips) ---------- */
 const jokes = [
-"Why don’t skeletons fight? They don’t have the guts!",
-"Why did the math book look sad? It had too many problems.",
-"Why can’t your nose be 12 inches long? Because then it would be a foot!",
-"Why did the scarecrow win an award? He was outstanding in his field!",
-"What do you call fake spaghetti? An impasta!",
-"Why did the bicycle fall over? It was two-tired!",
-"Why don’t eggs tell jokes? They’d crack each other up!",
-"What do you call cheese that isn’t yours? Nacho cheese!",
-"Why did the golfer bring two pairs of pants? In case he got a hole in one!",
-"Why did the tomato blush? It saw the salad dressing!",
-"Why don’t scientists trust atoms? Because they make up everything!",
-"Why did the cookie go to the doctor? It was feeling crummy!",
-"Why did the computer go to therapy? It had too many bytes!",
-"Why did the student eat his homework? The teacher said it was a piece of cake!",
-"Why did the cat sit on the computer? To keep an eye on the mouse!",
-"Why did the banana go to the party? Because it was a-peeling!",
-"Why did the chicken join a band? Because it had the drumsticks!",
-"Why did the fish blush? Because it saw the ocean’s bottom!",
-"Why did the frog take the bus? His car got toad!",
-"Why did the bee get married? Because he found his honey!",
-"Why did the pencil go to the principal’s office? It had a point to make!",
-"Why did the broom get a promotion? It swept the competition!",
-"Why did the grape stop in the road? It ran out of juice!",
-"Why did the light bulb go to school? To get a little brighter!",
-"Why did the duck get a job? He was tired of winging it!",
-"Why did the elephant bring a suitcase? He was going on a trunk trip!",
-"Why did the calendar apply for a job? It wanted to work full time!",
-"Why did the robot go on vacation? It needed to recharge!",
-"Why did the donut go to therapy? It felt empty inside!",
-"Why did the dog sit in the shade? He didn’t want to be a hot dog!",
-"Why did the astronaut break up? He needed space!",
-"Why did the fish get bad grades? Because it was below sea level!",
-"Why did the cow go to space? To see the moooon!",
-"Why did the skeleton skip the dance? He had no body to go with!",
-"Why did the kangaroo stop coffee? It made him too jumpy!",
-"Why did the snowman call a cab? He had a meltdown!",
-"Why did the pirate buy an eye patch? He couldn’t afford an iPhone!",
-"Why did the balloon go near the needle? To pop the question!",
-"Why did the horse go behind the tree? To change his jockeys!",
-"Why did the snail paint an S on his car? So people would say, ‘Look at that S-car go!’",
-"Why did the giraffe get bad grades? He had his head in the clouds!",
-"Why did the owl get promoted? He was a real hoot!",
-"Why did the mirror fail the test? It couldn’t reflect well!",
-"Why did the volcano get a promotion? It was on fire!",
-"Why did the sandwich go to the gym? To get shredded!",
-"Why did the book join the police? It wanted to go undercover!",
-"Why did the clock get detention? It was tocking too much!",
-"Why did the spider start a blog? To spin a web of stories!"
+"Why don’t skeletons fight? They don’t have the guts!","Why did the math book look sad? It had too many problems.","Why can’t your nose be 12 inches long? Because then it would be a foot!",
+"Why did the scarecrow win an award? He was outstanding in his field!","What do you call fake spaghetti? An impasta!","Why did the bicycle fall over? It was two-tired!",
+"Why don’t eggs tell jokes? They’d crack each other up!","What do you call cheese that isn’t yours? Nacho cheese!","Why did the golfer bring two pairs of pants? In case he got a hole in one!",
+"Why did the tomato blush? It saw the salad dressing!","Why don’t scientists trust atoms? Because they make up everything!","Why did the cookie go to the doctor? It was feeling crummy!",
+"Why did the computer go to therapy? It had too many bytes!","Why did the student eat his homework? The teacher said it was a piece of cake!","Why did the cat sit on the computer? To keep an eye on the mouse!",
+"Why did the banana go to the party? Because it was a-peeling!","Why did the chicken join a band? Because it had the drumsticks!","Why did the fish blush? Because it saw the ocean’s bottom!",
+"Why did the frog take the bus? His car got toad!","Why did the bee get married? Because he found his honey!","Why did the pencil go to the principal’s office? It had a point to make!",
+"Why did the broom get a promotion? It swept the competition!","Why did the grape stop in the road? It ran out of juice!","Why did the light bulb go to school? To get a little brighter!",
+"Why did the duck get a job? He was tired of winging it!","Why did the elephant bring a suitcase? He was going on a trunk trip!","Why did the calendar apply for a job? It wanted to work full time!",
+"Why did the robot go on vacation? It needed to recharge!","Why did the donut go to therapy? It felt empty inside!","Why did the dog sit in the shade? He didn’t want to be a hot dog!",
+"Why did the astronaut break up? He needed space!","Why did the fish get bad grades? Because it was below sea level!","Why did the cow go to space? To see the moooon!",
+"Why did the skeleton skip the dance? He had no body to go with!","Why did the kangaroo stop coffee? It made him too jumpy!","Why did the snowman call a cab? He had a meltdown!",
+"Why did the pirate buy an eye patch? He couldn’t afford an iPhone!","Why did the balloon go near the needle? To pop the question!","Why did the horse go behind the tree? To change his jockeys!",
+"Why did the snail paint an S on his car? So people would say, ‘Look at that S-car go!’","Why did the giraffe get bad grades? He had his head in the clouds!","Why did the owl get promoted? He was a real hoot!",
+"Why did the mirror fail the test? It couldn’t reflect well!","Why did the volcano get a promotion? It was on fire!","Why did the sandwich go to the gym? To get shredded!"
 ];
 const studyTips = [
-"Break study sessions into 25-minute chunks with 5-minute breaks.",
-"Teach what you learn — explaining helps retention.",
-"Use flashcards for active recall.",
-"Review material within 24 hours.",
-"Create a distraction-free study space.",
-"Set clear goals for each session.",
-"Use mnemonic devices.",
-"Practice past papers under timed conditions.",
-"Summarize notes in your own words.",
-"Use diagrams and mind maps.",
-"Sleep well — memory consolidates during rest.",
-"Stay hydrated and eat brain-friendly foods.",
-"Avoid multitasking.",
-"Use spaced repetition.",
-"Study at your peak energy time.",
-"Group study for tough topics.",
-"Use apps like Anki or Quizlet.",
-"Record yourself explaining topics.",
-"Color-code notes.",
-"Reward yourself after tasks.",
-"Spread learning over days, not cramming.",
-"Apply the Feynman technique.",
-"Take movement/stretch breaks.",
-"Turn off notifications.",
-"Use background music if it helps.",
-"Make a weekly checklist.",
-"Start with the hardest subject.",
-"Use real-world examples.",
-"Ask questions to deepen understanding.",
-"Use sticky notes for key facts.",
-"Teach a friend or sibling.",
-"Watch short explainer videos.",
-"Keep a study journal.",
-"Visualize exam success.",
-"Don’t hesitate to ask for help.",
-"Stay consistent with daily effort.",
-"Use analogies to simplify.",
-"Practice writing essays.",
-"Limit social media.",
-"Use timers to stay on track.",
-"Keep your desk tidy.",
-"Drink water before and during study.",
-"Use site blockers for focus.",
-"Make your own quizzes.",
-"Combine words + visuals (dual coding).",
-"Celebrate small wins.",
-"Stay positive — mindset matters.",
-"Track your time to find patterns.",
-"Reflect on what worked and what didn’t.",
-"Balance study with exercise and relaxation."
+"Break study sessions into 25-minute chunks with 5-minute breaks.","Teach what you learn — explaining helps retention.","Use flashcards for active recall.","Review material within 24 hours.","Create a distraction-free study space.","Set clear goals for each session.","Use mnemonic devices.","Practice past papers under timed conditions.","Summarize notes in your own words.","Use diagrams and mind maps.","Sleep well — memory consolidates during rest.","Stay hydrated and eat brain-friendly foods.","Avoid multitasking.","Use spaced repetition.","Study at your peak energy time.","Group study for tough topics.","Use apps like Anki or Quizlet.","Record yourself explaining topics.","Color-code notes.","Reward yourself after tasks.","Spread learning over days, not cramming.","Apply the Feynman technique.","Take movement/stretch breaks.","Turn off notifications.","Use background music if it helps.","Make a weekly checklist.","Start with the hardest subject.","Use real-world examples.","Ask questions to deepen understanding.","Use sticky notes for key facts.","Teach a friend or sibling.","Watch short explainer videos.","Keep a study journal.","Visualize exam success.","Don’t hesitate to ask for help.","Stay consistent with daily effort.","Use analogies to simplify.","Practice writing essays.","Limit social media.","Use timers to stay on track.","Keep your desk tidy.","Drink water before and during study.","Use site blockers for focus.","Make your own quizzes.","Combine words + visuals (dual coding).","Celebrate small wins.","Stay positive — mindset matters.","Track your time to find patterns.","Reflect on what worked and what didn’t.","Balance study with exercise and relaxation."
 ];
 
-function botQuick(type){
+function appendChat(user, bot){
   const box = $('chatbox');
-  let user='', reply='';
-  if(type==='weather'){ user="What's the weather?"; reply="Sunny and 28°C (example)."; }
-  else if(type==='joke'){ user="Tell me a joke"; reply = jokes[Math.floor(Math.random()*jokes.length)]; }
-  else { user="Give me a study tip"; reply = studyTips[Math.floor(Math.random()*studyTips.length)]; }
-  box.innerHTML += `<p style="margin:6px 0"><strong>You:</strong> ${escapeHtml(user)}</p><p style="margin:6px 0"><strong>Bot:</strong> ${escapeHtml(reply)}</p>`;
+  box.innerHTML += `<p style="margin:6px 0"><strong>You:</strong> ${escapeHtml(user)}</p><p style="margin:6px 0"><strong>Bot:</strong> ${escapeHtml(bot)}</p>`;
   box.scrollTop = box.scrollHeight;
 }
+$('btnWeather').addEventListener('pointerup', ()=> appendChat("What's the weather?", "Sunny and 28°C (example)."));
+$('btnJoke').addEventListener('pointerup', ()=> appendChat("Tell me a joke", jokes[Math.floor(Math.random()*jokes.length)]));
+$('btnTip').addEventListener('pointerup', ()=> appendChat("Give me a study tip", studyTips[Math.floor(Math.random()*studyTips.length)]));
 
-/* Reminders */
-function addRem(){ const t=$('remText').value.trim(); if(!t) return; const el=document.createElement('div'); el.className='todo-item'; el.innerHTML=`<div>${escapeHtml(t)}</div><div><button onclick="this.closest('.todo-item').remove()">Delete</button></div>`; $('remList').prepend(el); $('remText').value=''; }
+/* ---------- Reminders ---------- */
+$('addRemBtn').addEventListener('pointerup', ()=> {
+  const txt = $('remText').value.trim(); if(!txt) return;
+  const el = document.createElement('div'); el.className='todo-item';
+  el.innerHTML = `<div>${escapeHtml(txt)}</div><div><button class="btn" style="background:#ef4444" onclick="this.closest('.todo-item').remove()">Delete</button></div>`;
+  $('remList').prepend(el); $('remText').value='';
+});
 
-/* Timer */
-function startTimer(){ const m=parseInt($('minutes').value,10); if(isNaN(m)||m<=0) return alert('Enter minutes'); let s=m*60; const out=$('countdown'); const choice=$('alarmSel').value; const alarm=$(choice); const id=setInterval(()=>{ const mm=Math.floor(s/60), ss=s%60; out.textContent=`${mm}:${ss<10?'0':''}${ss}`; if(--s<0){ clearInterval(id); try{ alarm.currentTime=0; alarm.play(); }catch(e){} out.textContent='Done' } },1000); }
+/* ---------- Timer & ringtones (10) ---------- */
+const ringtoneList = [
+  {id:'alarm1', label:'Beep'}, {id:'alarm2', label:'Marimba'}, {id:'alarm3', label:'Bell'},
+  {id:'alarm4', label:'Digital'}, {id:'alarm5', label:'Chime'}, {id:'alarm6', label:'Tone A'},
+  {id:'alarm7', label:'Tone B'}, {id:'alarm8', label:'Pluck'}, {id:'alarm9', label:'Ping'}, {id:'alarm10', label:'Alert'}
+];
+const alarmSelect = $('alarmSelect');
+ringtoneList.forEach(r=>{ const opt = document.createElement('option'); opt.value = r.id; opt.textContent = r.label; alarmSelect.appendChild(opt); });
 
-/* Hydration */
-function updateWaterUI(){ const goal=Number($('goalWater').value||0); $('waterConsumed').textContent = waterConsumed; $('waterRemaining').textContent = Math.max(goal-waterConsumed,0); drawWater(); }
-function addWater(){ const v=Number($('logWater').value||0); if(v<=0) return alert('Enter ml'); waterConsumed += v; try{ localStorage.setItem('lt_water', String(waterConsumed)) }catch(e){} updateWaterUI(); }
-function startHydration(){ const m=Number($('waterInterval').value||0); if(m<=0) return alert('Enter minutes'); if(hydrationTimer) clearInterval(hydrationTimer); hydrationTimer = setInterval(()=> alert('Hydration reminder'), m*60000); alert('Hydration reminders started'); }
-function stopHydration(){ if(hydrationTimer){ clearInterval(hydrationTimer); hydrationTimer=null; alert('Hydration reminders stopped'); } }
-function drawWater(){ const c=$('waterCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal=Number($('goalWater').value||0); const ratio = goal>0 ? Math.min(waterConsumed/goal,1) : 0; const w=(c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20, c.height/2-10, w, 20); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w, c.height/2-10, c.width-40-w,20); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${waterConsumed} ml / Goal ${goal} ml`, 20, c.height/2-18); }
+let timerInterval = null;
+$('startTimerBtn').addEventListener('pointerup', ()=> {
+  const mins = Number($('minutes').value||0); if(!mins || mins<=0) return alert('Enter minutes');
+  let seconds = Math.round(mins*60);
+  const countdown = $('countdown');
+  const choice = alarmSelect.value;
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(()=>{
+    const m = Math.floor(seconds/60), s = seconds%60;
+    countdown.textContent = `${m}:${s<10?'0':''}${s}`;
+    if(seconds-- <= 0){
+      clearInterval(timerInterval); timerInterval = null; countdown.textContent = 'Done';
+      playAlarm(choice);
+    }
+  },1000);
+});
+function playAlarm(id){
+  try{
+    const a = $(id);
+    if(!a) return;
+    a.currentTime = 0;
+    a.play().catch(()=>{ /* WebView may block autoplay until user gesture; start button is a gesture */ });
+  }catch(e){}
+}
 
-/* Sleep */
-function logSleep(){ const s=$('sleepStart').value, e=$('sleepEnd').value; if(!s||!e) return alert('Select times'); const [sh,sm]=s.split(':').map(Number), [eh,em]=e.split(':').map(Number); let start=sh*60+sm, end=eh*60+em; if(end<=start) end+=24*60; const mins=end-start, hours=mins/60; $('lastSleep').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`; const d=(new Date()).toISOString().slice(0,10); sleepLogs.push({date:d,hours}); const last7=sleepLogs.slice(-7); const avg= last7.reduce((a,b)=>a+b.hours,0)/(last7.length||1); $('avgSleep').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`; drawSleep(); }
-function drawSleep(){ const c=$('sleepCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7 = sleepLogs.slice(-7); if(!last7.length) return; const barW = Math.max(12,(c.width-40)/last7.length - 6); last7.forEach((l,i)=>{ const h=Math.min(12,l.hours)/12*(c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+6), c.height-12-h, barW, h); ctx.fillStyle='#333'; ctx.font='10px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+6), c.height-2); }); }
+/* ---------- Hydration ---------- */
+let hydrationTimer = null;
+(function initHydration(){
+  try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water = 0; }
+  $('waterConsumed').textContent = window._lt_water;
+  $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0) - window._lt_water, 0);
+})();
+$('addWaterBtn').addEventListener('pointerup', ()=>{
+  const v = Number($('logWater').value||0); if(!v || v<=0) return alert('Enter ml');
+  window._lt_water = (window._lt_water || 0) + v;
+  try{ localStorage.setItem('lt_water', String(window._lt_water)); }catch(e){}
+  $('waterConsumed').textContent = window._lt_water;
+  $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0) - window._lt_water, 0);
+  drawWater();
+});
+$('startHydBtn').addEventListener('pointerup', ()=>{
+  const mins = Number($('waterInterval').value||0); if(!mins || mins<=0) return alert('Enter minutes');
+  if(hydrationTimer) clearInterval(hydrationTimer);
+  hydrationTimer = setInterval(()=> alert('Hydration reminder'), mins*60000);
+  alert('Hydration reminders started');
+});
+$('stopHydBtn').addEventListener('pointerup', ()=>{ if(hydrationTimer){ clearInterval(hydrationTimer); hydrationTimer=null; alert('Hydration reminders stopped'); }});
+function drawWater(){
+  const c = $('waterCanvas'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  const goal = Number($('goalWater').value||0); const consumed = Number(window._lt_water||0);
+  const ratio = goal>0? Math.min(consumed/goal,1):0; const w = (c.width-40)*ratio;
+  ctx.fillStyle = '#34d399'; ctx.fillRect(20, c.height/2-10, w, 20);
+  ctx.fillStyle = '#e6e8f2'; ctx.fillRect(20+w, c.height/2-10, c.width-40-w,20);
+  ctx.fillStyle = '#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`, 20, c.height/2-18);
+}
 
-/* Meals: persistent storage, list, pie */
-function mealsKey(){ return 'lt_meals_' + (new Date()).toISOString().slice(0,10) }
-function loadMeals(){ try{ return JSON.parse(localStorage.getItem(mealsKey())||'[]') }catch(e){ return [] } }
-function saveMeals(list){ localStorage.setItem(mealsKey(), JSON.stringify(list)) }
+/* ---------- Sleep ---------- */
+let sleepLogs = [];
+$('logSleepBtn').addEventListener('pointerup', ()=>{
+  const s = $('sleepTime').value, w = $('wakeTime').value; if(!s||!w) return alert('Select times');
+  const [sh,sm]=s.split(':').map(Number), [wh,wm]=w.split(':').map(Number);
+  let start = sh*60+sm, end = wh*60+wm; if(end<=start) end+=24*60;
+  const mins = end-start, hours = mins/60;
+  $('lastSleepDuration').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`;
+  const today = new Date().toISOString().slice(0,10);
+  sleepLogs.push({date:today, hours});
+  const last7 = sleepLogs.slice(-7); const avg = last7.reduce((a,b)=>a+b.hours,0)/(last7.length||1);
+  $('avgSleepDuration').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`;
+  drawSleep();
+});
+function drawSleep(){
+  const c = $('sleepChart'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  const last7 = sleepLogs.slice(-7); if(!last7.length) return;
+  const barW = Math.max(12, (c.width-40)/last7.length - 6);
+  last7.forEach((l,i)=>{ const h = Math.min(12,l.hours)/12 * (c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+6), c.height-12-h, barW, h); ctx.fillStyle='#333'; ctx.font='10px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+6), c.height-2); });
+}
+
+/* ---------- Meals (persisted, mobile-fixed) ---------- */
+function mealsKey(){ return 'lt_meals_' + (new Date()).toISOString().slice(0,10); }
+function loadMeals(){ try{ return JSON.parse(localStorage.getItem(mealsKey())||'[]'); }catch(e){ return []; } }
+function saveMeals(list){ localStorage.setItem(mealsKey(), JSON.stringify(list)); }
 function renderMeals(){
   const list = loadMeals(); const container = $('mealList'); container.innerHTML=''; let totalCalories=0, totalPortions=0;
-  list.slice().reverse().forEach(m=>{ const div=document.createElement('div'); div.className='todo-item'; div.innerHTML = `<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div style="font-size:12px;color:${'#6b7280'}">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div><div><button onclick="removeMeal(${m.id})">Delete</button></div>`; container.appendChild(div); totalCalories += Number(m.calories||0); totalPortions += Number(m.portion||0); });
-  $('todayKcal').textContent = totalCalories; $('todayPortions').textContent = totalPortions;
-  // Always redraw pie after totals computed
-  drawPie(totalCalories);
+  list.slice().reverse().forEach(m=>{
+    const row = document.createElement('div'); row.className='todo-item';
+    row.innerHTML = `<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div style="font-size:12px;color:${'#6b7280'}">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div><div><button class="btn" style="background:#ef4444" data-delete="${m.id}">Delete</button></div>`;
+    container.appendChild(row);
+    totalCalories += Number(m.calories||0);
+    totalPortions += Number(m.portion||0);
+  });
+  $('todayCalories').textContent = totalCalories;
+  $('todayPortions').textContent = totalPortions;
+  drawMealsPie(totalCalories);
 }
-function addMeal(){
-  const name=$('mealName').value.trim(); const portion=Number($('mealPortion').value||0); const calories=Number($('mealCalories').value||0);
+/* event delegation for delete buttons to work on mobile */
+$('mealList').addEventListener('pointerup', function(e){
+  const btn = e.target.closest('button[data-delete]');
+  if(!btn) return;
+  const id = Number(btn.getAttribute('data-delete'));
+  removeMeal(id);
+});
+$('addMealBtn').addEventListener('pointerup', ()=>{
+  const name = $('mealName').value.trim(); const portion = Number($('mealPortion').value||0); const calories = Number($('mealCalories').value||0);
   if(!name) return alert('Enter meal name');
-  const list = loadMeals(); list.push({id:Date.now(), name, portion, calories, ts:Date.now()}); saveMeals(list);
+  const list = loadMeals(); list.push({id: Date.now(), name, portion, calories, ts: Date.now()}); saveMeals(list);
   $('mealName').value=''; $('mealPortion').value=''; $('mealCalories').value='';
   renderMeals();
+});
+function removeMeal(id){
+  let list = loadMeals(); list = list.filter(m=>m.id !== id); saveMeals(list); renderMeals();
 }
-function removeMeal(id){ let list=loadMeals(); list=list.filter(m=>m.id!==id); saveMeals(list); renderMeals(); }
-
-/* Full circular pie drawing (consumed vs remaining) */
-function drawPie(totalCalories){
-  const canvas = $('pieCanvas'); if(!canvas) return; const ctx = canvas.getContext('2d');
+function drawMealsPie(totalCalories){
+  const c = $('mealsPie'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
   const target = 2000; const consumed = Math.max(0, Math.min(totalCalories||0, target)); const remaining = Math.max(0, target - consumed);
   const slices = [{label:'Consumed', value:consumed, color:'#ff9f43'},{label:'Remaining', value:remaining, color:'#e9eefb'}];
-  const total = slices.reduce((s,x)=>s+x.value,0) || 1;
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  const cx = canvas.width/2, cy = canvas.height/2, r = Math.min(canvas.width, canvas.height)*0.38;
-  let start = -Math.PI/2;
+  const total = Math.max(1, slices.reduce((s,x)=>s+x.value,0));
+  const cx = c.width/2, cy = c.height/2, r = Math.min(c.width, c.height)*0.38; let start = -Math.PI/2;
   slices.forEach(s=>{
     const ang = (s.value/total)*Math.PI*2; const end = start + ang;
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle = s.color; ctx.fill();
-    ctx.strokeStyle='#ffffff'; ctx.lineWidth=1; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath();
+    ctx.fillStyle = s.color; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.stroke();
     start = end;
   });
-  ctx.fillStyle='#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14);
-  // legend top-left
-  const lx=12, ly=12; slices.forEach((s,i)=>{ const y=ly+i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); });
+  ctx.fillStyle = '#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14);
+  const lx=12, ly=12; slices.forEach((s,i)=>{ const y = ly + i*20; ctx.fillStyle = s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); });
 }
 
-/* Tips (50) */
+/* ---------- Tips display ---------- */
 const mealTips = [
-"Eat a colorful plate — fruits and vegetables of different colors.",
-"Include lean protein with every meal (eggs, legumes, fish, chicken).",
-"Choose whole grains over refined grains.",
-"Snack on nuts and seeds instead of chips.",
-"Drink water before meals to prevent overeating.",
-"Favor cooking at home to control ingredients.",
-"Keep portion sizes moderate and consistent.",
-"Include a source of healthy fat (avocado, olive oil).",
-"Limit sugary drinks and choose water or herbal tea.",
-"Eat fiber-rich foods to support digestion and satiety.",
-"Plan meals ahead to avoid impulsive fast food.",
-"Start the day with a balanced breakfast.",
-"Combine protein and carbs for sustained energy.",
-"Add vegetables to sandwiches and omelettes.",
-"Use spices and herbs to flavor instead of salt.",
-"Opt for low-fat dairy or dairy alternatives if needed.",
-"Choose grilled, baked, or steamed foods over fried.",
-"Choose fresh fruit or yogurt for dessert.",
-"Include legumes as a low-cost protein option.",
-"Rotate your protein sources for variety.",
-"Read labels and avoid trans fats or excessive sugar.",
-"Use healthy swaps like zucchini noodles for pasta.",
-"Prepare simple salads with mixed greens and seeds.",
-"Use hummus or Greek yogurt dips for veggies.",
-"Keep healthy snacks visible and accessible.",
-"Reduce processed meat intake; choose lean options.",
-"Balance treats with healthier daily choices.",
-"Have a small protein-rich snack before workouts.",
-"Limit late-night heavy meals that disrupt sleep.",
-"Add chia or flax seeds to smoothies for omega-3s.",
-"Use brown rice or quinoa instead of white rice.",
-"Include fermented foods for gut health (yogurt, idli).",
-"Avoid skipping meals which can lead to overeating later.",
-"Cook in batches and freeze portions for busy days.",
-"Use baking, grilling or air-frying instead of deep frying.",
-"Pick whole fruit instead of fruit juice.",
-"Incorporate leafy greens daily (spinach, kale).",
-"Opt for unsweetened nut butters and spreads.",
-"Be mindful when eating — chew slowly and enjoy.",
-"Limit sugary cereals; choose oats or muesli.",
-"Choose beans and lentils as protein-rich mains.",
-"Use citrus and vinegar for dressings instead of heavy creams.",
-"Try meatless meals a few times a week.",
-"Rotate seasonal vegetables for freshness and nutrients.",
-"Store pre-cut veggies for faster healthy snacking.",
-"Watch portion sizes of calorie-dense foods like nuts.",
-"Seek balance: carbs, protein, fats, fiber every meal.",
-"Plan a weekly menu to reduce decision fatigue.",
-"Choose low-sodium options when possible.",
-"Add herbs for flavor without extra calories.",
-"Use smaller plates to help portion control."
+"Eat a colorful plate — fruits and vegetables of different colors.","Include lean protein with every meal (eggs, legumes, fish, chicken).","Choose whole grains over refined grains.","Snack on nuts and seeds instead of chips.","Drink water before meals to prevent overeating.","Favor cooking at home to control ingredients.","Keep portion sizes moderate and consistent.","Include a source of healthy fat (avocado, olive oil).","Limit sugary drinks and choose water or herbal tea.","Eat fiber-rich foods to support digestion and satiety.","Plan meals ahead to avoid impulsive fast food.","Start the day with a balanced breakfast.","Combine protein and carbs for sustained energy.","Add vegetables to sandwiches and omelettes.","Use spices and herbs to flavor instead of salt.","Opt for low-fat dairy or dairy alternatives if needed.","Choose grilled, baked, or steamed foods over fried.","Choose fresh fruit or yogurt for dessert.","Include legumes as a low-cost protein option.","Rotate your protein sources for variety.","Read labels and avoid trans fats or excessive sugar.","Use healthy swaps like zucchini noodles for pasta.","Prepare simple salads with mixed greens and seeds.","Use hummus or Greek yogurt dips for veggies.","Keep healthy snacks visible and accessible.","Reduce processed meat intake; choose lean options.","Balance treats with healthier daily choices.","Have a small protein-rich snack before workouts.","Limit late-night heavy meals that disrupt sleep.","Add chia or flax seeds to smoothies for omega-3s.","Use brown rice or quinoa instead of white rice.","Include fermented foods for gut health (yogurt, idli).","Avoid skipping meals which can lead to overeating later.","Cook in batches and freeze portions for busy days.","Use baking, grilling or air-frying instead of deep frying.","Pick whole fruit instead of fruit juice.","Incorporate leafy greens daily (spinach, kale).","Opt for unsweetened nut butters and spreads.","Be mindful when eating — chew slowly and enjoy.","Limit sugary cereals; choose oats or muesli.","Choose beans and lentils as protein-rich mains.","Use citrus and vinegar for dressings instead of heavy creams.","Try meatless meals a few times a week.","Rotate seasonal vegetables for freshness and nutrients.","Store pre-cut veggies for faster healthy snacking.","Watch portion sizes of calorie-dense foods like nuts.","Seek balance: carbs, protein, fats, fiber every meal.","Plan a weekly menu to reduce decision fatigue."
 ];
-function toggleTips(){ const c=$('tipsCont'); if(c.style.display==='block'){ c.style.display='none'; c.innerHTML=''; return } c.innerHTML = mealTips.map((t,i)=>`<div style="padding:6px 4px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${escapeHtml(t)}</div>`).join(''); c.style.display='block' }
-function hideTips(){ const c=$('tipsCont'); c.style.display='none'; c.innerHTML='' }
+$('toggleTipsBtn').addEventListener('pointerup', ()=>{
+  const c = $('tipsCont'); if(c.style.display==='block'){ c.style.display='none'; c.innerHTML=''; return; }
+  c.innerHTML = mealTips.map((t,i)=>`<div style="padding:6px 4px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${escapeHtml(t)}</div>`).join('');
+  c.style.display='block';
+});
 
-/* File picker: browser + AppInventor signal */
+/* ---------- File picker (browser + WebViewer signal) ---------- */
 function openPicker(){
   const input = $('fileInput');
   try{
-    input.value = '';
-    input.click();
-    setTimeout(()=>{ if(!input.files.length){ sendToApp({action:'REQUEST_FILE_PICKER'}); } }, 600);
-  }catch(e){
-    sendToApp({action:'REQUEST_FILE_PICKER'});
-  }
+    input.value=''; input.click();
+    setTimeout(()=>{ if(!input.files.length) sendToApp({action:'REQUEST_FILE_PICKER'}); }, 600);
+  }catch(e){ sendToApp({action:'REQUEST_FILE_PICKER'}); }
 }
 $('fileInput').addEventListener('change', function(){
   const files = Array.from(this.files||[]);
   if(!files.length) return;
-  selectedFiles = selectedFiles.concat(files);
-  showFiles(selectedFiles);
-  sendToApp({medicalFiles: selectedFiles.map(f=>({name:f.name,size:f.size,type:f.type}))});
-});
-function showFiles(list){
   const box = $('fileList'); box.style.display='block'; box.innerHTML='';
-  list.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round(f.size/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div>`; const actions=document.createElement('div'); const v=document.createElement('button'); v.className='view'; v.textContent='View'; v.onclick=()=>{ const url=URL.createObjectURL(f); window.open(url,'_blank'); setTimeout(()=>URL.revokeObjectURL(url),60000); }; const r=document.createElement('button'); r.className='rem'; r.textContent='Remove'; r.onclick=()=>{ selectedFiles.splice(i,1); showFiles(selectedFiles); sendToApp({medicalFiles:selectedFiles.map(x=>({name:x.name,size:x.size,type:x.type}))}); }; actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); box.appendChild(row); });
-}
-function hideFiles(){ const b=$('fileList'); b.style.display='none'; b.innerHTML='' }
+  files.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round(f.size/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div>`; const actions=document.createElement('div'); const v=document.createElement('button'); v.className='view'; v.textContent='View'; v.addEventListener('pointerup', ()=>{ try{ const url = URL.createObjectURL(f); window.open(url,'_blank'); setTimeout(()=>URL.revokeObjectURL(url),60000); }catch(e){ alert('Cannot open file preview'); } }); const r=document.createElement('button'); r.className='rem'; r.textContent='Remove'; r.addEventListener('pointerup', ()=>{ files.splice(i,1); row.remove(); sendToApp({medicalFiles: files.map(x=>({name:x.name,size:x.size,type:x.type}))}); }); actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); box.appendChild(row); });
+  sendToApp({medicalFiles: files.map(f=>({name:f.name,size:f.size,type:f.type}))});
+});
 function sendToApp(obj){
   const json = JSON.stringify(obj);
   try{ if(window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') window.AppInventor.setWebViewString(json); }catch(e){}
   try{ if(window.WebViewInterface && typeof window.WebViewInterface.postMessage === 'function') window.WebViewInterface.postMessage(json); }catch(e){}
   try{ if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor && typeof window.webkit.messageHandlers.AppInventor.postMessage === 'function') window.webkit.messageHandlers.AppInventor.postMessage(json); }catch(e){}
 }
-// accept messages posted by the native app (content: {medicalFiles:[{name,size,type,uri}]})
-window.addEventListener('message', function(ev){ try{ const data = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data; if(data && data.medicalFiles) displayFilesFromJson(data.medicalFiles); }catch(e){} });
-function displayFilesFromJson(list){ const box=$('fileList'); box.style.display='block'; box.innerHTML=''; list.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round((f.size||0)/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div><div><button class="view" onclick="openUri('${escapeHtml(f.uri||'')}')">Open</button><button class="rem" onclick="this.closest('.file-row').remove()">Remove</button></div>`; box.appendChild(row); }); }
+window.addEventListener('message', e=>{
+  try{
+    const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+    if(data && data.medicalFiles) displayFilesFromApp(data.medicalFiles);
+  }catch(err){}
+});
+function displayFilesFromApp(list){
+  const container = $('fileList'); container.style.display='block'; container.innerHTML='';
+  list.forEach(f=>{
+    const row = document.createElement('div'); row.className='file-row';
+    row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round((f.size||0)/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div><div><button class="view" onclick="openUri('${escapeHtml(f.uri||'')}')">Open</button><button class="rem" onclick="this.closest('.file-row').remove()">Remove</button></div>`;
+    container.appendChild(row);
+  });
+}
 function openUri(u){ if(!u) return alert('No URI'); try{ window.open(u,'_blank'); }catch(e){ alert('Cannot open URI'); } }
 
-/* Mood drawing */
-function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const value = Number($('moodValue').textContent||5); const w=(value/10)*(c.width-40); ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#5063f2'; ctx.fillRect(20,c.height/2-16,w,32); ctx.fillStyle='#333'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${value}`,20,c.height/2-26); }
-function enterMood(){ const v = prompt('Enter mood 1-10','5'); const n=Number(v); if(n>=1 && n<=10){ $('moodValue').textContent = n; drawMood(); } else alert('Enter a number 1-10'); }
+/* ---------- Initial render ---------- */
+renderMeals(); drawWater(); drawMealsPie(0); drawMood(); drawSleep();
 
-/* Expose small API */
-window.LifeTrack = { addMeal, renderMeals, sendToApp };
+/* ---------- Small helper draws ---------- */
+function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const value = Number($('moodValue').textContent||5); const w=(value/10)*(c.width-40); ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#5063f2'; ctx.fillRect(20,c.height/2-16,w,32); ctx.fillStyle='#333'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${value}`,20,c.height/2-26); }
+$('enterMood').addEventListener('pointerup', ()=>{ const v = prompt('Enter mood 1-10','5'); const n = Number(v); if(n>=1 && n<=10){ $('moodValue').textContent = n; drawMood(); } else alert('Enter a number 1-10'); });
 
-/* End of script */
+function drawMealsPie(totalCalories){ /* defined above but safe-call here to ensure exists */ const c = $('mealsPie'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const target = 2000; const consumed = Math.max(0, Math.min(totalCalories||0, target)); const remaining = Math.max(0, target - consumed); const slices = [{label:'Consumed', value:consumed, color:'#ff9f43'},{label:'Remaining', value:remaining, color:'#e9eefb'}]; const total = Math.max(1, slices.reduce((s,x)=>s+x.value,0)); const cx = c.width/2, cy = c.height/2, r = Math.min(c.width, c.height)*0.38; let start = -Math.PI/2; slices.forEach(s=>{ const ang=(s.value/total)*Math.PI*2; const end = start+ang; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=s.color; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); start=end; }); ctx.fillStyle='#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14); const lx=12, ly=12; slices.forEach((s,i)=>{ const y=ly+i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); }); }
+
+function drawWater(){ const c = $('waterCanvas'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal = Number($('goalWater').value||0); const consumed = Number(window._lt_water||0); const ratio = goal>0? Math.min(consumed/goal,1):0; const w = (c.width-40)*ratio; ctx.fillStyle = '#34d399'; ctx.fillRect(20, c.height/2-10, w, 20); ctx.fillStyle = '#e6e8f2'; ctx.fillRect(20+w, c.height/2-10, c.width-40-w, 20); ctx.fillStyle = '#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`, 20, c.height/2-18); }
+
+/* ---------- Expose small API ---------- */
+window.LifeTrack = { renderMeals, sendToApp };
+
+/* ---------- End ---------- */
 </script>
 </body>
 </html>
