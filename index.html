@@ -1,744 +1,774 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>LifeTrack Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root{
-      --accent-color:#667eea;
-      --bg:#f8fafc;
-      --card-border:#e5e7eb;
-      --text:#111827;
-      --muted:#6b7280;
-      --font-family: "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
-      --font-size:16px;
-      --brightness:1;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:var(--font-family);
-      background:var(--bg);
-      color:var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      font-size:var(--font-size);
-      filter:brightness(var(--brightness));
-    }
-    .container{ max-width:380px; margin:18px auto; padding:12px; }
-    .header{
-      background:linear-gradient(135deg,var(--accent-color),#764ba2);
-      color:#fff;
-      padding:24px;
-      border-radius:14px;
-      text-align:center;
-      box-shadow:0 10px 30px rgba(16,24,40,0.12);
-    }
-    .header h1{ margin:0; font-size:24px; font-weight:800; letter-spacing:0.2px; }
-    .header p{ margin:6px 0 0; color:rgba(255,255,255,0.95); font-weight:600; }
-    .quick-actions{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:18px 0; }
-    .action-card{
-      background:#fff; border-radius:12px; padding:16px; display:flex; align-items:center;
-      justify-content:center; text-align:center; min-height:86px; cursor:pointer; border:1.5px solid var(--card-border);
-      box-shadow:0 8px 22px rgba(2,6,23,0.06); transition:transform .08s ease, box-shadow .08s ease; font-weight:700; color:var(--text);
-    }
-    .action-card:hover{ transform:translateY(-3px); box-shadow:0 14px 36px rgba(2,6,23,0.10); }
-    .screen{ display:none; background:#fff; padding:14px; border-radius:12px; border:2px solid #e6e9f2;
-      box-shadow:0 8px 24px rgba(2,6,23,0.06); margin-bottom:14px; text-align:center; }
-    .visible{ display:block; }
-    h3{ margin:8px 0 12px; font-size:18px; }
-    .sub-label{ color:var(--muted); font-size:13px; margin-bottom:8px; }
-    .chatbox{ height:220px; overflow:auto; text-align:left; border:1px solid #e6e7ee; padding:10px; border-radius:10px; margin-bottom:10px; }
-    .input-area{ display:flex; flex-direction:column; gap:8px; align-items:center; }
-    .btn{ width:100%; max-width:320px; padding:12px 14px; border-radius:12px; border:none; background:var(--accent-color); color:#fff; font-weight:700; cursor:pointer; box-shadow:0 8px 22px rgba(102,126,234,0.18); }
-    input[type="text"], input[type="number"], input[type="time"], select, input[type="range"], input[type="color"]{
-      width:100%; max-width:320px; padding:10px; border-radius:10px; border:1.5px solid var(--card-border); font-size:15px; margin:6px auto;
-    }
-    .todo-item{ display:flex; justify-content:space-between; align-items:center; border-radius:8px; padding:8px; border:1px solid var(--card-border); margin:8px 0; }
-    .todo-item button{ background:#ef4444; color:#fff; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; }
-    #medicalFile{ display:none; }
-    .summary{ display:flex; gap:10px; justify-content:center; margin-top:8px; }
-    .summary .stat{ background:#f3f4f6; padding:8px 12px; border-radius:8px; font-weight:700; color:var(--text); }
-    canvas{ max-width:100%; margin:8px 0; }
-    .muted{ color:var(--muted); font-size:13px; }
-    #tipsContainer, #medicalFileList { text-align:left; display:none; max-height:260px; overflow:auto; border:1px solid var(--card-border); padding:8px; border-radius:8px; margin-top:10px; background:#fff; }
-    .file-row{ display:flex; justify-content:space-between; align-items:center; padding:6px 4px; border-bottom:1px dashed #eef2ff; }
-    .file-row button{ background:#2563eb; color:#fff; border:none; padding:6px 8px; border-radius:8px; cursor:pointer; margin-left:8px; }
-    .file-name{ font-size:14px; color:var(--text); }
-    .file-meta{ font-size:12px; color:var(--muted); }
-    /* settings panel styling */
-    .settings-panel{
-      display:none; background:#fff; padding:12px; border-radius:12px; border:2px solid #e6e9f2; margin-bottom:12px;
-      box-shadow:0 8px 24px rgba(2,6,23,0.06);
-    }
-    .settings-row{ display:flex; flex-direction:column; gap:8px; margin-bottom:10px; text-align:left; }
-    .settings-row label{ font-weight:700; font-size:14px; margin-bottom:4px; }
-    .font-sample{ margin-top:6px; padding:8px; border-radius:8px; background:#fafafa; border:1px dashed #eef2ff; color:var(--muted); }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LifeTrack Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+  --accent-color:#5063f2;
+  --bg:#f6f8fb;
+  --card-border:#e6e8f2;
+  --text:#0f1724;
+  --muted:#6b7280;
+  --font-family: "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+  --font-size:16px;
+  --brightness:1;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:var(--font-family);
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-size:var(--font-size);
+  filter:brightness(var(--brightness));
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  user-select:none;
+}
+.container{ max-width:420px; margin:14px auto; padding:14px; }
+.topbar{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.settings-icon{
+  width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  background:#fff; border:1.2px solid var(--card-border); cursor:pointer; box-shadow:0 6px 16px rgba(16,24,40,0.06);
+  font-size:20px;
+}
+.header{
+  flex:1; background:linear-gradient(135deg,var(--accent-color),#7b61ff);
+  color:#fff; padding:14px; border-radius:10px; text-align:center;
+  box-shadow:0 12px 34px rgba(16,24,40,0.10);
+}
+.header h1{ margin:0; font-size:26px; font-weight:800; }
+.header p{ margin:6px 0 0; font-weight:600; font-size:14px; opacity:0.95; }
+
+.settings-panel{ display:none; background:#fff; padding:12px; border-radius:10px; border:1px solid var(--card-border); margin-bottom:12px; box-shadow:0 10px 24px rgba(16,24,40,0.06); }
+.settings-row{ display:flex; flex-direction:column; gap:8px; margin-bottom:10px; text-align:left; }
+.settings-row label{ font-weight:700; font-size:13px; color:var(--text); }
+.font-sample{ margin-top:6px; padding:8px; border-radius:8px; background:#fbfdff; border:1px dashed #eef2ff; color:var(--muted); font-size:14px; }
+
+.quick-actions{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:12px 0 18px; }
+.action-card{
+  background:#fff; border-radius:12px; padding:14px; display:flex; align-items:center; justify-content:center;
+  text-align:center; min-height:80px; cursor:pointer; border:1.2px solid var(--card-border);
+  box-shadow:0 8px 20px rgba(16,24,40,0.06); font-weight:700; color:var(--text);
+}
+.action-card:hover{ transform:translateY(-3px); transition:transform .12s ease; box-shadow:0 18px 36px rgba(16,24,40,0.10); }
+
+.screen{ display:none; background:#fff; padding:14px; border-radius:12px; border:1px solid var(--card-border); box-shadow:0 8px 24px rgba(16,24,40,0.06); margin-bottom:14px; text-align:center; }
+.visible{ display:block; }
+h3{ margin:6px 0 12px; font-size:18px; }
+.sub-label{ color:var(--muted); font-size:13px; margin-bottom:8px; }
+
+.chatbox{ height:200px; overflow:auto; text-align:left; border:1px solid #eef2ff; padding:10px; border-radius:10px; margin-bottom:10px; background:#fbfdff; }
+.input-area{ display:flex; flex-direction:column; gap:8px; align-items:center; }
+
+.btn{ width:100%; max-width:340px; padding:12px 14px; border-radius:12px; border:none; background:var(--accent-color); color:#fff; font-weight:800; cursor:pointer; box-shadow:0 8px 20px rgba(80,99,242,0.16); font-size:15px; }
+input[type="text"], input[type="number"], input[type="time"], select, input[type="range"], input[type="color"]{
+  width:100%; max-width:340px; padding:10px; border-radius:10px; border:1.2px solid var(--card-border); font-size:14px; margin:6px auto;
+}
+.todo-item{ display:flex; justify-content:space-between; align-items:center; border-radius:8px; padding:8px; border:1px solid var(--card-border); margin:8px 0; background:#fff; }
+.todo-item button{ background:#ef4444; color:#fff; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; }
+
+.summary{ display:flex; gap:10px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
+.summary .stat{ background:#fbfdff; padding:8px 12px; border-radius:8px; font-weight:800; color:var(--text); border:1px solid #eef2ff; font-size:14px; }
+canvas{ max-width:100%; margin:8px 0; }
+
+#tipsContainer, #medicalFileList { text-align:left; display:none; max-height:320px; overflow:auto; border:1px solid var(--card-border); padding:8px; border-radius:8px; margin-top:10px; background:#fff; }
+.file-row{ display:flex; justify-content:space-between; align-items:center; padding:8px 4px; border-bottom:1px dashed #f1f5ff; gap:8px; }
+.file-row button{ background:#2b6ef6; color:#fff; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; }
+.file-meta{ font-size:12px; color:var(--muted); }
+
+@media (max-width:420px){
+  .container{ padding:10px; }
+  .header h1{ font-size:20px; }
+}
+</style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
+  <div class="topbar">
+    <div class="settings-icon" id="settingsIcon" title="App Settings">⚙️</div>
     <div class="header">
       <h1>LifeTrack Dashboard</h1>
       <p>Welcome User</p>
     </div>
-
-    <div class="quick-actions">
-      <div class="action-card" onclick="showScreen('chatbot')">💬 Chatbot</div>
-      <div class="action-card" onclick="showScreen('graph')">📊 Mood Graph</div>
-      <div class="action-card" onclick="showScreen('reminders')">✅ Reminders</div>
-      <div class="action-card" onclick="showScreen('timer')">⏱ Timer</div>
-      <div class="action-card" onclick="toggleMedicalFiles()">📂 Upload Medical Files</div>
-      <div class="action-card" onclick="showScreen('hydration')">💧 Hydration Monitor</div>
-      <div class="action-card" onclick="showScreen('sleep')">🌙 Sleep Analytics</div>
-      <div class="action-card" onclick="showScreen('meals')">🍽 Meal Tracking</div>
-      <div class="action-card" onclick="toggleSettings()">⚙️ App Settings</div>
-    </div>
-
-    <!-- Settings panel -->
-    <div class="settings-panel" id="settingsPanel">
-      <h3>App Settings</h3>
-      <div class="settings-row">
-        <label for="fontSizeRange">Font size</label>
-        <input id="fontSizeRange" type="range" min="12" max="22" step="1" />
-        <div class="font-sample" id="fontSample">Sample text — font size updates live</div>
-      </div>
-
-      <div class="settings-row">
-        <label for="fontSelect">Font family</label>
-        <select id="fontSelect">
-          <option value='"Segoe UI", Roboto, system-ui, -apple-system, sans-serif'>System UI (default)</option>
-          <option value='Georgia, "Times New Roman", Times, serif'>Georgia (serif)</option>
-          <option value='"Helvetica Neue", Arial, sans-serif'>Helvetica Neue / Arial</option>
-          <option value='"Courier New", Courier, monospace'>Courier New (monospace)</option>
-          <option value='"Trebuchet MS", "Segoe UI", sans-serif'>Trebuchet</option>
-        </select>
-        <div class="font-sample" id="fontFamilySample">Sample text — font family updates live</div>
-      </div>
-
-      <div class="settings-row">
-        <label for="themeColor">Theme color</label>
-        <input id="themeColor" type="color" value="#667eea" />
-      </div>
-
-      <div class="settings-row">
-        <label for="brightnessRange">App brightness</label>
-        <input id="brightnessRange" type="range" min="0.6" max="1.4" step="0.05" />
-      </div>
-
-      <div style="display:flex; gap:8px; margin-top:6px;">
-        <button class="btn" id="saveSettingsBtn">Save</button>
-        <button class="btn" id="resetSettingsBtn" style="background:#ef4444">Reset</button>
-      </div>
-    </div>
-
-    <!-- Hidden file input for Upload Medical Files -->
-    <input id="medicalFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" multiple>
-    <div id="medicalFileList"></div>
-
-    <!-- Chatbot -->
-    <div class="screen" id="chatbot">
-      <h3>Simple Chatbot</h3>
-      <div class="chatbox" id="chatbox"></div>
-      <div class="input-area">
-        <button class="btn" onclick="sendQuick('weather')">🌦 Weather</button>
-        <button class="btn" onclick="sendQuick('joke')">😂 Joke</button>
-        <button class="btn" onclick="sendQuick('study')">📚 Study Tip</button>
-      </div>
-    </div>
-
-    <!-- Mood graph -->
-    <div class="screen" id="graph">
-      <h3>Mood Graph</h3>
-      <p class="sub-label">Log a 1–10 mood score and track it visually.</p>
-      <button class="btn" onclick="promptMood()">Enter mood</button>
-      <p>Mood: <strong id="moodValue">5</strong></p>
-      <canvas id="moodChart" width="320" height="160"></canvas>
-    </div>
-
-    <!-- Reminders -->
-    <div class="screen" id="reminders">
-      <h3>Reminders</h3>
-      <input id="newReminder" type="text" placeholder="Add reminder (e.g., call family)"/>
-      <button class="btn" onclick="addReminder()">Add</button>
-      <div id="todoList"></div>
-    </div>
-
-    <!-- Timer -->
-    <div class="screen" id="timer">
-      <h3>Focus Timer</h3>
-      <input id="minutes" type="number" placeholder="Minutes"/>
-      <select id="alarmChoice">
-        <option value="alarm1">Beep</option>
-        <option value="alarm2">Marimba</option>
-        <option value="alarm3">Analog bell</option>
-        <option value="alarm4">Countdown ticks</option>
-        <option value="alarm5">Space alert</option>
-      </select>
-      <button class="btn" onclick="startTimer()">Start</button>
-      <div id="countdown" style="margin-top:10px;"></div>
-      <audio id="alarm1" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
-      <audio id="alarm2" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2e6f3e9b4b.mp3"></audio>
-      <audio id="alarm3" src="https://cdn.pixabay.com/download/audio/2021/09/30/audio_2c9b5f3b3d.mp3"></audio>
-      <audio id="alarm4" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1a2b3c4d5e.mp3"></audio>
-      <audio id="alarm5" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9f8e7d6c5b.mp3"></audio>
-    </div>
-
-    <!-- Hydration monitor -->
-    <div class="screen" id="hydration">
-      <h3>Hydration Monitor</h3>
-      <p class="sub-label">Set daily goal (ml), log intake (ml), and configure reminder interval (minutes).</p>
-      <input id="waterGoal" type="number" placeholder="Daily goal (ml)" value="2000"/>
-      <input id="waterIntake" type="number" placeholder="Log intake (ml)" value="250"/>
-      <button class="btn" onclick="logWater()">Add intake (ml)</button>
-      <div class="summary" style="margin-top:12px;">
-        <div class="stat">Consumed: <span id="waterConsumed">0</span> ml</div>
-        <div class="stat">Remaining: <span id="waterRemaining">2000</span> ml</div>
-      </div>
-      <input id="waterInterval" type="number" placeholder="Reminder interval (minutes)" value="60"/>
-      <button class="btn" onclick="startWaterReminders()">Start reminders</button>
-      <button class="btn" onclick="stopWaterReminders()">Stop reminders</button>
-      <canvas id="waterChart" width="320" height="160"></canvas>
-    </div>
-
-    <!-- Sleep analytics -->
-    <div class="screen" id="sleep">
-      <h3>Sleep Analytics</h3>
-      <p class="sub-label">Log sleep and wake times; get last-night duration and 7-day average.</p>
-      <input id="sleepTime" type="time"/>
-      <input id="wakeTime" type="time"/>
-      <button class="btn" onclick="logSleep()">Log sleep</button>
-      <p>Last duration: <strong id="lastSleepDuration">0h 0m</strong></p>
-      <p>7-day average: <strong id="avgSleepDuration">0h 0m</strong></p>
-      <canvas id="sleepChart" width="320" height="160"></canvas>
-    </div>
-
-    <!-- Meal tracking -->
-    <div class="screen" id="meals">
-      <h3>Meal Tracking</h3>
-      <p class="sub-label">Add meals with calories and portion (ml or g). Daily totals and recent entries shown below.</p>
-      <input id="mealName" type="text" placeholder="Meal name (e.g., Breakfast - Oats)"/>
-      <input id="mealPortion" type="number" placeholder="Portion (ml or g)"/>
-      <input id="mealCalories" type="number" placeholder="Calories (kcal)"/>
-      <button class="btn" onclick="addMeal()">Add meal</button>
-      <div class="summary" style="margin-top:12px;">
-        <div class="stat">Today kcal: <span id="todayCalories">0</span></div>
-        <div class="stat">Today portions: <span id="todayPortions">0</span></div>
-      </div>
-      <p class="muted">Recent entries</p>
-      <div id="mealList"></div>
-      <p class="muted" style="margin-top:12px;">Healthy eating tips (tap again to close)</p>
-      <button class="btn" onclick="toggleTips()">Show/Hide 50 Healthy Food Tips</button>
-      <div id="tipsContainer"></div>
-      <canvas id="mealsChart" width="320" height="160" style="margin-top:10px;"></canvas>
-    </div>
-
   </div>
 
-  <script>
-    // ---------- Settings: persistence and live updates ----------
-    const SETTINGS_KEY = 'lifetrack_settings_v1';
+  <div class="settings-panel" id="settingsPanel" aria-hidden="true">
+    <h3>App Settings</h3>
+    <div class="settings-row">
+      <label for="fontSizeRange">Font size</label>
+      <input id="fontSizeRange" type="range" min="12" max="22" step="1" />
+      <div class="font-sample" id="fontSample">Sample text — font size updates live</div>
+    </div>
 
-    function loadSettings(){
-      try{
-        const raw = localStorage.getItem(SETTINGS_KEY);
-        return raw ? JSON.parse(raw) : null;
-      }catch(e){ return null; }
-    }
-    function saveSettings(obj){
-      try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(obj)); }catch(e){}
-    }
-    function applySettings(obj){
-      if(!obj) return;
-      if(obj.fontSize) {
-        document.documentElement.style.setProperty('--font-size', obj.fontSize + 'px');
-        document.getElementById('fontSizeRange').value = obj.fontSize;
-        document.getElementById('fontSample').style.fontSize = obj.fontSize + 'px';
-      }
-      if(obj.fontFamily){
-        document.documentElement.style.setProperty('--font-family', obj.fontFamily);
-        document.getElementById('fontSelect').value = obj.fontFamily;
-        document.getElementById('fontFamilySample').style.fontFamily = obj.fontFamily;
-      }
-      if(obj.themeColor){
-        document.documentElement.style.setProperty('--accent-color', obj.themeColor);
-        document.getElementById('themeColor').value = obj.themeColor;
-      }
-      if(obj.brightness){
-        document.documentElement.style.setProperty('--brightness', obj.brightness);
-        document.getElementById('brightnessRange').value = obj.brightness;
-      }
-    }
+    <div class="settings-row">
+      <label for="fontSelect">Font family</label>
+      <select id="fontSelect">
+        <option value='"Segoe UI", Roboto, system-ui, -apple-system, sans-serif'>System UI (default)</option>
+        <option value='Georgia, "Times New Roman", Times, serif'>Georgia (serif)</option>
+        <option value='"Helvetica Neue", Arial, sans-serif'>Helvetica Neue / Arial</option>
+        <option value='"Courier New", Courier, monospace'>Courier New (monospace)</option>
+        <option value='"Trebuchet MS", "Segoe UI", sans-serif'>Trebuchet</option>
+      </select>
+      <div class="font-sample" id="fontFamilySample">Sample text — font family updates live</div>
+    </div>
 
-    function initSettingsUI(){
-      // set defaults if missing
-      const saved = loadSettings();
-      const defaults = {
-        fontSize: saved?.fontSize || 16,
-        fontFamily: saved?.fontFamily || getComputedStyle(document.documentElement).getPropertyValue('--font-family').trim() || '"Segoe UI", Roboto, system-ui, -apple-system, sans-serif',
-        themeColor: saved?.themeColor || getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#667eea',
-        brightness: saved?.brightness || 1
-      };
-      applySettings(defaults);
+    <div class="settings-row">
+      <label for="themeColor">Theme color</label>
+      <input id="themeColor" type="color" value="#5063f2" />
+    </div>
 
-      // UI bindings
-      document.getElementById('fontSizeRange').oninput = (e) => {
-        const v = e.target.value;
-        document.documentElement.style.setProperty('--font-size', v + 'px');
-        document.getElementById('fontSample').style.fontSize = v + 'px';
-      };
-      document.getElementById('fontSelect').onchange = (e) => {
-        const v = e.target.value;
-        document.documentElement.style.setProperty('--font-family', v);
-        document.getElementById('fontFamilySample').style.fontFamily = v;
-      };
-      document.getElementById('themeColor').oninput = (e) => {
-        document.documentElement.style.setProperty('--accent-color', e.target.value);
-      };
-      document.getElementById('brightnessRange').oninput = (e) => {
-        document.documentElement.style.setProperty('--brightness', e.target.value);
-      };
+    <div class="settings-row">
+      <label for="brightnessRange">App brightness</label>
+      <input id="brightnessRange" type="range" min="0.6" max="1.4" step="0.05" />
+    </div>
 
-      // Save and reset buttons
-      document.getElementById('saveSettingsBtn').onclick = () => {
-        const obj = {
-          fontSize: Number(document.getElementById('fontSizeRange').value),
-          fontFamily: document.getElementById('fontSelect').value,
-          themeColor: document.getElementById('themeColor').value,
-          brightness: Number(document.getElementById('brightnessRange').value)
-        };
-        saveSettings(obj);
-        applySettings(obj);
-        alert('Settings saved.');
-      };
-      document.getElementById('resetSettingsBtn').onclick = () => {
-        localStorage.removeItem(SETTINGS_KEY);
-        location.reload();
-      };
-    }
+    <div style="display:flex; gap:8px; margin-top:6px;">
+      <button class="btn" id="saveSettingsBtn">Save</button>
+      <button class="btn" id="resetSettingsBtn" style="background:#ef4444">Reset</button>
+    </div>
+  </div>
 
-    function toggleSettings(){
-      const panel = document.getElementById('settingsPanel');
-      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-      // hide other floating containers
-      hideTips();
-      hideMedicalFiles();
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
-    }
+  <div class="quick-actions" id="actionGrid">
+    <div class="action-card" onclick="showScreen('chatbot')">💬 Chatbot</div>
+    <div class="action-card" onclick="showScreen('graph')">📊 Mood Graph</div>
+    <div class="action-card" onclick="showScreen('reminders')">✅ Reminders</div>
+    <div class="action-card" onclick="showScreen('timer')">⏱ Timer</div>
+    <div class="action-card" onclick="requestFilePicker()">📂 Upload Medical Files</div>
+    <div class="action-card" onclick="showScreen('hydration')">💧 Hydration Monitor</div>
+    <div class="action-card" onclick="showScreen('sleep')">🌙 Sleep Analytics</div>
+    <div class="action-card" onclick="showScreen('meals')">🍽 Meal Tracking</div>
+  </div>
 
-    // ---------- Existing app functions (chatbot, uploads, hydration, meals, etc.) ----------
-    function showScreen(id){
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
-      document.getElementById(id).classList.add('visible');
-      // hide floating panels when switching screens
-      hideTips();
-      hideMedicalFiles();
-      // close settings panel when navigating
-      document.getElementById('settingsPanel').style.display = 'none';
-    }
+  <!-- Hidden file input (fallback for browsers) -->
+  <input id="medicalFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" multiple style="display:none"/>
 
-    // Medical files toggle and listing
-    let lastSelectedFiles = [];
-    function toggleMedicalFiles(){
-      const list = document.getElementById('medicalFileList');
-      if(list.style.display === 'block'){ hideMedicalFiles(); return; }
-      document.getElementById('medicalFile').click();
-      list.style.display = 'block';
-      list.innerHTML = '<div class="muted" style="padding:6px">Select files using the phone picker. Selected files will appear here.</div>';
-    }
-    function hideMedicalFiles(){ const list=document.getElementById('medicalFileList'); list.style.display='none'; list.innerHTML=''; }
+  <!-- File list (populated after selection) -->
+  <div id="medicalFileList"></div>
 
-    document.getElementById('medicalFile').addEventListener('change', function(){
-      const files = Array.from(this.files || []);
-      lastSelectedFiles = files;
-      const list = document.getElementById('medicalFileList');
-      if(!files.length){ list.innerHTML = '<div class="muted" style="padding:6px">No files selected.</div>'; return; }
-      list.innerHTML = '';
-      files.forEach((f, idx) => {
-        const row = document.createElement('div');
-        row.className = 'file-row';
-        const left = document.createElement('div');
-        left.innerHTML = `<div class="file-name">${f.name}</div><div class="file-meta">${Math.round(f.size/1024)} KB • ${f.type||'unknown'}</div>`;
-        const right = document.createElement('div');
-        const viewBtn = document.createElement('button');
-        viewBtn.textContent = 'View';
-        viewBtn.onclick = () => {
-          const url = URL.createObjectURL(f);
-          window.open(url, '_blank');
-          setTimeout(()=>URL.revokeObjectURL(url), 60000);
-        };
-        const removeBtn = document.createElement('button');
-        removeBtn.style.background = '#ef4444';
-        removeBtn.textContent = 'Remove';
-        removeBtn.onclick = () => {
-          lastSelectedFiles.splice(idx,1);
-          list.removeChild(row);
-          if(lastSelectedFiles.length === 0) list.innerHTML = '<div class="muted" style="padding:6px">No files selected.</div>';
-        };
-        right.appendChild(viewBtn);
-        right.appendChild(removeBtn);
-        row.appendChild(left);
-        row.appendChild(right);
-        list.appendChild(row);
-      });
-      // send file metadata to App Inventor if available
-      try{
-        const meta = files.map(f=>({name:f.name,size:f.size,type:f.type}));
-        if(window.WebViewInterface && typeof window.WebViewInterface.postMessage === 'function'){
-          window.WebViewInterface.postMessage(JSON.stringify({medicalFiles:meta}));
-        } else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor){
-          // iOS bridge placeholder (if app provides handler)
-          window.webkit.messageHandlers.AppInventor.postMessage(JSON.stringify({medicalFiles:meta}));
-        }
-      }catch(e){}
-    });
+  <!-- Chatbot -->
+  <div class="screen" id="chatbot">
+    <h3>Simple Chatbot</h3>
+    <div class="chatbox" id="chatbox"></div>
+    <div class="input-area">
+      <button class="btn" onclick="sendQuick('weather')">🌦 Weather</button>
+      <button class="btn" onclick="sendQuick('joke')">😂 Joke</button>
+      <button class="btn" onclick="sendQuick('study')">📚 Study Tip</button>
+    </div>
+  </div>
 
-    // Chatbot data & functions (50 jokes & 50 study tips included earlier)
-    const jokes = [
-      "Why don’t skeletons fight? They don’t have the guts!",
-      "Why did the math book look sad? It had too many problems.",
-      "Why can’t your nose be 12 inches long? Because then it would be a foot!",
-      "Why did the scarecrow win an award? He was outstanding in his field!",
-      "What do you call fake spaghetti? An impasta!",
-      "Why did the bicycle fall over? It was two-tired!",
-      "Why don’t eggs tell jokes? They’d crack each other up!",
-      "What do you call cheese that isn’t yours? Nacho cheese!",
-      "Why did the golfer bring two pairs of pants? In case he got a hole in one!",
-      "Why did the tomato blush? It saw the salad dressing!",
-      "Why don’t scientists trust atoms? Because they make up everything!",
-      "Why did the cookie go to the doctor? It was feeling crummy!",
-      "Why did the computer go to therapy? It had too many bytes!",
-      "Why did the student eat his homework? The teacher said it was a piece of cake!",
-      "Why did the cat sit on the computer? To keep an eye on the mouse!",
-      "Why did the banana go to the party? Because it was a-peeling!",
-      "Why did the chicken join a band? Because it had the drumsticks!",
-      "Why did the fish blush? Because it saw the ocean’s bottom!",
-      "Why did the frog take the bus? His car got toad!",
-      "Why did the bee get married? Because he found his honey!",
-      "Why did the pencil go to the principal’s office? It had a point to make!",
-      "Why did the broom get a promotion? It swept the competition!",
-      "Why did the grape stop in the road? It ran out of juice!",
-      "Why did the light bulb go to school? To get a little brighter!",
-      "Why did the duck get a job? He was tired of winging it!",
-      "Why did the elephant bring a suitcase? He was going on a trunk trip!",
-      "Why did the calendar apply for a job? It wanted to work full time!",
-      "Why did the robot go on vacation? It needed to recharge!",
-      "Why did the donut go to therapy? It felt empty inside!",
-      "Why did the dog sit in the shade? He didn’t want to be a hot dog!",
-      "Why did the astronaut break up? He needed space!",
-      "Why did the fish get bad grades? Because it was below sea level!",
-      "Why did the cow go to space? To see the moooon!",
-      "Why did the skeleton skip the dance? He had no body to go with!",
-      "Why did the kangaroo stop coffee? It made him too jumpy!",
-      "Why did the snowman call a cab? He had a meltdown!",
-      "Why did the pirate buy an eye patch? Because he couldn’t afford an iPhone!",
-      "Why did the balloon go near the needle? To pop the question!",
-      "Why did the horse go behind the tree? To change his jockeys!",
-      "Why did the snail paint an S on his car? So people would say, ‘Look at that S-car go!’",
-      "Why did the giraffe get bad grades? He had his head in the clouds!",
-      "Why did the owl get promoted? He was a real hoot!",
-      "Why did the mirror fail the test? It couldn’t reflect well!",
-      "Why did the volcano get a promotion? It was on fire!",
-      "Why did the sandwich go to the gym? To get shredded!",
-      "Why did the book join the police? It wanted to go undercover!",
-      "Why did the clock get detention? It was tocking too much!",
-      "Why did the spider start a blog? To spin a web of stories!",
-      "Why did the egg hide? It was a little chicken!"
-    ];
-    const studyTips = [
-      "Break study sessions into 25-minute chunks with 5-minute breaks.",
-      "Teach what you learn — explaining helps retention.",
-      "Use flashcards for active recall.",
-      "Review material within 24 hours.",
-      "Create a distraction-free study space.",
-      "Set clear goals for each session.",
-      "Use mnemonic devices.",
-      "Practice past papers under timed conditions.",
-      "Summarize notes in your own words.",
-      "Use diagrams and mind maps.",
-      "Sleep well — memory consolidates during rest.",
-      "Stay hydrated and eat brain-friendly foods.",
-      "Avoid multitasking.",
-      "Use spaced repetition.",
-      "Study at your peak energy time.",
-      "Group study for tough topics.",
-      "Use apps like Anki or Quizlet.",
-      "Record yourself explaining topics.",
-      "Color-code notes.",
-      "Reward yourself after tasks.",
-      "Spread learning over days, not cramming.",
-      "Apply the Feynman technique.",
-      "Take movement/stretch breaks.",
-      "Turn off notifications.",
-      "Use background music if it helps.",
-      "Make a weekly checklist.",
-      "Start with the hardest subject.",
-      "Use real-world examples.",
-      "Ask questions to deepen understanding.",
-      "Use sticky notes for key facts.",
-      "Teach a friend or sibling.",
-      "Watch short explainer videos.",
-      "Keep a study journal.",
-      "Visualize exam success.",
-      "Don’t hesitate to ask for help.",
-      "Stay consistent with daily effort.",
-      "Use analogies to simplify.",
-      "Practice writing essays.",
-      "Limit social media.",
-      "Use timers to stay on track.",
-      "Keep your desk tidy.",
-      "Drink water before and during study.",
-      "Use site blockers for focus.",
-      "Make your own quizzes.",
-      "Combine words + visuals (dual coding).",
-      "Celebrate small wins.",
-      "Stay positive — mindset matters.",
-      "Track your time to find patterns.",
-      "Reflect on what worked and what didn’t.",
-      "Balance study with exercise and relaxation."
-    ];
-    function sendQuick(type){
-      const chatbox = document.getElementById('chatbox');
-      let userText="", reply="";
-      if(type==='weather'){ userText="What is the weather?"; reply="It's sunny and 28°C today!"; }
-      else if(type==='joke'){ userText="Tell me a joke"; reply = jokes[Math.floor(Math.random()*jokes.length)]; }
-      else if(type==='study'){ userText="Give me a study tip"; reply = studyTips[Math.floor(Math.random()*studyTips.length)]; }
-      chatbox.innerHTML += `<p><strong>You:</strong> ${userText}</p><p><strong>Bot:</strong> ${reply}</p>`;
-      chatbox.scrollTop = chatbox.scrollHeight;
-    }
+  <!-- Mood Graph -->
+  <div class="screen" id="graph">
+    <h3>Mood Graph</h3>
+    <p class="sub-label">Log a 1–10 mood score and track it visually.</p>
+    <button class="btn" onclick="promptMood()">Enter mood</button>
+    <p>Mood: <strong id="moodValue">5</strong></p>
+    <canvas id="moodChart" width="360" height="160"></canvas>
+  </div>
 
-    // Reminders
-    function addReminder(){
-      const text = document.getElementById('newReminder').value.trim();
-      if(!text) return;
-      const container = document.getElementById('todoList');
-      const el = document.createElement('div');
-      el.className='todo-item';
-      el.innerHTML = `<span>${text}</span><div><button onclick="this.closest('.todo-item').remove()">Delete</button></div>`;
-      container.prepend(el);
-      document.getElementById('newReminder').value='';
-    }
+  <!-- Reminders -->
+  <div class="screen" id="reminders">
+    <h3>Reminders</h3>
+    <input id="newReminder" type="text" placeholder="Add reminder (e.g., call family)"/>
+    <button class="btn" onclick="addReminder()">Add</button>
+    <div id="todoList"></div>
+  </div>
 
-    // Mood chart
-    function promptMood(){
-      const value = prompt("Enter your mood (1-10):","5");
-      const num = Number(value);
-      if(num>=1 && num<=10){
-        document.getElementById('moodValue').textContent = num;
-        if(window.moodChart){ moodChart.data.datasets[0].data[0] = num; moodChart.update(); }
-      } else alert("Please enter 1-10");
-    }
-    function initMoodChart(){
-      const ctx = document.getElementById('moodChart').getContext('2d');
-      window.moodChart = new Chart(ctx,{type:'bar', data:{labels:['Mood'], datasets:[{label:'Mood', data:[5], backgroundColor:'#667eea'}]}, options:{scales:{y:{beginAtZero:true,max:10}}}});
-    }
+  <!-- Timer -->
+  <div class="screen" id="timer">
+    <h3>Focus Timer</h3>
+    <input id="minutes" type="number" placeholder="Minutes"/>
+    <select id="alarmChoice">
+      <option value="alarm1">Beep</option>
+      <option value="alarm2">Marimba</option>
+      <option value="alarm3">Analog bell</option>
+    </select>
+    <button class="btn" onclick="startTimer()">Start</button>
+    <div id="countdown" style="margin-top:10px;"></div>
+    <audio id="alarm1" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
+    <audio id="alarm2" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2e6f3e9b4b.mp3"></audio>
+    <audio id="alarm3" src="https://cdn.pixabay.com/download/audio/2021/09/30/audio_2c9b5f3b3d.mp3"></audio>
+  </div>
 
-    // Timer
-    function startTimer(){
-      const minutes = parseInt(document.getElementById('minutes').value,10);
-      if(isNaN(minutes)||minutes<=0) return;
-      let seconds = minutes*60;
-      const countdown = document.getElementById('countdown');
-      const alarm = document.getElementById(document.getElementById('alarmChoice').value);
-      const interval = setInterval(()=>{
-        const m = Math.floor(seconds/60), s = seconds%60;
-        countdown.textContent = `${m}:${s<10?'0':''}${s}`;
-        if(--seconds < 0){ clearInterval(interval); alarm.currentTime=0; alarm.play(); }
-      },1000);
-    }
+  <!-- Hydration -->
+  <div class="screen" id="hydration">
+    <h3>Hydration Monitor</h3>
+    <p class="sub-label">Set daily goal (ml), log intake (ml), and reminders (minutes).</p>
+    <input id="waterGoal" type="number" placeholder="Daily goal (ml)" value="2000"/>
+    <input id="waterIntake" type="number" placeholder="Log intake (ml)" value="250"/>
+    <button class="btn" onclick="logWater()">Add intake (ml)</button>
+    <div class="summary" style="margin-top:12px;">
+      <div class="stat">Consumed: <span id="waterConsumed">0</span> ml</div>
+      <div class="stat">Remaining: <span id="waterRemaining">2000</span> ml</div>
+    </div>
+    <input id="waterInterval" type="number" placeholder="Reminder interval (minutes)" value="60"/>
+    <button class="btn" onclick="startWaterReminders()">Start reminders</button>
+    <button class="btn" onclick="stopWaterReminders()">Stop reminders</button>
+    <canvas id="waterChart" width="360" height="160"></canvas>
+  </div>
 
-    // Hydration (ml)
-    let waterConsumed = 0;
-    let waterReminderTimer = null;
-    let waterChart = null;
-    function updateWaterUI(){
-      const goal = Number(document.getElementById('waterGoal').value || 0);
-      document.getElementById('waterConsumed').textContent = waterConsumed;
-      document.getElementById('waterRemaining').textContent = Math.max(goal - waterConsumed, 0);
-      if(waterChart){ waterChart.data.datasets[0].data = [waterConsumed, Math.max(goal - waterConsumed, 0)]; waterChart.update(); }
-    }
-    function logWater(){
-      const intake = Number(document.getElementById('waterIntake').value || 0);
-      if(intake <=0) return alert("Enter ml value");
-      waterConsumed += intake;
-      updateWaterUI();
-      try{ localStorage.setItem('waterConsumed', String(waterConsumed)); }catch(e){}
-    }
-    function startWaterReminders(){
-      const mins = Number(document.getElementById('waterInterval').value || 0);
-      if(mins <=0) return alert("Enter minutes interval");
-      stopWaterReminders();
-      alert("Hydration reminders started every "+mins+" minute(s).");
-      waterReminderTimer = setInterval(()=>{ alert("Hydration reminder: drink water ("+document.getElementById('waterIntake').value+" ml recommended)"); }, mins*60000);
-    }
-    function stopWaterReminders(){ if(waterReminderTimer){ clearInterval(waterReminderTimer); waterReminderTimer=null; alert("Hydration reminders stopped."); } }
-    function initWaterChart(){
-      const ctx = document.getElementById('waterChart').getContext('2d');
-      const goal = Number(document.getElementById('waterGoal').value || 2000);
-      waterChart = new Chart(ctx, { type:'doughnut', data:{ labels:['Consumed','Remaining'], datasets:[{ data:[0,goal], backgroundColor:['#34d399','#e5e7eb'] }] }, options:{ plugins:{ legend:{ position:'bottom' } }, cutout:'60%'}});
-      try{ waterConsumed = Number(localStorage.getItem('waterConsumed')||0); }catch(e){ waterConsumed = 0; }
-      updateWaterUI();
-    }
+  <!-- Sleep -->
+  <div class="screen" id="sleep">
+    <h3>Sleep Analytics</h3>
+    <p class="sub-label">Log sleep/wake times. View last night and 7-day average.</p>
+    <input id="sleepTime" type="time"/>
+    <input id="wakeTime" type="time"/>
+    <button class="btn" onclick="logSleep()">Log sleep</button>
+    <p>Last duration: <strong id="lastSleepDuration">0h 0m</strong></p>
+    <p>7-day average: <strong id="avgSleepDuration">0h 0m</strong></p>
+    <canvas id="sleepChart" width="360" height="160"></canvas>
+  </div>
 
-    // Sleep analytics
-    const sleepLogs = [];
-    let sleepChart = null;
-    function logSleep(){
-      const s = document.getElementById('sleepTime').value;
-      const w = document.getElementById('wakeTime').value;
-      if(!s||!w) return alert("Select both times");
-      const [sh,sm]=s.split(':').map(Number), [wh,wm]=w.split(':').map(Number);
-      let start = sh*60+sm, end = wh*60+wm;
-      if(end <= start) end += 24*60;
-      const mins = end-start, hours = mins/60;
-      document.getElementById('lastSleepDuration').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`;
-      const today = new Date().toISOString().slice(0,10);
-      sleepLogs.push({date:today, hours});
-      const last7 = sleepLogs.slice(-7);
-      const avg = last7.reduce((a,b)=>a+b.hours,0)/last7.length;
-      document.getElementById('avgSleepDuration').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`;
-      updateSleepChart();
-    }
-    function initSleepChart(){
-      const ctx = document.getElementById('sleepChart').getContext('2d');
-      sleepChart = new Chart(ctx,{ type:'bar', data:{ labels:[], datasets:[{ label:'Hours', data:[], backgroundColor:'#a78bfa' }] }, options:{ scales:{ y:{ beginAtZero:true, max:12 } }, plugins:{ legend:{ display:false } } } });
-    }
-    function updateSleepChart(){
-      if(!sleepChart) return;
-      const last7 = sleepLogs.slice(-7);
-      sleepChart.data.labels = last7.map(l=>l.date.slice(5));
-      sleepChart.data.datasets[0].data = last7.map(l=>Number(l.hours.toFixed(2)));
-      sleepChart.update();
-    }
+  <!-- Meals -->
+  <div class="screen" id="meals">
+    <h3>Meal Tracking</h3>
+    <p class="sub-label">Add meal name, portion (ml or g), calories. Persistent per-day.</p>
+    <input id="mealName" type="text" placeholder="Meal name (e.g., Breakfast - Oats)"/>
+    <input id="mealPortion" type="number" placeholder="Portion (ml or g)"/>
+    <input id="mealCalories" type="number" placeholder="Calories (kcal)"/>
+    <button class="btn" onclick="addMeal()">Add meal</button>
 
-    // Meal tracking
-    function getTodayKey(){ return 'meals_'+(new Date().toISOString().slice(0,10)); }
-    function loadMeals(){ try{ return JSON.parse(localStorage.getItem(getTodayKey())||'[]'); }catch(e){ return []; } }
-    function saveMeals(list){ localStorage.setItem(getTodayKey(), JSON.stringify(list)); }
-    function renderMeals(){
-      const list = loadMeals();
-      const container = document.getElementById('mealList');
-      container.innerHTML = '';
-      let totalCalories=0, totalPortion=0;
-      list.slice().reverse().forEach(m=>{
-        const el = document.createElement('div');
-        el.className='todo-item';
-        el.innerHTML = `<div style="text-align:left"><strong>${m.name}</strong><div class="muted">${m.portion} unit • ${m.calories} kcal</div></div>
-          <div><button onclick="removeMeal(${m.id})">Delete</button></div>`;
-        container.appendChild(el);
-        totalCalories += Number(m.calories || 0);
-        totalPortion += Number(m.portion || 0);
-      });
-      document.getElementById('todayCalories').textContent = totalCalories;
-      document.getElementById('todayPortions').textContent = totalPortion;
-      updateMealsChart(list);
-    }
-    function addMeal(){
-      const name = document.getElementById('mealName').value.trim();
-      const portion = Number(document.getElementById('mealPortion').value || 0);
-      const calories = Number(document.getElementById('mealCalories').value || 0);
-      if(!name) return alert("Enter meal name");
-      const list = loadMeals();
-      const entry = { id: Date.now(), name, portion, calories, ts: Date.now() };
-      list.push(entry);
-      saveMeals(list);
-      document.getElementById('mealName').value=''; document.getElementById('mealPortion').value=''; document.getElementById('mealCalories').value='';
-      renderMeals();
-    }
-    function removeMeal(id){
-      let list = loadMeals();
-      list = list.filter(m=>m.id !== id);
-      saveMeals(list);
-      renderMeals();
-    }
-    let mealsChart = null;
-    function initMealsChart(){
-      const ctx = document.getElementById('mealsChart').getContext('2d');
-      mealsChart = new Chart(ctx,{ type:'pie', data:{ labels:['kcal consumed','remaining'], datasets:[{ data:[0,2000], backgroundColor:['#f97316','#e5e7eb'] }] }, options:{ plugins:{ legend:{ position:'bottom' } } }});
-      renderMeals();
-    }
-    function updateMealsChart(list){
-      if(!mealsChart) return;
-      const total = list.reduce((s,m)=>s+(Number(m.calories)||0),0);
-      const target = 2000;
-      mealsChart.data.labels = ['Consumed kcal','Remaining kcal'];
-      mealsChart.data.datasets[0].data = [total, Math.max(target - total, 0)];
-      mealsChart.update();
-    }
+    <div class="summary" style="margin-top:12px;">
+      <div class="stat">Today kcal: <span id="todayCalories">0</span></div>
+      <div class="stat">Today portions: <span id="todayPortions">0</span></div>
+    </div>
 
-    // Meal tips toggle helpers
-    const mealTips = [
-      "Eat a colorful plate — fruits and vegetables of different colors.",
-      "Include lean protein with every meal (eggs, legumes, fish, chicken).",
-      "Choose whole grains over refined grains.",
-      "Snack on nuts and seeds instead of chips.",
-      "Drink water before meals to prevent overeating.",
-      "Favor cooking at home to control ingredients.",
-      "Keep portion sizes moderate and consistent.",
-      "Include a source of healthy fat (avocado, olive oil).",
-      "Limit sugary drinks and choose water or herbal tea.",
-      "Eat fiber-rich foods to support digestion and satiety.",
-      "Plan meals ahead to avoid impulsive fast food.",
-      "Start the day with a balanced breakfast.",
-      "Combine protein and carbs for sustained energy.",
-      "Add vegetables to sandwiches and omelettes.",
-      "Use spices and herbs to flavor instead of salt.",
-      "Opt for low-fat dairy or dairy alternatives if needed.",
-      "Choose grilled, baked, or steamed foods over fried.",
-      "Choose fresh fruit or yogurt for dessert.",
-      "Include legumes as a low-cost protein option.",
-      "Rotate your protein sources for variety.",
-      "Read labels and avoid trans fats or excessive sugar.",
-      "Use healthy swaps like zucchini noodles for pasta.",
-      "Prepare simple salads with mixed greens and seeds.",
-      "Use hummus or Greek yogurt dips for veggies.",
-      "Keep healthy snacks visible and accessible.",
-      "Reduce processed meat intake; choose lean options.",
-      "Balance treats with healthier daily choices.",
-      "Have a small protein-rich snack before workouts.",
-      "Limit late-night heavy meals that disrupt sleep.",
-      "Add chia or flax seeds to smoothies for omega-3s.",
-      "Use brown rice or quinoa instead of white rice.",
-      "Include fermented foods for gut health (yogurt, idli).",
-      "Avoid skipping meals which can lead to overeating later.",
-      "Cook in batches and freeze portions for busy days.",
-      "Use baking, grilling or air-frying instead of deep frying.",
-      "Pick whole fruit instead of fruit juice.",
-      "Incorporate leafy greens daily (spinach, kale).",
-      "Opt for unsweetened nut butters and spreads.",
-      "Be mindful when eating — chew slowly and enjoy.",
-      "Limit sugary cereals; choose oats or muesli.",
-      "Choose beans and lentils as protein-rich mains.",
-      "Use citrus and vinegar for dressings instead of heavy creams.",
-      "Try meatless meals a few times a week.",
-      "Rotate seasonal vegetables for freshness and nutrients.",
-      "Store pre-cut veggies for faster healthy snacking.",
-      "Watch portion sizes of calorie-dense foods like nuts.",
-      "Seek balance: carbs, protein, fats, fiber every meal.",
-      "Consult a nutritionist for personalized guidance."
-    ];
-    function toggleTips(){
-      const c = document.getElementById('tipsContainer');
-      if(c.style.display === 'block'){ c.style.display='none'; c.innerHTML=''; return; }
-      c.innerHTML = mealTips.map((t,i)=>`<div style="padding:6px 4px;border-bottom:1px solid #eef2ff"><strong>${i+1}.</strong> ${t}</div>`).join('');
-      c.style.display = 'block';
-    }
-    function hideTips(){ const c=document.getElementById('tipsContainer'); c.style.display='none'; c.innerHTML=''; }
+    <p class="muted">Recent entries</p>
+    <div id="mealList"></div>
 
-    // ---------- Init on load ----------
-    window.onload = function(){
-      initMoodChart();
-      initWaterChart();
-      initSleepChart();
-      initMealsChart();
-      initSettingsUI();
-      showScreen('chatbot');
-      try{ waterConsumed = Number(localStorage.getItem('waterConsumed')||0); updateWaterUI(); }catch(e){}
-      renderMeals();
+    <p class="muted" style="margin-top:12px;">Healthy eating tips</p>
+    <button class="btn" onclick="toggleTips()">Show/Hide 50 Healthy Food Tips</button>
+    <div id="tipsContainer"></div>
+
+    <canvas id="mealsChart" width="360" height="160" style="margin-top:10px;"></canvas>
+  </div>
+</div>
+
+<script>
+/* -------------------------
+   Settings persistence & UI
+   ------------------------- */
+const SETTINGS_KEY = 'lifetrack_settings_v2';
+
+function loadSettings(){
+  try{ const raw = localStorage.getItem(SETTINGS_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
+}
+function saveSettings(obj){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(obj)); }catch(e){} }
+function applySettings(obj){
+  if(!obj) return;
+  if(obj.fontSize){ document.documentElement.style.setProperty('--font-size', obj.fontSize + 'px'); document.getElementById('fontSample').style.fontSize = obj.fontSize + 'px'; }
+  if(obj.fontFamily){ document.documentElement.style.setProperty('--font-family', obj.fontFamily); document.getElementById('fontFamilySample').style.fontFamily = obj.fontFamily; }
+  if(obj.themeColor){ document.documentElement.style.setProperty('--accent-color', obj.themeColor); document.getElementById('themeColor').value = obj.themeColor; }
+  if(obj.brightness){ document.documentElement.style.setProperty('--brightness', obj.brightness); document.getElementById('brightnessRange').value = obj.brightness; }
+}
+function initSettingsUI(){
+  const saved = loadSettings();
+  const defaults = {
+    fontSize: saved?.fontSize || 16,
+    fontFamily: saved?.fontFamily || getComputedStyle(document.documentElement).getPropertyValue('--font-family').trim(),
+    themeColor: saved?.themeColor || '#5063f2',
+    brightness: saved?.brightness || 1
+  };
+  applySettings(defaults);
+
+  document.getElementById('fontSizeRange').value = defaults.fontSize;
+  document.getElementById('fontSelect').value = defaults.fontFamily;
+  document.getElementById('brightnessRange').value = defaults.brightness;
+  document.getElementById('fontSample').style.fontSize = defaults.fontSize + 'px';
+  document.getElementById('fontFamilySample').style.fontFamily = defaults.fontFamily;
+
+  document.getElementById('fontSizeRange').oninput = (e)=> {
+    document.documentElement.style.setProperty('--font-size', e.target.value + 'px');
+    document.getElementById('fontSample').style.fontSize = e.target.value + 'px';
+  };
+  document.getElementById('fontSelect').onchange = (e)=> {
+    document.documentElement.style.setProperty('--font-family', e.target.value);
+    document.getElementById('fontFamilySample').style.fontFamily = e.target.value;
+  };
+  document.getElementById('themeColor').oninput = (e)=> document.documentElement.style.setProperty('--accent-color', e.target.value);
+  document.getElementById('brightnessRange').oninput = (e)=> document.documentElement.style.setProperty('--brightness', e.target.value);
+
+  document.getElementById('saveSettingsBtn').onclick = ()=> {
+    const obj = {
+      fontSize: Number(document.getElementById('fontSizeRange').value),
+      fontFamily: document.getElementById('fontSelect').value,
+      themeColor: document.getElementById('themeColor').value,
+      brightness: Number(document.getElementById('brightnessRange').value)
     };
-  </script>
+    saveSettings(obj);
+    applySettings(obj);
+    alert('Settings saved.');
+  };
+  document.getElementById('resetSettingsBtn').onclick = ()=> { localStorage.removeItem(SETTINGS_KEY); location.reload(); };
+
+  document.getElementById('settingsIcon').onclick = ()=> {
+    const panel = document.getElementById('settingsPanel');
+    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    // close other screens/lists
+    hideTips(); hideMedicalFiles(); document.querySelectorAll('.screen').forEach(s=>s.classList.remove('visible'));
+  };
+}
+
+/* -------------------------
+   Navigation helper
+   ------------------------- */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
+  document.getElementById(id).classList.add('visible');
+  hideTips(); hideMedicalFiles();
+  document.getElementById('settingsPanel').style.display = 'none';
+}
+
+/* -------------------------
+   App Inventor bridge helpers
+   ------------------------- */
+/*
+  Request pattern used:
+  1) requestFilePicker() -> tries in-page file input first (browser). If running inside App Inventor,
+     it sends "REQUEST_FILE_PICKER" via AppInventor.setWebViewString(...) or postMessage.
+  2) App Inventor must open the device picker (via extension or Activity chooser) and then set WebView.WebViewString
+     to a JSON string: { "medicalFiles": [ { "name":"file.pdf", "size":12345, "type":"application/pdf", "uri": "content://..." }, ... ] }
+  3) The page polls for an incoming response and handles it (display, previews). See guideline after the code.
+*/
+
+function sendToApp(json){
+  try{
+    if(window.AppInventor && typeof window.AppInventor.setWebViewString === 'function'){
+      window.AppInventor.setWebViewString(json);
+      return true;
+    }
+  }catch(e){}
+  try{
+    if(window.WebViewInterface && typeof window.WebViewInterface.postMessage === 'function'){
+      window.WebViewInterface.postMessage(json);
+      return true;
+    }
+  }catch(e){}
+  try{
+    if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor && typeof window.webkit.messageHandlers.AppInventor.postMessage === 'function'){
+      window.webkit.messageHandlers.AppInventor.postMessage(json);
+      return true;
+    }
+  }catch(e){}
+  console.log('No AppInventor bridge available for sending:', json);
+  return false;
+}
+
+// Poll for WebViewString-based responses if AppInventor exposes getWebViewString
+// (some embedded WebView bridges expose getWebViewString or other access; this is defensive)
+let pollWebViewStringTimer = null;
+function startPollingWebViewString(handler, interval = 700){
+  if(pollWebViewStringTimer) clearInterval(pollWebViewStringTimer);
+  pollWebViewStringTimer = setInterval(()=> {
+    try{
+      if(window.AppInventor && typeof window.AppInventor.getWebViewString === 'function'){
+        const s = window.AppInventor.getWebViewString();
+        if(s && s.trim()){
+          // attempt parse
+          try {
+            const parsed = JSON.parse(s);
+            // clear WebViewString if possible (app needs to clear on its side normally)
+            if(window.AppInventor && typeof window.AppInventor.setWebViewString === 'function'){
+              window.AppInventor.setWebViewString('');
+            }
+            handler(parsed);
+          } catch(e){}
+        }
+      }
+    }catch(e){}
+  }, interval);
+}
+function stopPollingWebViewString(){ if(pollWebViewStringTimer){ clearInterval(pollWebViewStringTimer); pollWebViewStringTimer = null; } }
+
+/* -------------------------
+   Request file picker from page / app
+   ------------------------- */
+let awaitingAppFiles = false;
+function requestFilePicker(){
+  // Try in-page picker first (works in modern browser WebView)
+  const input = document.getElementById('medicalFile');
+  // Safari & some WebView may block programmatic click unless user gesture; this is invoked by user tap - OK.
+  try{
+    input.value = '';
+    input.click();
+    // In many WebView environments this opens native file picker.
+    // We'll still send a REQUEST to AppInventor as a fallback if no files arrive in short time.
+    awaitingAppFiles = true;
+    // If no files selected by in-page input within 1.2s, send REQUEST to App Inventor
+    setTimeout(()=> {
+      if(awaitingAppFiles){
+        const req = JSON.stringify({ action: "REQUEST_FILE_PICKER" });
+        sendToApp(req);
+        // start polling for a response via AppInventor.getWebViewString if available
+        startPollingWebViewString(handleAppReturnedFiles, 800);
+      }
+    }, 1200);
+  }catch(e){
+    // fallback: directly request AppInventor
+    const req = JSON.stringify({ action: "REQUEST_FILE_PICKER" });
+    sendToApp(req);
+    startPollingWebViewString(handleAppReturnedFiles, 800);
+  }
+}
+
+/* -------------------------
+   Handle files returned from App Inventor (or in-page selection)
+   ------------------------- */
+let lastSelectedFiles = []; // in-memory File objects (for in-page) or metadata (from app)
+
+/* In-page picker change handler (browser fallback) */
+document.getElementById('medicalFile').addEventListener('change', function(e){
+  awaitingAppFiles = false;
+  stopPollingWebViewString();
+  const files = Array.from(this.files || []);
+  lastSelectedFiles = files;
+  displaySelectedFilesFromFiles(files);
+  // send metadata to AppInventor if desired
+  const meta = files.map(f=>({ name:f.name, size:f.size, type:f.type }));
+  sendToApp(JSON.stringify({ medicalFiles: meta }));
+});
+
+/* Handler for files returned by App Inventor via WebViewString JSON */
+function handleAppReturnedFiles(obj){
+  // obj expected: { medicalFiles: [ {name, size, type, uri? } ] }
+  if(!obj || !obj.medicalFiles) return;
+  stopPollingWebViewString();
+  awaitingAppFiles = false;
+  const list = obj.medicalFiles;
+  // show list built from metadata (no File objects available in this case)
+  displaySelectedFilesFromMeta(list);
+}
+
+/* UI to display files when we have File objects */
+function displaySelectedFilesFromFiles(files){
+  const list = document.getElementById('medicalFileList');
+  list.style.display = 'block';
+  list.innerHTML = '';
+  files.forEach((f, idx) => {
+    const row = document.createElement('div');
+    row.className = 'file-row';
+    const left = document.createElement('div');
+    left.innerHTML = `<div style="font-weight:800">${escapeHtml(f.name)}</div><div class="file-meta">${Math.round(f.size/1024)} KB • ${escapeHtml(f.type||'unknown')}</div>`;
+    const right = document.createElement('div');
+    const viewBtn = document.createElement('button');
+    viewBtn.textContent = 'View';
+    viewBtn.onclick = ()=> {
+      const url = URL.createObjectURL(f);
+      window.open(url, '_blank');
+      setTimeout(()=>URL.revokeObjectURL(url), 60000);
+    };
+    const removeBtn = document.createElement('button');
+    removeBtn.style.background = '#ef4444';
+    removeBtn.textContent = 'Remove';
+    removeBtn.onclick = ()=> {
+      files.splice(idx,1);
+      if(files.length === 0){ list.innerHTML = '<div class="file-meta" style="padding:8px">No files selected.</div>'; }
+      else displaySelectedFilesFromFiles(files);
+      sendToApp(JSON.stringify({ medicalFiles: files.map(x=>({name:x.name,size:x.size,type:x.type})) }));
+    };
+    right.appendChild(viewBtn); right.appendChild(removeBtn);
+    row.appendChild(left); row.appendChild(right);
+    list.appendChild(row);
+  });
+}
+
+/* UI to display files when we only have metadata from the app */
+function displaySelectedFilesFromMeta(metaList){
+  const list = document.getElementById('medicalFileList');
+  list.style.display = 'block';
+  list.innerHTML = '';
+  metaList.forEach((m, idx) => {
+    const row = document.createElement('div');
+    row.className = 'file-row';
+    const left = document.createElement('div');
+    left.innerHTML = `<div style="font-weight:800">${escapeHtml(m.name)}</div><div class="file-meta">${Math.round((m.size||0)/1024)} KB • ${escapeHtml(m.type||'unknown')}</div>`;
+    const right = document.createElement('div');
+    const infoBtn = document.createElement('button');
+    infoBtn.textContent = 'Info';
+    infoBtn.onclick = ()=> alert(`Name: ${m.name}\nSize: ${m.size} bytes\nType: ${m.type}\nURI: ${m.uri || 'n/a'}`);
+    const removeBtn = document.createElement('button');
+    removeBtn.style.background = '#ef4444';
+    removeBtn.textContent = 'Remove';
+    removeBtn.onclick = ()=> {
+      metaList.splice(idx,1);
+      if(metaList.length === 0) list.innerHTML = '<div class="file-meta" style="padding:8px">No files selected.</div>';
+      else displaySelectedFilesFromMeta(metaList);
+      sendToApp(JSON.stringify({ medicalFiles: metaList }));
+    };
+    right.appendChild(infoBtn); right.appendChild(removeBtn);
+    row.appendChild(left); row.appendChild(right);
+    list.appendChild(row);
+  });
+}
+
+function hideMedicalFiles(){ const list=document.getElementById('medicalFileList'); list.style.display='none'; list.innerHTML=''; }
+
+/* -------------------------
+   Chatbot (small canned responses)
+   ------------------------- */
+const jokes = [ "Why don’t skeletons fight? They don’t have the guts!", "Why did the math book look sad? It had too many problems.", "Why can’t your nose be 12 inches long? Because then it would be a foot!" ];
+const studyTips = [ "Break study into 25-minute chunks.", "Teach to learn more." ];
+function sendQuick(type){
+  const chatbox = document.getElementById('chatbox');
+  let userText="", reply="";
+  if(type==='weather'){ userText="Weather?"; reply="Sunny and 28°C (example)."; }
+  else if(type==='joke'){ userText="Tell me a joke"; reply = jokes[Math.floor(Math.random()*jokes.length)]; }
+  else if(type==='study'){ userText="Study tip"; reply = studyTips[Math.floor(Math.random()*studyTips.length)]; }
+  chatbox.innerHTML += `<p style="margin:6px 0"><strong>You:</strong> ${escapeHtml(userText)}</p><p style="margin:6px 0"><strong>Bot:</strong> ${escapeHtml(reply)}</p>`;
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+/* -------------------------
+   Reminders (simple in-page list)
+   ------------------------- */
+function addReminder(){
+  const text = document.getElementById('newReminder').value.trim();
+  if(!text) return;
+  const container = document.getElementById('todoList');
+  const el = document.createElement('div');
+  el.className='todo-item';
+  el.innerHTML = `<span>${escapeHtml(text)}</span><div><button onclick="this.closest('.todo-item').remove()">Delete</button></div>`;
+  container.prepend(el);
+  document.getElementById('newReminder').value='';
+}
+
+/* -------------------------
+   Mood chart
+   ------------------------- */
+function promptMood(){
+  const value = prompt("Enter mood 1-10:","5");
+  const num = Number(value);
+  if(num>=1 && num<=10){ document.getElementById('moodValue').textContent = num; if(window.moodChart){ moodChart.data.datasets[0].data[0]=num; moodChart.update(); } }
+  else alert("Enter a number 1-10");
+}
+function initMoodChart(){
+  const ctx = document.getElementById('moodChart').getContext('2d');
+  window.moodChart = new Chart(ctx,{ type:'bar', data:{ labels:['Mood'], datasets:[{ label:'Mood', data:[5], backgroundColor:'#5063f2' }] }, options:{ scales:{ y:{ beginAtZero:true, max:10 } }, plugins:{ legend:{ display:false } } } });
+}
+
+/* -------------------------
+   Timer
+   ------------------------- */
+function startTimer(){
+  const minutes = parseInt(document.getElementById('minutes').value,10);
+  if(isNaN(minutes)||minutes<=0) return alert('Enter minutes');
+  let seconds = minutes*60;
+  const countdown = document.getElementById('countdown');
+  const alarm = document.getElementById('alarm1');
+  const t = setInterval(()=> {
+    const m = Math.floor(seconds/60), s = seconds%60;
+    countdown.textContent = `${m}:${s<10?'0':''}${s}`;
+    if(--seconds < 0){ clearInterval(t); alarm.currentTime=0; alarm.play(); countdown.textContent = 'Done'; }
+  },1000);
+}
+
+/* -------------------------
+   Hydration (ml)
+   ------------------------- */
+let waterConsumed = 0;
+let waterReminderTimer = null;
+let waterChart = null;
+function updateWaterUI(){
+  const goal = Number(document.getElementById('waterGoal').value || 0);
+  document.getElementById('waterConsumed').textContent = waterConsumed;
+  document.getElementById('waterRemaining').textContent = Math.max(goal - waterConsumed, 0);
+  if(waterChart){ waterChart.data.datasets[0].data = [waterConsumed, Math.max(goal - waterConsumed, 0)]; waterChart.update(); }
+}
+function logWater(){
+  const intake = Number(document.getElementById('waterIntake').value || 0);
+  if(intake <= 0) return alert('Enter ml value');
+  waterConsumed += intake;
+  localStorage.setItem('waterConsumed', String(waterConsumed));
+  updateWaterUI();
+}
+function startWaterReminders(){
+  const mins = Number(document.getElementById('waterInterval').value || 0);
+  if(mins <= 0) return alert('Enter minutes interval');
+  if(waterReminderTimer) clearInterval(waterReminderTimer);
+  waterReminderTimer = setInterval(()=> { alert(`Hydration reminder: drink ${document.getElementById('waterIntake').value || 250} ml`); }, mins*60000);
+  alert('Hydration reminders started');
+}
+function stopWaterReminders(){ if(waterReminderTimer){ clearInterval(waterReminderTimer); waterReminderTimer = null; alert('Hydration reminders stopped'); } }
+function initWaterChart(){
+  const ctx = document.getElementById('waterChart').getContext('2d');
+  const goal = Number(document.getElementById('waterGoal').value || 2000);
+  waterChart = new Chart(ctx,{ type:'doughnut', data:{ labels:['Consumed','Remaining'], datasets:[{ data:[0,goal], backgroundColor:['#34d399','#e6e8f2'] }] }, options:{ cutout:'60%', plugins:{ legend:{ position:'bottom' } } } });
+  try{ waterConsumed = Number(localStorage.getItem('waterConsumed')||0); }catch(e){ waterConsumed = 0; }
+  updateWaterUI();
+}
+
+/* -------------------------
+   Sleep analytics
+   ------------------------- */
+const sleepLogs = [];
+let sleepChart = null;
+function logSleep(){
+  const s = document.getElementById('sleepTime').value;
+  const w = document.getElementById('wakeTime').value;
+  if(!s||!w) return alert('Select both times');
+  const [sh,sm] = s.split(':').map(Number);
+  const [wh,wm] = w.split(':').map(Number);
+  let start = sh*60 + sm, end = wh*60 + wm;
+  if(end <= start) end += 24*60;
+  const mins = end - start, hours = mins/60;
+  document.getElementById('lastSleepDuration').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`;
+  const today = new Date().toISOString().slice(0,10);
+  sleepLogs.push({ date: today, hours });
+  const last7 = sleepLogs.slice(-7);
+  const avg = last7.reduce((a,b)=>a+b.hours,0)/last7.length;
+  document.getElementById('avgSleepDuration').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`;
+  updateSleepChart();
+}
+function initSleepChart(){
+  const ctx = document.getElementById('sleepChart').getContext('2d');
+  sleepChart = new Chart(ctx,{ type:'bar', data:{ labels:[], datasets:[{ label:'Hours', data:[], backgroundColor:'#7c5cff' }] }, options:{ scales:{ y:{ beginAtZero:true, max:12 } }, plugins:{ legend:{ display:false } } } });
+}
+function updateSleepChart(){
+  if(!sleepChart) return;
+  const last7 = sleepLogs.slice(-7);
+  sleepChart.data.labels = last7.map(l=>l.date.slice(5));
+  sleepChart.data.datasets[0].data = last7.map(l=>Number(l.hours.toFixed(2)));
+  sleepChart.update();
+}
+
+/* -------------------------
+   Meal tracking (fixed)
+   ------------------------- */
+function getTodayKey(){ return 'meals_' + (new Date().toISOString().slice(0,10)); }
+function loadMeals(){ try{ return JSON.parse(localStorage.getItem(getTodayKey())||'[]'); }catch(e){ return []; } }
+function saveMeals(list){ localStorage.setItem(getTodayKey(), JSON.stringify(list)); }
+function renderMeals(){
+  const list = loadMeals();
+  const container = document.getElementById('mealList');
+  container.innerHTML = '';
+  let totalCalories = 0, totalPortions = 0;
+  list.slice().reverse().forEach(m=>{
+    const el = document.createElement('div');
+    el.className = 'todo-item';
+    el.innerHTML = `<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div class="file-meta">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div>
+      <div><button onclick="removeMeal(${m.id})">Delete</button></div>`;
+    container.appendChild(el);
+    totalCalories += Number(m.calories || 0);
+    totalPortions += Number(m.portion || 0);
+  });
+  document.getElementById('todayCalories').textContent = totalCalories;
+  document.getElementById('todayPortions').textContent = totalPortions;
+  updateMealsChart(list);
+}
+function addMeal(){
+  const name = document.getElementById('mealName').value.trim();
+  const portion = Number(document.getElementById('mealPortion').value || 0);
+  const calories = Number(document.getElementById('mealCalories').value || 0);
+  if(!name) return alert('Enter meal name');
+  const list = loadMeals();
+  const entry = { id: Date.now(), name, portion, calories, ts: Date.now() };
+  list.push(entry);
+  saveMeals(list);
+  document.getElementById('mealName').value=''; document.getElementById('mealPortion').value=''; document.getElementById('mealCalories').value='';
+  renderMeals();
+}
+function removeMeal(id){
+  let list = loadMeals();
+  list = list.filter(m=>m.id !== id);
+  saveMeals(list);
+  renderMeals();
+}
+let mealsChart = null;
+function initMealsChart(){
+  const ctx = document.getElementById('mealsChart').getContext('2d');
+  mealsChart = new Chart(ctx,{ type:'pie', data:{ labels:['Consumed kcal','Remaining kcal'], datasets:[{ data:[0,2000], backgroundColor:['#ff9f43','#e9eefb'] }] }, options:{ plugins:{ legend:{ position:'bottom' } } });
+  renderMeals();
+}
+function updateMealsChart(list){
+  if(!mealsChart) return;
+  const total = (list || loadMeals()).reduce((s,m)=>s+(Number(m.calories)||0),0);
+  const target = 2000;
+  mealsChart.data.datasets[0].data = [total, Math.max(target - total, 0)];
+  mealsChart.update();
+}
+
+/* -------------------------
+   Meal tips
+   ------------------------- */
+const mealTips = [
+  "Eat a colorful plate — fruits and vegetables of different colors.",
+  "Include lean protein with every meal.",
+  "Choose whole grains over refined grains.",
+  "Snack on nuts and seeds instead of chips.",
+  "Drink water before meals to avoid overeating.",
+  "Cook more at home to control ingredients.",
+  "Keep portion sizes moderate.",
+  "Include healthy fats like olive oil or avocado.",
+  "Limit sugary drinks; choose water or tea.",
+  "Eat fiber-rich foods for digestion.",
+  "Plan meals to avoid impulse choices.",
+  "Start day with a balanced breakfast.",
+  "Combine protein and carbs for steady energy.",
+  "Add vegetables to sandwiches and omelettes.",
+  "Use herbs and spices instead of excess salt.",
+  "Choose grilled or steamed over fried.",
+  "Pick fruit or yogurt for dessert.",
+  "Use legumes as economical protein.",
+  "Rotate proteins for variety.",
+  "Read labels for trans fat and sugars.",
+  "Try zucchini noodles as pasta substitute.",
+  "Make quick salads with seeds and greens.",
+  "Use hummus or Greek yogurt as dips.",
+  "Keep healthy snacks visible.",
+  "Reduce processed meats.",
+  "Balance treats with healthier meals.",
+  "Have protein snack before workouts.",
+  "Avoid heavy late-night meals.",
+  "Add chia or flax to smoothies.",
+  "Use brown rice or quinoa.",
+  "Include fermented foods for gut health.",
+  "Avoid skipping meals to reduce overeating.",
+  "Batch cook and freeze portions.",
+  "Prefer baking or air-frying to deep frying.",
+  "Choose whole fruit over juice.",
+  "Add leafy greens daily.",
+  "Pick unsweetened nut butters.",
+  "Chew slowly and be mindful.",
+  "Limit sugary cereals.",
+  "Use beans and lentils regularly.",
+  "Dressings: citrus and vinegar over creams.",
+  "Try meatless meals several times weekly.",
+  "Rotate seasonal vegetables.",
+  "Keep pre-cut veggies for quick snacks.",
+  "Watch portions of calorie-dense foods.",
+  "Aim for carbs, protein, fats, fiber each meal.",
+  "Consult a nutritionist for personalized advice."
+];
+function toggleTips(){
+  const c = document.getElementById('tipsContainer');
+  if(c.style.display === 'block'){ c.style.display='none'; c.innerHTML=''; return; }
+  c.innerHTML = mealTips.map((t,i)=>`<div style="padding:8px 6px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${escapeHtml(t)}</div>`).join('');
+  c.style.display = 'block';
+}
+function hideTips(){ const c=document.getElementById('tipsContainer'); c.style.display='none'; c.innerHTML=''; }
+
+/* -------------------------
+   Utils & Init
+   ------------------------- */
+function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); }); }
+
+window.onload = function(){
+  initMoodChart();
+  initWaterChart();
+  initSleepChart();
+  initMealsChart();
+  initSettingsUI();
+  showScreen('chatbot');
+  try{ waterConsumed = Number(localStorage.getItem('waterConsumed')||0); }catch(e){ waterConsumed = 0; }
+  updateWaterUI();
+  renderMeals();
+};
+</script>
 </body>
 </html>
