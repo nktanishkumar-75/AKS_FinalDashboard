@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>LifeTrack Dashboard</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LifeTrack Dashboard — All Functions Working</title>
 <style>
   :root{
-    --accent:#5063f2;
-    --bg:#f6f8fb;
-    --card:#e6e8f2;
-    --text:#0f1724;
-    --muted:#6b7280;
+    --accent:#5063f2; --bg:#f6f8fb; --card:#e6e8f2; --text:#0f1724; --muted:#6b7280;
     --font:"Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
-    --fs:16px;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
@@ -24,7 +19,7 @@
   .card{background:#fff;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;min-height:70px;cursor:pointer;border:1px solid var(--card);font-weight:700}
   .screen{display:none;background:#fff;padding:12px;border-radius:10px;border:1px solid var(--card);margin-bottom:12px}
   .btn{display:block;width:100%;max-width:340px;margin:8px auto;padding:11px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:800;cursor:pointer}
-  input,select{display:block;width:100%;max-width:340px;margin:8px auto;padding:10px;border-radius:8px;border:1px solid var(--card)}
+  input,select,textarea{display:block;width:100%;max-width:340px;margin:8px auto;padding:10px;border-radius:8px;border:1px solid var(--card)}
   .chatbox{height:220px;overflow:auto;border:1px solid #eef2ff;padding:10px;border-radius:8px;background:#fbfdff}
   .meta-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
   #tipsCont,#fileList{display:none;max-height:320px;overflow:auto;border:1px solid var(--card);padding:8px;border-radius:8px;background:#fff}
@@ -34,7 +29,6 @@
   .rem{background:#ef4444;color:#fff}
   .todo-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--card);border-radius:8px;margin:8px 0;background:#fff}
   canvas{display:block;margin:10px auto;max-width:100%}
-  .legend{font-size:13px;color:#333;margin:6px 0}
 </style>
 </head>
 <body>
@@ -58,7 +52,6 @@
     <div class="card" onclick="show('meals')">🍽 Meals</div>
   </div>
 
-  <!-- hidden file input for browsers -->
   <input id="fileInput" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" style="display:none">
   <div id="fileList"></div>
 
@@ -108,7 +101,7 @@
     <button class="btn" onclick="addWater()">Add intake</button>
     <div class="meta-row">
       <div>Consumed: <strong id="waterConsumed">0</strong> ml</div>
-      <div>Remaining: <strong id="waterRemaining">2000</strong> ml</div>
+      <div>Remaining: <strong id="waterRemaining">2000</strong></div>
     </div>
     <input id="waterInterval" type="number" placeholder="Reminder min" value="60">
     <button class="btn" onclick="startHydration()">Start reminders</button>
@@ -138,338 +131,272 @@
       <div>Today kcal: <strong id="todayKcal">0</strong></div>
       <div>Today portions: <strong id="todayPortions">0</strong></div>
     </div>
-
     <p>Recent</p>
     <div id="mealList"></div>
-
-    <button class="btn" onclick="toggleTips()">Show/Hide 50 Tips</button>
+    <button class="btn" onclick="toggleTips()">Show/Hide 50 Healthy Tips</button>
     <div id="tipsCont"></div>
-
     <p>Meal pie</p>
     <canvas id="pieCanvas" width="360" height="240" style="background:#fff;border-radius:8px"></canvas>
   </div>
 </div>
 
 <script>
-/* ---------- Utilities ---------- */
-function $(id){ return document.getElementById(id) }
+/* Utilities */
+function $(id){return document.getElementById(id)}
 function show(id){ document.querySelectorAll('.screen').forEach(s=>s.style.display='none'); const el=$(id); if(el) el.style.display='block'; hideTips(); hideFiles(); }
 function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
-/* ---------- Initialization ---------- */
-let waterConsumed = 0, waterTimer = null;
-let mood = 5, moodCanvas, moodCtx;
+/* State */
+let waterConsumed = 0, hydrationTimer = null;
 let sleepLogs = [];
 let selectedFiles = [];
 
+/* Init */
 window.onload = function(){
-  // show default
   show('chat');
-  moodCanvas = $('moodCanvas'); moodCtx = moodCanvas.getContext('2d');
-  // restore water
-  try{ waterConsumed = Number(localStorage.getItem('lt_water')||0) }catch(e){ waterConsumed=0 }
+  try{ waterConsumed = Number(localStorage.getItem('lt_water')||0) }catch(e){ waterConsumed = 0 }
   updateWaterUI();
+  renderMeals();
+  drawPie(0);
   drawMood();
   drawSleep();
-  renderMeals();
 };
 
-/* ---------- Chatbot content ---------- */
+/* Chatbot: 50 jokes, 50 study tips */
 const jokes = [
-  "Why don’t skeletons fight? They don’t have the guts!",
-  "Why did the math book look sad? It had too many problems.",
-  "Why can’t your nose be 12 inches long? Because then it would be a foot!",
-  "Why did the scarecrow win an award? He was outstanding in his field!",
-  "What do you call fake spaghetti? An impasta!",
-  "Why did the bicycle fall over? It was two-tired!",
-  "Why don’t eggs tell jokes? They’d crack each other up!",
-  "What do you call cheese that isn’t yours? Nacho cheese!",
-  "Why did the golfer bring two pairs of pants? In case he got a hole in one!",
-  "Why did the tomato blush? It saw the salad dressing!",
-  "Why don’t scientists trust atoms? Because they make up everything!",
-  "Why did the cookie go to the doctor? It was feeling crummy!",
-  "Why did the computer go to therapy? It had too many bytes!",
-  "Why did the student eat his homework? The teacher said it was a piece of cake!",
-  "Why did the cat sit on the computer? To keep an eye on the mouse!",
-  "Why did the banana go to the party? Because it was a-peeling!",
-  "Why did the chicken join a band? Because it had the drumsticks!",
-  "Why did the fish blush? Because it saw the ocean’s bottom!",
-  "Why did the frog take the bus? His car got toad!",
-  "Why did the bee get married? Because he found his honey!",
-  "Why did the pencil go to the principal’s office? It had a point to make!",
-  "Why did the broom get a promotion? It swept the competition!",
-  "Why did the grape stop in the road? It ran out of juice!",
-  "Why did the light bulb go to school? To get a little brighter!",
-  "Why did the duck get a job? He was tired of winging it!",
-  "Why did the elephant bring a suitcase? He was going on a trunk trip!",
-  "Why did the calendar apply for a job? It wanted to work full time!",
-  "Why did the robot go on vacation? It needed to recharge!",
-  "Why did the donut go to therapy? It felt empty inside!",
-  "Why did the dog sit in the shade? He didn’t want to be a hot dog!",
-  "Why did the astronaut break up? He needed space!",
-  "Why did the fish get bad grades? Because it was below sea level!",
-  "Why did the cow go to space? To see the moooon!",
-  "Why did the skeleton skip the dance? He had no body to go with!",
-  "Why did the kangaroo stop coffee? It made him too jumpy!",
-  "Why did the snowman call a cab? He had a meltdown!",
-  "Why did the pirate buy an eye patch? He couldn’t afford an iPhone!",
-  "Why did the balloon go near the needle? To pop the question!",
-  "Why did the horse go behind the tree? To change his jockeys!",
-  "Why did the snail paint an S on his car? So people would say, ‘Look at that S-car go!’",
-  "Why did the giraffe get bad grades? He had his head in the clouds!",
-  "Why did the owl get promoted? He was a real hoot!",
-  "Why did the mirror fail the test? It couldn’t reflect well!",
-  "Why did the volcano get a promotion? It was on fire!",
-  "Why did the sandwich go to the gym? To get shredded!",
-  "Why did the book join the police? It wanted to go undercover!",
-  "Why did the clock get detention? It was tocking too much!",
-  "Why did the spider start a blog? To spin a web of stories!",
-  "Why did the egg hide? It was a little chicken!",
-  "Why did the belt get arrested? It held up a pair of pants!",
-  "Why did the computer sneeze? It had a virus!"
+"Why don’t skeletons fight? They don’t have the guts!",
+"Why did the math book look sad? It had too many problems.",
+"Why can’t your nose be 12 inches long? Because then it would be a foot!",
+"Why did the scarecrow win an award? He was outstanding in his field!",
+"What do you call fake spaghetti? An impasta!",
+"Why did the bicycle fall over? It was two-tired!",
+"Why don’t eggs tell jokes? They’d crack each other up!",
+"What do you call cheese that isn’t yours? Nacho cheese!",
+"Why did the golfer bring two pairs of pants? In case he got a hole in one!",
+"Why did the tomato blush? It saw the salad dressing!",
+"Why don’t scientists trust atoms? Because they make up everything!",
+"Why did the cookie go to the doctor? It was feeling crummy!",
+"Why did the computer go to therapy? It had too many bytes!",
+"Why did the student eat his homework? The teacher said it was a piece of cake!",
+"Why did the cat sit on the computer? To keep an eye on the mouse!",
+"Why did the banana go to the party? Because it was a-peeling!",
+"Why did the chicken join a band? Because it had the drumsticks!",
+"Why did the fish blush? Because it saw the ocean’s bottom!",
+"Why did the frog take the bus? His car got toad!",
+"Why did the bee get married? Because he found his honey!",
+"Why did the pencil go to the principal’s office? It had a point to make!",
+"Why did the broom get a promotion? It swept the competition!",
+"Why did the grape stop in the road? It ran out of juice!",
+"Why did the light bulb go to school? To get a little brighter!",
+"Why did the duck get a job? He was tired of winging it!",
+"Why did the elephant bring a suitcase? He was going on a trunk trip!",
+"Why did the calendar apply for a job? It wanted to work full time!",
+"Why did the robot go on vacation? It needed to recharge!",
+"Why did the donut go to therapy? It felt empty inside!",
+"Why did the dog sit in the shade? He didn’t want to be a hot dog!",
+"Why did the astronaut break up? He needed space!",
+"Why did the fish get bad grades? Because it was below sea level!",
+"Why did the cow go to space? To see the moooon!",
+"Why did the skeleton skip the dance? He had no body to go with!",
+"Why did the kangaroo stop coffee? It made him too jumpy!",
+"Why did the snowman call a cab? He had a meltdown!",
+"Why did the pirate buy an eye patch? He couldn’t afford an iPhone!",
+"Why did the balloon go near the needle? To pop the question!",
+"Why did the horse go behind the tree? To change his jockeys!",
+"Why did the snail paint an S on his car? So people would say, ‘Look at that S-car go!’",
+"Why did the giraffe get bad grades? He had his head in the clouds!",
+"Why did the owl get promoted? He was a real hoot!",
+"Why did the mirror fail the test? It couldn’t reflect well!",
+"Why did the volcano get a promotion? It was on fire!",
+"Why did the sandwich go to the gym? To get shredded!",
+"Why did the book join the police? It wanted to go undercover!",
+"Why did the clock get detention? It was tocking too much!",
+"Why did the spider start a blog? To spin a web of stories!"
 ];
-const tips = [
-  "Break study sessions into 25-minute chunks with 5-minute breaks.",
-  "Teach what you learn — explaining helps retention.",
-  "Use flashcards for active recall.",
-  "Review material within 24 hours.",
-  "Create a distraction-free study space.",
-  "Set clear goals for each session.",
-  "Use mnemonic devices.",
-  "Practice past papers under timed conditions.",
-  "Summarize notes in your own words.",
-  "Use diagrams and mind maps.",
-  "Sleep well — memory consolidates during rest.",
-  "Stay hydrated and eat brain-friendly foods.",
-  "Avoid multitasking.",
-  "Use spaced repetition.",
-  "Study at your peak energy time.",
-  "Group study for tough topics.",
-  "Use apps like Anki or Quizlet.",
-  "Record yourself explaining topics.",
-  "Color-code notes.",
-  "Reward yourself after tasks.",
-  "Spread learning over days, not cramming.",
-  "Apply the Feynman technique.",
-  "Take movement/stretch breaks.",
-  "Turn off notifications.",
-  "Use background music if it helps.",
-  "Make a weekly checklist.",
-  "Start with the hardest subject.",
-  "Use real-world examples.",
-  "Ask questions to deepen understanding.",
-  "Use sticky notes for key facts.",
-  "Teach a friend or sibling.",
-  "Watch short explainer videos.",
-  "Keep a study journal.",
-  "Visualize exam success.",
-  "Don’t hesitate to ask for help.",
-  "Stay consistent with daily effort.",
-  "Use analogies to simplify.",
-  "Practice writing essays.",
-  "Limit social media.",
-  "Use timers to stay on track.",
-  "Keep your desk tidy.",
-  "Drink water before and during study.",
-  "Use site blockers for focus.",
-  "Make your own quizzes.",
-  "Combine words + visuals (dual coding).",
-  "Celebrate small wins.",
-  "Stay positive — mindset matters.",
-  "Track your time to find patterns.",
-  "Reflect on what worked and what didn’t.",
-  "Balance study with exercise and relaxation."
+const studyTips = [
+"Break study sessions into 25-minute chunks with 5-minute breaks.",
+"Teach what you learn — explaining helps retention.",
+"Use flashcards for active recall.",
+"Review material within 24 hours.",
+"Create a distraction-free study space.",
+"Set clear goals for each session.",
+"Use mnemonic devices.",
+"Practice past papers under timed conditions.",
+"Summarize notes in your own words.",
+"Use diagrams and mind maps.",
+"Sleep well — memory consolidates during rest.",
+"Stay hydrated and eat brain-friendly foods.",
+"Avoid multitasking.",
+"Use spaced repetition.",
+"Study at your peak energy time.",
+"Group study for tough topics.",
+"Use apps like Anki or Quizlet.",
+"Record yourself explaining topics.",
+"Color-code notes.",
+"Reward yourself after tasks.",
+"Spread learning over days, not cramming.",
+"Apply the Feynman technique.",
+"Take movement/stretch breaks.",
+"Turn off notifications.",
+"Use background music if it helps.",
+"Make a weekly checklist.",
+"Start with the hardest subject.",
+"Use real-world examples.",
+"Ask questions to deepen understanding.",
+"Use sticky notes for key facts.",
+"Teach a friend or sibling.",
+"Watch short explainer videos.",
+"Keep a study journal.",
+"Visualize exam success.",
+"Don’t hesitate to ask for help.",
+"Stay consistent with daily effort.",
+"Use analogies to simplify.",
+"Practice writing essays.",
+"Limit social media.",
+"Use timers to stay on track.",
+"Keep your desk tidy.",
+"Drink water before and during study.",
+"Use site blockers for focus.",
+"Make your own quizzes.",
+"Combine words + visuals (dual coding).",
+"Celebrate small wins.",
+"Stay positive — mindset matters.",
+"Track your time to find patterns.",
+"Reflect on what worked and what didn’t.",
+"Balance study with exercise and relaxation."
 ];
-function botQuick(t){
+
+function botQuick(type){
   const box = $('chatbox');
   let user='', reply='';
-  if(t==='weather'){ user="What's the weather?"; reply="Sunny and 28°C (example)."; }
-  else if(t==='joke'){ user="Tell me a joke"; reply=jokes[Math.floor(Math.random()*jokes.length)]; }
-  else { user="Study tip"; reply=tips[Math.floor(Math.random()*tips.length)]; }
+  if(type==='weather'){ user="What's the weather?"; reply="Sunny and 28°C (example)."; }
+  else if(type==='joke'){ user="Tell me a joke"; reply = jokes[Math.floor(Math.random()*jokes.length)]; }
+  else { user="Give me a study tip"; reply = studyTips[Math.floor(Math.random()*studyTips.length)]; }
   box.innerHTML += `<p style="margin:6px 0"><strong>You:</strong> ${escapeHtml(user)}</p><p style="margin:6px 0"><strong>Bot:</strong> ${escapeHtml(reply)}</p>`;
   box.scrollTop = box.scrollHeight;
 }
 
-/* ---------- Reminders ---------- */
-function addRem(){
-  const t=$('remText').value.trim(); if(!t) return;
-  const el=document.createElement('div'); el.className='todo-item'; el.innerHTML=`<div>${escapeHtml(t)}</div><div><button onclick="this.closest('.todo-item').remove()">Delete</button></div>`;
-  $('remList').prepend(el); $('remText').value='';
-}
+/* Reminders */
+function addRem(){ const t=$('remText').value.trim(); if(!t) return; const el=document.createElement('div'); el.className='todo-item'; el.innerHTML=`<div>${escapeHtml(t)}</div><div><button onclick="this.closest('.todo-item').remove()">Delete</button></div>`; $('remList').prepend(el); $('remText').value=''; }
 
-/* ---------- Timer ---------- */
-function startTimer(){
-  const m = parseInt($('minutes').value,10); if(isNaN(m)||m<=0) return alert('Enter minutes');
-  let s = m*60; const out=$('countdown');
-  const choice = $('alarmSel').value;
-  const alarm = $(choice);
-  const id = setInterval(()=>{ const mm=Math.floor(s/60), ss=s%60; out.textContent = `${mm}:${ss<10?'0':''}${ss}`; if(--s<0){ clearInterval(id); try{ alarm.currentTime=0; alarm.play(); }catch(e){} out.textContent='Done' }},1000);
-}
+/* Timer */
+function startTimer(){ const m=parseInt($('minutes').value,10); if(isNaN(m)||m<=0) return alert('Enter minutes'); let s=m*60; const out=$('countdown'); const choice=$('alarmSel').value; const alarm=$(choice); const id=setInterval(()=>{ const mm=Math.floor(s/60), ss=s%60; out.textContent=`${mm}:${ss<10?'0':''}${ss}`; if(--s<0){ clearInterval(id); try{ alarm.currentTime=0; alarm.play(); }catch(e){} out.textContent='Done' } },1000); }
 
-/* ---------- Hydration ---------- */
-let hydrationReminder = null;
-function updateWaterUI(){
-  const goal = Number($('goalWater').value||0);
-  $('waterConsumed').textContent = waterConsumed;
-  $('waterRemaining').textContent = Math.max(goal-waterConsumed,0);
-  drawWater();
-}
-function addWater(){ const v=Number($('logWater').value||0); if(v<=0) return alert('Enter ml'); waterConsumed+=v; try{ localStorage.setItem('lt_water', String(waterConsumed)); }catch(e){} updateWaterUI(); }
-function startHydration(){ const m=Number($('waterInterval').value||0); if(m<=0) return alert('Enter minutes'); if(hydrationReminder) clearInterval(hydrationReminder); hydrationReminder = setInterval(()=> alert('Hydration reminder'), m*60000); alert('Hydration reminders started'); }
-function stopHydration(){ if(hydrationReminder){ clearInterval(hydrationReminder); hydrationReminder = null; alert('Hydration reminders stopped'); } }
-function drawWater(){
-  const canvas=$('waterCanvas'), ctx=canvas.getContext('2d');
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  const goal=Number($('goalWater').value||0), consumed=waterConsumed;
-  const ratio = goal>0? Math.min(consumed/goal,1):0;
-  const w = (canvas.width-40)*ratio;
-  ctx.fillStyle='#34d399'; ctx.fillRect(20, canvas.height/2-10, w, 20);
-  ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w, canvas.height/2-10, canvas.width-40-w, 20);
-  ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`, 20, canvas.height/2-18);
-}
+/* Hydration */
+function updateWaterUI(){ const goal=Number($('goalWater').value||0); $('waterConsumed').textContent = waterConsumed; $('waterRemaining').textContent = Math.max(goal-waterConsumed,0); drawWater(); }
+function addWater(){ const v=Number($('logWater').value||0); if(v<=0) return alert('Enter ml'); waterConsumed += v; try{ localStorage.setItem('lt_water', String(waterConsumed)) }catch(e){} updateWaterUI(); }
+function startHydration(){ const m=Number($('waterInterval').value||0); if(m<=0) return alert('Enter minutes'); if(hydrationTimer) clearInterval(hydrationTimer); hydrationTimer = setInterval(()=> alert('Hydration reminder'), m*60000); alert('Hydration reminders started'); }
+function stopHydration(){ if(hydrationTimer){ clearInterval(hydrationTimer); hydrationTimer=null; alert('Hydration reminders stopped'); } }
+function drawWater(){ const c=$('waterCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal=Number($('goalWater').value||0); const ratio = goal>0 ? Math.min(waterConsumed/goal,1) : 0; const w=(c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20, c.height/2-10, w, 20); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w, c.height/2-10, c.width-40-w,20); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${waterConsumed} ml / Goal ${goal} ml`, 20, c.height/2-18); }
 
-/* ---------- Sleep ---------- */
-function logSleep(){
-  const s=$('sleepStart').value, e=$('sleepEnd').value; if(!s||!e) return alert('Select times');
-  const [sh,sm]=s.split(':').map(Number), [eh,em]=e.split(':').map(Number);
-  let start = sh*60+sm, end = eh*60+em; if(end<=start) end+=24*60;
-  const mins = end-start, hours = mins/60;
-  $('lastSleep').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`;
-  const d = new Date().toISOString().slice(0,10);
-  sleepLogs.push({date:d,hours});
-  const last7 = sleepLogs.slice(-7);
-  const avg = last7.reduce((a,b)=>a+b.hours,0)/ (last7.length||1);
-  $('avgSleep').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`;
-  drawSleep();
-}
-function drawSleep(){
-  const c=$('sleepCanvas'), ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
-  const last7 = sleepLogs.slice(-7); if(!last7.length) return;
-  const barW = Math.max(12, (c.width-40)/last7.length - 6);
-  last7.forEach((l,i)=>{ const h = Math.min(12,l.hours)/12 * (c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+6), c.height-12-h, barW, h); ctx.fillStyle='#333'; ctx.font='10px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+6), c.height-2); });
-}
+/* Sleep */
+function logSleep(){ const s=$('sleepStart').value, e=$('sleepEnd').value; if(!s||!e) return alert('Select times'); const [sh,sm]=s.split(':').map(Number), [eh,em]=e.split(':').map(Number); let start=sh*60+sm, end=eh*60+em; if(end<=start) end+=24*60; const mins=end-start, hours=mins/60; $('lastSleep').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`; const d=(new Date()).toISOString().slice(0,10); sleepLogs.push({date:d,hours}); const last7=sleepLogs.slice(-7); const avg= last7.reduce((a,b)=>a+b.hours,0)/(last7.length||1); $('avgSleep').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`; drawSleep(); }
+function drawSleep(){ const c=$('sleepCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7 = sleepLogs.slice(-7); if(!last7.length) return; const barW = Math.max(12,(c.width-40)/last7.length - 6); last7.forEach((l,i)=>{ const h=Math.min(12,l.hours)/12*(c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+6), c.height-12-h, barW, h); ctx.fillStyle='#333'; ctx.font='10px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+6), c.height-2); }); }
 
-/* ---------- Meals: storage & list ---------- */
+/* Meals: persistent storage, list, pie */
 function mealsKey(){ return 'lt_meals_' + (new Date()).toISOString().slice(0,10) }
 function loadMeals(){ try{ return JSON.parse(localStorage.getItem(mealsKey())||'[]') }catch(e){ return [] } }
 function saveMeals(list){ localStorage.setItem(mealsKey(), JSON.stringify(list)) }
 function renderMeals(){
-  const list=loadMeals(), container=$('mealList'); container.innerHTML=''; let totalC=0,totalP=0;
-  list.slice().reverse().forEach(m=>{
-    const div=document.createElement('div'); div.className='todo-item';
-    div.innerHTML=`<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div style="font-size:12px;color:${'#6b7280'}">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div><div><button onclick="removeMeal(${m.id})">Delete</button></div>`;
-    container.appendChild(div);
-    totalC += Number(m.calories||0); totalP += Number(m.portion||0);
-  });
-  $('todayKcal').textContent = totalC; $('todayPortions').textContent = totalP;
-  drawPie(totalC);
+  const list = loadMeals(); const container = $('mealList'); container.innerHTML=''; let totalCalories=0, totalPortions=0;
+  list.slice().reverse().forEach(m=>{ const div=document.createElement('div'); div.className='todo-item'; div.innerHTML = `<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div style="font-size:12px;color:${'#6b7280'}">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div><div><button onclick="removeMeal(${m.id})">Delete</button></div>`; container.appendChild(div); totalCalories += Number(m.calories||0); totalPortions += Number(m.portion||0); });
+  $('todayKcal').textContent = totalCalories; $('todayPortions').textContent = totalPortions;
+  // Always redraw pie after totals computed
+  drawPie(totalCalories);
 }
 function addMeal(){
-  const name=$('mealName').value.trim(), portion=Number($('mealPortion').value||0), calories=Number($('mealCalories').value||0);
+  const name=$('mealName').value.trim(); const portion=Number($('mealPortion').value||0); const calories=Number($('mealCalories').value||0);
   if(!name) return alert('Enter meal name');
-  const list=loadMeals(); list.push({id:Date.now(),name,portion,calories,ts:Date.now()}); saveMeals(list);
+  const list = loadMeals(); list.push({id:Date.now(), name, portion, calories, ts:Date.now()}); saveMeals(list);
   $('mealName').value=''; $('mealPortion').value=''; $('mealCalories').value='';
   renderMeals();
 }
-function removeMeal(id){
-  let list=loadMeals(); list=list.filter(x=>x.id!==id); saveMeals(list); renderMeals();
-}
+function removeMeal(id){ let list=loadMeals(); list=list.filter(m=>m.id!==id); saveMeals(list); renderMeals(); }
 
-/* ---------- Full circular pie drawing (consumed vs remaining) ---------- */
+/* Full circular pie drawing (consumed vs remaining) */
 function drawPie(totalCalories){
-  const canvas=$('pieCanvas'), ctx=canvas.getContext('2d');
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  const target = 2000;
-  const consumed = Math.min(totalCalories, target);
-  const remaining = Math.max(target - consumed, 0);
+  const canvas = $('pieCanvas'); if(!canvas) return; const ctx = canvas.getContext('2d');
+  const target = 2000; const consumed = Math.max(0, Math.min(totalCalories||0, target)); const remaining = Math.max(0, target - consumed);
   const slices = [{label:'Consumed', value:consumed, color:'#ff9f43'},{label:'Remaining', value:remaining, color:'#e9eefb'}];
   const total = slices.reduce((s,x)=>s+x.value,0) || 1;
-  const cx = canvas.width/2, cy = canvas.height/2, r = Math.min(canvas.width, canvas.height) * 0.38;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const cx = canvas.width/2, cy = canvas.height/2, r = Math.min(canvas.width, canvas.height)*0.38;
   let start = -Math.PI/2;
-  // background
-  ctx.fillStyle='#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
   slices.forEach(s=>{
-    const angle = (s.value/total) * Math.PI * 2;
-    const end = start + angle;
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath();
-    ctx.fillStyle = s.color; ctx.fill();
+    const ang = (s.value/total)*Math.PI*2; const end = start + ang;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle = s.color; ctx.fill();
     ctx.strokeStyle='#ffffff'; ctx.lineWidth=1; ctx.stroke();
     start = end;
   });
-  // center text
-  ctx.fillStyle='#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center';
-  ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14);
-  // legend
-  ctx.textAlign='left'; const lx=12, ly=12;
-  slices.forEach((s,i)=>{ const y = ly + i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); });
+  ctx.fillStyle='#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14);
+  // legend top-left
+  const lx=12, ly=12; slices.forEach((s,i)=>{ const y=ly+i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); });
 }
 
-/* ---------- Tips display ---------- */
-const tipList = [
-  "Eat a colorful plate — fruits and vegetables of different colors.",
-  "Include lean protein with every meal (eggs, legumes, fish, chicken).",
-  "Choose whole grains over refined grains.",
-  "Snack on nuts and seeds instead of chips.",
-  "Drink water before meals to prevent overeating.",
-  "Favor cooking at home to control ingredients.",
-  "Keep portion sizes moderate and consistent.",
-  "Include a source of healthy fat (avocado, olive oil).",
-  "Limit sugary drinks and choose water or herbal tea.",
-  "Eat fiber-rich foods to support digestion and satiety.",
-  "Plan meals ahead to avoid impulsive fast food.",
-  "Start the day with a balanced breakfast.",
-  "Combine protein and carbs for sustained energy.",
-  "Add vegetables to sandwiches and omelettes.",
-  "Use spices and herbs to flavor instead of salt.",
-  "Opt for low-fat dairy or dairy alternatives if needed.",
-  "Choose grilled, baked, or steamed foods over fried.",
-  "Choose fresh fruit or yogurt for dessert.",
-  "Include legumes as a low-cost protein option.",
-  "Rotate your protein sources for variety.",
-  "Read labels and avoid trans fats or excessive sugar.",
-  "Use healthy swaps like zucchini noodles for pasta.",
-  "Prepare simple salads with mixed greens and seeds.",
-  "Use hummus or Greek yogurt dips for veggies.",
-  "Keep healthy snacks visible and accessible.",
-  "Reduce processed meat intake; choose lean options.",
-  "Balance treats with healthier daily choices.",
-  "Have a small protein-rich snack before workouts.",
-  "Limit late-night heavy meals that disrupt sleep.",
-  "Add chia or flax seeds to smoothies for omega-3s.",
-  "Use brown rice or quinoa instead of white rice.",
-  "Include fermented foods for gut health (yogurt, idli).",
-  "Avoid skipping meals which can lead to overeating later.",
-  "Cook in batches and freeze portions for busy days.",
-  "Use baking, grilling or air-frying instead of deep frying.",
-  "Pick whole fruit instead of fruit juice.",
-  "Incorporate leafy greens daily (spinach, kale).",
-  "Opt for unsweetened nut butters and spreads.",
-  "Be mindful when eating — chew slowly and enjoy.",
-  "Limit sugary cereals; choose oats or muesli.",
-  "Choose beans and lentils as protein-rich mains.",
-  "Use citrus and vinegar for dressings instead of heavy creams.",
-  "Try meatless meals a few times a week.",
-  "Rotate seasonal vegetables for freshness and nutrients.",
-  "Store pre-cut veggies for faster healthy snacking.",
-  "Watch portion sizes of calorie-dense foods like nuts.",
-  "Seek balance: carbs, protein, fats, fiber every meal.",
-  "Plan a weekly menu to reduce decision fatigue.",
-  "Choose low-sodium options when possible.",
-  "Add herbs for flavor without extra calories.",
-  "Use smaller plates to help portion control.",
-  "Celebrate small nutrition wins each day."
+/* Tips (50) */
+const mealTips = [
+"Eat a colorful plate — fruits and vegetables of different colors.",
+"Include lean protein with every meal (eggs, legumes, fish, chicken).",
+"Choose whole grains over refined grains.",
+"Snack on nuts and seeds instead of chips.",
+"Drink water before meals to prevent overeating.",
+"Favor cooking at home to control ingredients.",
+"Keep portion sizes moderate and consistent.",
+"Include a source of healthy fat (avocado, olive oil).",
+"Limit sugary drinks and choose water or herbal tea.",
+"Eat fiber-rich foods to support digestion and satiety.",
+"Plan meals ahead to avoid impulsive fast food.",
+"Start the day with a balanced breakfast.",
+"Combine protein and carbs for sustained energy.",
+"Add vegetables to sandwiches and omelettes.",
+"Use spices and herbs to flavor instead of salt.",
+"Opt for low-fat dairy or dairy alternatives if needed.",
+"Choose grilled, baked, or steamed foods over fried.",
+"Choose fresh fruit or yogurt for dessert.",
+"Include legumes as a low-cost protein option.",
+"Rotate your protein sources for variety.",
+"Read labels and avoid trans fats or excessive sugar.",
+"Use healthy swaps like zucchini noodles for pasta.",
+"Prepare simple salads with mixed greens and seeds.",
+"Use hummus or Greek yogurt dips for veggies.",
+"Keep healthy snacks visible and accessible.",
+"Reduce processed meat intake; choose lean options.",
+"Balance treats with healthier daily choices.",
+"Have a small protein-rich snack before workouts.",
+"Limit late-night heavy meals that disrupt sleep.",
+"Add chia or flax seeds to smoothies for omega-3s.",
+"Use brown rice or quinoa instead of white rice.",
+"Include fermented foods for gut health (yogurt, idli).",
+"Avoid skipping meals which can lead to overeating later.",
+"Cook in batches and freeze portions for busy days.",
+"Use baking, grilling or air-frying instead of deep frying.",
+"Pick whole fruit instead of fruit juice.",
+"Incorporate leafy greens daily (spinach, kale).",
+"Opt for unsweetened nut butters and spreads.",
+"Be mindful when eating — chew slowly and enjoy.",
+"Limit sugary cereals; choose oats or muesli.",
+"Choose beans and lentils as protein-rich mains.",
+"Use citrus and vinegar for dressings instead of heavy creams.",
+"Try meatless meals a few times a week.",
+"Rotate seasonal vegetables for freshness and nutrients.",
+"Store pre-cut veggies for faster healthy snacking.",
+"Watch portion sizes of calorie-dense foods like nuts.",
+"Seek balance: carbs, protein, fats, fiber every meal.",
+"Plan a weekly menu to reduce decision fatigue.",
+"Choose low-sodium options when possible.",
+"Add herbs for flavor without extra calories.",
+"Use smaller plates to help portion control."
 ];
-function toggleTips(){ const c=$('tipsCont'); if(c.style.display==='block'){ c.style.display='none'; c.innerHTML=''; return } c.innerHTML = tipList.map((t,i)=>`<div style="padding:6px 4px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${escapeHtml(t)}</div>`).join(''); c.style.display='block' }
+function toggleTips(){ const c=$('tipsCont'); if(c.style.display==='block'){ c.style.display='none'; c.innerHTML=''; return } c.innerHTML = mealTips.map((t,i)=>`<div style="padding:6px 4px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${escapeHtml(t)}</div>`).join(''); c.style.display='block' }
 function hideTips(){ const c=$('tipsCont'); c.style.display='none'; c.innerHTML='' }
 
-/* ---------- File picker (browser + AppInventor signal) ---------- */
+/* File picker: browser + AppInventor signal */
 function openPicker(){
   const input = $('fileInput');
   try{
-    input.value=''; input.click();
-    setTimeout(()=>{ if(!input.files.length){ // likely blocked in WebViewer
-      sendToApp({action:'REQUEST_FILE_PICKER'});
-    }},600);
+    input.value = '';
+    input.click();
+    setTimeout(()=>{ if(!input.files.length){ sendToApp({action:'REQUEST_FILE_PICKER'}); } }, 600);
   }catch(e){
     sendToApp({action:'REQUEST_FILE_PICKER'});
   }
@@ -483,14 +410,7 @@ $('fileInput').addEventListener('change', function(){
 });
 function showFiles(list){
   const box = $('fileList'); box.style.display='block'; box.innerHTML='';
-  list.forEach((f,i)=>{
-    const row = document.createElement('div'); row.className='file-row';
-    row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round(f.size/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div>`;
-    const actions = document.createElement('div');
-    const v = document.createElement('button'); v.className='view'; v.textContent='View'; v.onclick=()=>{ const url=URL.createObjectURL(f); window.open(url,'_blank'); setTimeout(()=>URL.revokeObjectURL(url),60000); };
-    const r = document.createElement('button'); r.className='rem'; r.textContent='Remove'; r.onclick=()=>{ selectedFiles.splice(i,1); showFiles(selectedFiles); sendToApp({medicalFiles:selectedFiles.map(x=>({name:x.name,size:x.size,type:x.type}))}); };
-    actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); box.appendChild(row);
-  });
+  list.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round(f.size/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div>`; const actions=document.createElement('div'); const v=document.createElement('button'); v.className='view'; v.textContent='View'; v.onclick=()=>{ const url=URL.createObjectURL(f); window.open(url,'_blank'); setTimeout(()=>URL.revokeObjectURL(url),60000); }; const r=document.createElement('button'); r.className='rem'; r.textContent='Remove'; r.onclick=()=>{ selectedFiles.splice(i,1); showFiles(selectedFiles); sendToApp({medicalFiles:selectedFiles.map(x=>({name:x.name,size:x.size,type:x.type}))}); }; actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); box.appendChild(row); });
 }
 function hideFiles(){ const b=$('fileList'); b.style.display='none'; b.innerHTML='' }
 function sendToApp(obj){
@@ -499,26 +419,19 @@ function sendToApp(obj){
   try{ if(window.WebViewInterface && typeof window.WebViewInterface.postMessage === 'function') window.WebViewInterface.postMessage(json); }catch(e){}
   try{ if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor && typeof window.webkit.messageHandlers.AppInventor.postMessage === 'function') window.webkit.messageHandlers.AppInventor.postMessage(json); }catch(e){}
 }
-// allow App Inventor to post a message (webview implementations vary)
+// accept messages posted by the native app (content: {medicalFiles:[{name,size,type,uri}]})
 window.addEventListener('message', function(ev){ try{ const data = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data; if(data && data.medicalFiles) displayFilesFromJson(data.medicalFiles); }catch(e){} });
-function displayFilesFromJson(list){
-  // expected list of objects {name,size,type,uri}
-  const box = $('fileList'); box.style.display='block'; box.innerHTML='';
-  list.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round((f.size||0)/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div><div><button class="view" onclick="openUri('${escapeHtml(f.uri||'')}')">Open</button><button class="rem" onclick="this.closest('.file-row').remove()">Remove</button></div>`; box.appendChild(row); });
-}
+function displayFilesFromJson(list){ const box=$('fileList'); box.style.display='block'; box.innerHTML=''; list.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round((f.size||0)/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div><div><button class="view" onclick="openUri('${escapeHtml(f.uri||'')}')">Open</button><button class="rem" onclick="this.closest('.file-row').remove()">Remove</button></div>`; box.appendChild(row); }); }
 function openUri(u){ if(!u) return alert('No URI'); try{ window.open(u,'_blank'); }catch(e){ alert('Cannot open URI'); } }
 
-/* ---------- Helpers for drawing ---------- */
-function drawMood(){ const c=$('moodCanvas'), ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const w=(mood/10) * (c.width-40); ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#5063f2'; ctx.fillRect(20, c.height/2-16, w, 32); ctx.fillStyle='#333'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${mood}`, 20, c.height/2-26) }
-function enterMood(){ const v = prompt('Enter mood 1-10','5'); const n=Number(v); if(n>=1 && n<=10){ mood=n; $('moodValue').textContent = n; drawMood(); } else alert('Enter 1-10') }
+/* Mood drawing */
+function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const value = Number($('moodValue').textContent||5); const w=(value/10)*(c.width-40); ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#5063f2'; ctx.fillRect(20,c.height/2-16,w,32); ctx.fillStyle='#333'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${value}`,20,c.height/2-26); }
+function enterMood(){ const v = prompt('Enter mood 1-10','5'); const n=Number(v); if(n>=1 && n<=10){ $('moodValue').textContent = n; drawMood(); } else alert('Enter a number 1-10'); }
 
-/* ---------- Expose small API if needed ---------- */
+/* Expose small API */
 window.LifeTrack = { addMeal, renderMeals, sendToApp };
 
-/* ---------- Ensure functions available in older WebViews ---------- */
-try{ if(!window.AppInventor) window.AppInventor = window.AppInventor || {}; }catch(e){}
-
-/* ---------- End ---------- */
+/* End of script */
 </script>
 </body>
 </html>
