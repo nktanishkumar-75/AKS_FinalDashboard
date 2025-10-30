@@ -3,359 +3,521 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Life track dashboard welcome user</title>
+<title>LIFE TRACK DASHBOARD - WELCOME USER</title>
 <style>
-:root{--accent:#5063f2;--bg:#f6f8fb;--card:#e6e8f2;--text:#0f1724;--muted:#6b7280;font-family:system-ui,-apple-system,Segoe UI,Roboto}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;background:var(--bg);color:var(--text)}
-.wrap{max-width:480px;margin:12px auto;padding:12px}
-.top{display:flex;gap:10px;align-items:center;margin-bottom:12px}
-.gear{width:44px;height:44px;border-radius:10px;background:#fff;border:1px solid var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
-.header{flex:1;padding:10px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7b61ff);color:#fff;text-align:center}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
-.card{background:#fff;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;min-height:66px;cursor:pointer;border:1px solid var(--card);font-weight:700;touch-action:manipulation}
-.screen{display:none;background:#fff;padding:12px;border-radius:10px;border:1px solid var(--card);margin-bottom:12px}
-.visible{display:block}
-.btn{display:block;width:100%;max-width:420px;margin:8px auto;padding:11px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;touch-action:manipulation}
-input,select,textarea{display:block;width:100%;max-width:420px;margin:8px auto;padding:10px;border-radius:8px;border:1px solid var(--card)}
-.chatbox{height:200px;overflow:auto;border:1px solid #eef2ff;padding:10px;border-radius:8px;background:#fbfdff}
-.meta-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-#tipsCont,#fileList{display:none;max-height:320px;overflow:auto;border:1px solid var(--card);padding:8px;border-radius:8px;background:#fff}
-.file-row{display:flex;justify-content:space-between;align-items:center;padding:8px 6px;border-bottom:1px dashed #f1f5ff}
-.file-row button{margin-left:8px;padding:6px 8px;border-radius:8px;border:0;cursor:pointer}
-.view{background:#2b6ef6;color:#fff}
-.rem{background:#ef4444;color:#fff}
-.todo-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--card);border-radius:8px;margin:8px 0;background:#fff}
-canvas{display:block;margin:10px auto;max-width:100%}
-.settings-panel{position:fixed;left:12px;right:12px;top:60px;background:#fff;border:1px solid var(--card);padding:12px;border-radius:12px;box-shadow:0 12px 30px rgba(16,24,40,0.12);z-index:999;display:none;max-width:480px;margin:0 auto}
-.small{font-size:13px;color:var(--muted)}
-.dropzone{border:2px dashed #dbeafe;border-radius:8px;padding:12px;text-align:center;color:#374151;background:#fff;margin:8px 0}
-.file-preview{font-size:13px;color:#374151}
+  :root{
+    --accent:#2163ff; --accent-2:#7b61ff; --bg:#f4f7fb; --surface:#ffffff;
+    --card:#e8eefc; --muted:#6b7280; --text:#0f1724; --app-brightness:1;
+    --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#eef4ff);font-family:var(--font);color:var(--text)}
+  .container{max-width:820px;margin:16px auto;padding:18px;filter:brightness(var(--app-brightness))}
+  header{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;box-shadow:0 8px 30px rgba(33,99,255,0.14)}
+  h1{font-size:18px;margin:0}
+  .subtitle{font-size:12px;color:var(--muted);margin-top:4px}
+  .layout{display:grid;grid-template-columns:320px 1fr;gap:16px}
+  .left{position:sticky;top:12px}
+  .card{background:var(--surface);border-radius:12px;padding:12px;border:1px solid var(--card);box-shadow:0 6px 20px rgba(16,24,40,0.04)}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .tile{background:linear-gradient(180deg,#fff,#fbfdff);border-radius:10px;padding:12px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;cursor:pointer;border:1px solid #eef4ff;min-height:66px;justify-content:center;touch-action:manipulation}
+  .emoji{font-size:20px}
+  .tile-title{font-weight:700;font-size:14px}
+  .btn{background:var(--accent);border:0;color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:700}
+  input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid var(--card);background:linear-gradient(180deg,#fff,#fbfdff)}
+  .screen{display:none;margin-bottom:12px}
+  .screen.visible{display:block}
+  .chatbox{height:200px;overflow:auto;border-radius:8px;padding:10px;border:1px solid #eef4ff;background:linear-gradient(180deg,#fff,#fcfdff)}
+  .small{font-size:13px;color:var(--muted)}
+  .todo-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;border:1px solid var(--card);margin:8px 0;background:linear-gradient(180deg,#fff,#fbfdff)}
+  canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
+  .settings-panel{position:fixed;left:12px;right:12px;top:70px;background:var(--surface);padding:12px;border-radius:12px;border:1px solid var(--card);box-shadow:0 20px 50px rgba(16,24,40,0.12);z-index:999;display:none}
+  .dropzone{border:2px dashed #e1f0ff;padding:12px;border-radius:8px;text-align:center;color:var(--muted);background:linear-gradient(180deg,#fff,#fbfdff)}
+  .file-row{display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px dashed #f1f5ff}
+  @media (max-width:880px){ .layout{grid-template-columns:1fr;} .left{position:static} }
 </style>
 </head>
 <body>
-<div class="wrap" id="app">
-  <div class="top">
-    <div class="gear" id="settingsToggle" role="button" tabindex="0" aria-label="Settings">⚙️</div>
-    <div class="header">
-      <h2 style="margin:0">Life track dashboard welcome user</h2>
-      <div style="opacity:0.95;font-weight:600">Mobile ready</div>
+  <div class="container" id="appContainer">
+    <header>
+      <div class="logo">LT</div>
+      <div>
+        <h1>LIFE TRACK DASHBOARD - WELCOME USER</h1>
+        <div class="subtitle">Professional mobile dashboard — all features working in MIT App Inventor WebViewer</div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <div class="left">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <strong>Quick actions</strong>
+              <div class="small">Tap a tile to open; tap the screen background to close</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn" id="settingsToggle">Settings</button>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="grid" id="quickGrid">
+            <div class="tile" data-target="chat"><div class="emoji">💬</div><div class="tile-title">Chatbot</div></div>
+            <div class="tile" data-target="mood"><div class="emoji">📊</div><div class="tile-title">Mood</div></div>
+            <div class="tile" data-target="rem"><div class="emoji">✅</div><div class="tile-title">Reminders</div></div>
+            <div class="tile" data-target="timer"><div class="emoji">⏱</div><div class="tile-title">Timer</div></div>
+            <div class="tile" id="uploadBtn"><div class="emoji">📂</div><div class="tile-title">Choose files</div></div>
+            <div class="tile" data-target="hydration"><div class="emoji">💧</div><div class="tile-title">Hydration</div></div>
+            <div class="tile" data-target="sleep"><div class="emoji">🌙</div><div class="tile-title">Sleep</div></div>
+            <div class="tile" data-target="meals"><div class="emoji">🍽</div><div class="tile-title">Meals</div></div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card">
+          <strong>Totals</strong>
+          <div style="margin-top:8px" class="small">Today calories: <strong id="todayCaloriesLeft">0</strong> kcal</div>
+          <div class="small">Water consumed: <strong id="waterConsumedLeft">0</strong> ml</div>
+        </div>
+      </div>
+
+      <main>
+        <!-- Chat -->
+        <div class="card screen visible" id="chat">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>Chatbot</strong><div class="small">50 jokes and 50 study tips</div>
+          </div>
+          <div id="chatbox" class="chatbox" aria-live="polite"></div>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn" id="btnJoke">Random joke</button>
+            <button class="btn" id="btnTip">Study tip</button>
+          </div>
+        </div>
+
+        <!-- Mood -->
+        <div class="card screen" id="mood">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>Mood</strong><div class="small">Log mood and view graph</div>
+          </div>
+          <div style="margin-top:8px">
+            <button class="btn" id="enterMood">Enter mood (1-10)</button>
+            <div style="margin-top:8px">Current: <strong id="moodValue">5</strong></div>
+            <canvas id="moodCanvas" width="720" height="140"></canvas>
+          </div>
+        </div>
+
+        <!-- Reminders -->
+        <div class="card screen" id="rem">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>Reminders</strong><div class="small">Add and remove quick reminders</div>
+          </div>
+          <input id="remText" placeholder="Reminder text" />
+          <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="addRemBtn">Add</button></div>
+          <div id="remList" style="margin-top:8px"></div>
+        </div>
+
+        <!-- Timer -->
+        <div class="card screen" id="timer">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>Focus Timer</strong><div class="small">10 ringtones included</div>
+          </div>
+          <input id="minutes" type="number" placeholder="Minutes" />
+          <label class="small">Choose ringtone</label>
+          <select id="alarmSelect"></select>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn" id="startTimerBtn">Start</button>
+            <button class="btn" id="stopTimerBtn" style="background:#ef4444">Stop</button>
+          </div>
+          <div id="countdown" style="margin-top:12px;font-weight:700"></div>
+        </div>
+
+        <!-- Hydration -->
+        <div class="card screen" id="hydration">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>Hydration</strong><div class="small">Track intake and reminders</div>
+          </div>
+          <input id="goalWater" type="number" placeholder="Daily goal (ml)" value="2000" />
+          <input id="logWater" type="number" placeholder="Log intake (ml)" value="250" />
+          <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="addWaterBtn">Add intake</button></div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px" class="small">
+            <div>Consumed: <strong id="waterConsumed">0</strong> ml</div>
+            <div>Remaining: <strong id="waterRemaining">2000</strong> ml</div>
+          </div>
+          <div style="margin-top:8px">
+            <input id="waterInterval" type="number" placeholder="Reminder interval (minutes)" value="60" />
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button class="btn" id="startHydBtn">Start reminders</button>
+              <button class="btn" id="stopHydBtn" style="background:#ef4444">Stop reminders</button>
+            </div>
+          </div>
+          <canvas id="waterCanvas" width="720" height="100"></canvas>
+        </div>
+
+        <!-- Sleep -->
+        <div class="card screen" id="sleep">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>Sleep Analytics</strong><div class="small">Log and view weekly average</div>
+          </div>
+          <input id="sleepTime" type="time" />
+          <input id="wakeTime" type="time" />
+          <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="logSleepBtn">Log sleep</button></div>
+          <div style="margin-top:8px" class="small">Last duration: <strong id="lastSleepDuration">0h 0m</strong> · 7-day average: <strong id="avgSleepDuration">0h 0m</strong></div>
+          <canvas id="sleepChart" width="720" height="120"></canvas>
+        </div>
+
+        <!-- Meals -->
+        <div class="card screen" id="meals">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>Meal Tracking</strong><div class="small">Per-day persistence and pie chart</div>
+          </div>
+          <input id="mealName" placeholder="Meal name" />
+          <input id="mealPortion" type="number" placeholder="Portion (g or ml)" />
+          <input id="mealCalories" type="number" placeholder="Calories (kcal)" />
+          <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="addMealBtn">Add meal</button></div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px" class="small">
+            <div>Today kcal: <strong id="todayCalories">0</strong></div>
+            <div>Portions: <strong id="todayPortions">0</strong></div>
+          </div>
+          <div id="mealList" style="margin-top:8px"></div>
+          <div style="margin-top:12px">
+            <button class="btn" id="toggleTipsBtn">Show 50 Healthy Food Tips</button>
+            <div id="tipsCont" style="margin-top:8px;display:none"></div>
+          </div>
+          <div style="margin-top:12px"><canvas id="mealsPie" width="720" height="260"></canvas></div>
+        </div>
+
+      </main>
     </div>
   </div>
 
-  <div class="grid" id="quickGrid" role="list">
-    <div class="card" data-target="chat" role="listitem" tabindex="0">💬 Chatbot</div>
-    <div class="card" data-target="mood" role="listitem" tabindex="0">📊 Mood</div>
-    <div class="card" data-target="rem" role="listitem" tabindex="0">✅ Reminders</div>
-    <div class="card" data-target="timer" role="listitem" tabindex="0">⏱ Timer</div>
-    <div class="card" id="uploadBtn" role="listitem" tabindex="0">📂 Choose files</div>
-    <div class="card" data-target="hydration" role="listitem" tabindex="0">💧 Hydration</div>
-    <div class="card" data-target="sleep" role="listitem" tabindex="0">🌙 Sleep</div>
-    <div class="card" data-target="meals" role="listitem" tabindex="0">🍽 Meals</div>
+  <!-- Settings panel -->
+  <div class="settings-panel card" id="settingsPanel" aria-hidden="true">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <strong>App settings</strong>
+      <div style="display:flex;gap:8px">
+        <button class="btn" id="saveSettings">Save</button>
+        <button class="btn" id="closeSettings" style="background:#ef4444">Close</button>
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <label class="small">Font size</label>
+      <input id="fontSize" type="range" min="12" max="20" value="16" />
+      <label class="small" style="margin-top:8px">App brightness</label>
+      <input id="appBrightness" type="range" min="0.5" max="1.3" step="0.05" value="1" />
+      <label class="small" style="margin-top:8px">Theme color</label>
+      <input id="themeColor" type="color" value="#2163ff" />
+
+      <hr/>
+
+      <label class="small">Choose files (native picker, drag & drop, manual URL/base64)</label>
+      <div class="dropzone" id="dropzone">Drag & drop files here, or use Choose files tile. You can also paste a file URL or data URI below</div>
+      <input id="manualUrl" placeholder="Paste file URL or data:..." />
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn" id="addManual">Add</button>
+        <button class="btn" id="clearFiles" style="background:#ef4444">Clear</button>
+      </div>
+      <div id="manualStatus" class="small" style="margin-top:6px;color:var(--muted)"></div>
+      <div id="fileList" style="margin-top:8px"></div>
+    </div>
   </div>
-
-  <input id="fileInput" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" style="display:none">
-
-  <div id="fileList" aria-live="polite"></div>
-
-  <!-- Chat -->
-  <section class="screen visible" id="chat">
-    <h3>Chatbot</h3>
-    <div id="chatbox" class="chatbox"></div>
-    <button class="btn" id="btnWeather">🌦 Weather</button>
-    <button class="btn" id="btnJoke">😂 Joke</button>
-    <button class="btn" id="btnTip">📚 Study Tip</button>
-  </section>
-
-  <!-- Mood -->
-  <section class="screen" id="mood">
-    <h3>Mood</h3>
-    <p class="small">Log mood 1–10</p>
-    <button class="btn" id="enterMood">Enter mood</button>
-    <p>Current: <strong id="moodValue">5</strong></p>
-    <canvas id="moodCanvas" width="360" height="120"></canvas>
-  </section>
-
-  <!-- Reminders -->
-  <section class="screen" id="rem">
-    <h3>Reminders</h3>
-    <input id="remText" type="text" placeholder="Reminder text">
-    <button class="btn" id="addRemBtn">Add</button>
-    <div id="remList"></div>
-  </section>
-
-  <!-- Timer -->
-  <section class="screen" id="timer">
-    <h3>Focus Timer</h3>
-    <input id="minutes" type="number" placeholder="Minutes">
-    <label class="small">Choose ringtone</label>
-    <select id="alarmSelect" aria-label="Alarm ringtone"></select>
-    <button class="btn" id="startTimerBtn">Start</button>
-    <div id="countdown" style="margin-top:8px"></div>
-
-    <!-- 10 ringtones -->
-    <audio id="alarm1" preload="auto" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
-    <audio id="alarm2" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2e6f3e9b4b.mp3"></audio>
-    <audio id="alarm3" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/09/30/audio_2c9b5f3b3d.mp3"></audio>
-    <audio id="alarm4" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/12/06/audio_7d2a6f9c6f.mp3"></audio>
-    <audio id="alarm5" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_24c7b3d98b.mp3"></audio>
-    <audio id="alarm6" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/08/03/audio_7f8f6f1a37.mp3"></audio>
-    <audio id="alarm7" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/12/08/audio_2c2f5e4b6a.mp3"></audio>
-    <audio id="alarm8" preload="auto" src="https://cdn.pixabay.com/download/audio/2023/01/13/audio_9c8d9e89ab.mp3"></audio>
-    <audio id="alarm9" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/10/11/audio_3e67b1d9c2.mp3"></audio>
-    <audio id="alarm10" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/02/20/audio_ab3a610f7f.mp3"></audio>
-  </section>
-
-  <!-- Hydration -->
-  <section class="screen" id="hydration">
-    <h3>Hydration</h3>
-    <input id="goalWater" type="number" placeholder="Daily goal (ml)" value="2000">
-    <input id="logWater" type="number" placeholder="Log intake (ml)" value="250">
-    <button class="btn" id="addWaterBtn">Add intake</button>
-    <div class="meta-row"><div>Consumed: <strong id="waterConsumed">0</strong> ml</div><div>Remaining: <strong id="waterRemaining">2000</strong> ml</div></div>
-    <input id="waterInterval" type="number" placeholder="Reminder interval (minutes)" value="60">
-    <button class="btn" id="startHydBtn">Start reminders</button>
-    <button class="btn" id="stopHydBtn">Stop reminders</button>
-    <canvas id="waterCanvas" width="360" height="100"></canvas>
-  </section>
-
-  <!-- Sleep -->
-  <section class="screen" id="sleep">
-    <h3>Sleep Analytics</h3>
-    <input id="sleepTime" type="time">
-    <input id="wakeTime" type="time">
-    <button class="btn" id="logSleepBtn">Log sleep</button>
-    <p>Last duration: <strong id="lastSleepDuration">0h 0m</strong></p>
-    <p>7-day average: <strong id="avgSleepDuration">0h 0m</strong></p>
-    <canvas id="sleepChart" width="360" height="100"></canvas>
-  </section>
-
-  <!-- Meals -->
-  <section class="screen" id="meals">
-    <h3>Meal Tracking</h3>
-    <input id="mealName" type="text" placeholder="Meal name">
-    <input id="mealPortion" type="number" placeholder="Portion (ml or g)">
-    <input id="mealCalories" type="number" placeholder="Calories (kcal)">
-    <button class="btn" id="addMealBtn">Add meal</button>
-    <div class="meta-row"><div>Today kcal: <strong id="todayCalories">0</strong></div><div>Today portions: <strong id="todayPortions">0</strong></div></div>
-    <p>Recent entries</p><div id="mealList"></div>
-    <button class="btn" id="toggleTipsBtn">Show/Hide 50 Healthy Food Tips</button>
-    <div id="tipsCont"></div>
-    <p>Meal pie</p><canvas id="mealsPie" width="360" height="240" style="background:#fff;border-radius:8px"></canvas>
-  </section>
-</div>
-
-<!-- Settings -->
-<div class="settings-panel" id="settingsPanel" role="dialog" aria-hidden="true">
-  <h3 style="margin:0 0 8px 0">App Settings</h3>
-  <div class="small">Font size</div>
-  <input id="fontSize" type="range" min="12" max="20" value="16">
-  <div class="small">Theme color</div>
-  <input id="themeColor" type="color" value="#5063f2">
-  <div style="display:flex;gap:8px;margin-top:10px">
-    <button class="btn" id="saveSettings">Save</button>
-    <button class="btn" id="resetSettings" style="background:#ef4444">Reset</button>
-  </div>
-  <hr>
-  <div class="small" style="margin-top:8px">Choose files (pure HTML fallbacks)</div>
-  <div class="dropzone" id="dropzone">Drag & drop files here, or tap "Choose files" above. You can also paste a file URL or paste base64 data below.</div>
-  <div style="display:flex;gap:8px;margin-top:8px">
-    <input id="manualUrl" type="text" placeholder="Paste file URL or base64 (data:...)" />
-    <button class="btn" id="addManual" style="width:120px">Add</button>
-  </div>
-  <div id="manualStatus" class="file-preview" style="margin-top:8px"></div>
-</div>
 
 <script>
-/* ---------- Helpers ---------- */
+/* ---------------- Utilities ---------------- */
 const $ = id => document.getElementById(id);
-function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('visible')); const el=$(id); if(el){ el.classList.add('visible'); el.scrollIntoView({behavior:'smooth',block:'start'}); } hideSettings(); hideTips(); hideFiles(); }
+function esc(s){ return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
-/* ---------- Grid card tap handling (pointer) ---------- */
-document.getElementById('quickGrid').addEventListener('pointerup', function(e){
-  const card = e.target.closest('.card');
-  if(!card) return;
-  const target = card.getAttribute('data-target');
-  if(target) showScreen(target);
-  else if(card.id === 'uploadBtn') openPicker();
-});
-document.getElementById('quickGrid').addEventListener('keydown', function(e){
-  if(e.key==='Enter' || e.key===' ') { e.preventDefault(); const card = e.target.closest('.card'); if(card){ const t = card.getAttribute('data-target'); if(t) showScreen(t); else if(card.id==='uploadBtn') openPicker(); } }
+/* ---------------- Screen behavior ---------------- */
+document.getElementById('quickGrid').addEventListener('pointerup', e=>{
+  const tile = e.target.closest('.tile');
+  if(!tile) return;
+  const target = tile.getAttribute('data-target');
+  if(target){
+    // close other screens
+    document.querySelectorAll('.screen.visible').forEach(s=>s.classList.remove('visible'));
+    const screen = document.getElementById(target);
+    if(!screen) return;
+    screen.classList.add('visible');
+    // close on tap background (non-interactive)
+    const closer = (ev) => {
+      const interactive = ev.target.closest('button,input,select,textarea,.todo-item,.file-row,.tile');
+      if(interactive) return;
+      screen.removeEventListener('pointerup', closer);
+      screen.classList.remove('visible');
+    };
+    screen.addEventListener('pointerup', closer);
+    // scroll
+    screen.scrollIntoView({behavior:'smooth',block:'center'});
+  } else if(tile.id === 'uploadBtn'){
+    openPicker();
+    toggleSettings(true);
+  }
 });
 
-/* ---------- Settings ---------- */
-function showSettings(){ $('settingsPanel').style.display='block'; $('settingsPanel').setAttribute('aria-hidden','false'); }
-function hideSettings(){ $('settingsPanel').style.display='none'; $('settingsPanel').setAttribute('aria-hidden','true'); }
-$('settingsToggle').addEventListener('pointerup', ()=> $('settingsPanel').style.display==='block' ? hideSettings() : showSettings());
-$('settingsToggle').addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); $('settingsPanel').style.display==='block' ? hideSettings() : showSettings(); }});
-const SETTINGS_KEY = 'lt_settings_full_v1';
+/* ---------------- Settings ---------------- */
+const SETTINGS_KEY = 'lt_dashboard_settings_v2';
 function loadSettings(){ try{ return JSON.parse(localStorage.getItem(SETTINGS_KEY)||'null'); }catch(e){ return null; } }
 function saveSettings(cfg){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(cfg)); }catch(e){} }
-function applySettings(cfg){ if(!cfg) return; if(cfg.fontSize) document.documentElement.style.fontSize = cfg.fontSize + 'px'; if(cfg.themeColor) document.documentElement.style.setProperty('--accent', cfg.themeColor); }
-(function initSettings(){ const s=loadSettings(); if(s){ applySettings(s); $('fontSize').value = s.fontSize || 16; $('themeColor').value = s.themeColor || '#5063f2'; } $('fontSize').addEventListener('input', e=> document.documentElement.style.fontSize = e.target.value + 'px'); $('themeColor').addEventListener('input', e=> document.documentElement.style.setProperty('--accent', e.target.value)); $('saveSettings').addEventListener('pointerup', ()=>{ const cfg={fontSize:Number($('fontSize').value), themeColor:$('themeColor').value}; saveSettings(cfg); applySettings(cfg); alert('Settings saved'); hideSettings(); }); $('resetSettings').addEventListener('pointerup', ()=>{ localStorage.removeItem(SETTINGS_KEY); location.reload(); }); })();
+function applySettings(cfg){
+  if(!cfg) return;
+  if(cfg.fontSize) document.documentElement.style.fontSize = cfg.fontSize + 'px';
+  if(cfg.theme) document.documentElement.style.setProperty('--accent', cfg.theme);
+  if(cfg.appBrightness) document.documentElement.style.setProperty('--app-brightness', cfg.appBrightness);
+}
+function toggleSettings(force){
+  const p = $('settingsPanel');
+  if(typeof force === 'boolean') p.style.display = force ? 'block' : 'none';
+  else p.style.display = (p.style.display === 'block') ? 'none' : 'block';
+  p.setAttribute('aria-hidden', p.style.display !== 'block');
+}
+$('settingsToggle').addEventListener('pointerup', ()=> toggleSettings());
+$('closeSettings').addEventListener('pointerup', ()=> toggleSettings(false));
+(function initSettings(){
+  const s = loadSettings();
+  if(s){ applySettings(s); $('fontSize').value = s.fontSize || 16; $('themeColor').value = s.theme || '#2163ff'; $('appBrightness').value = s.appBrightness || 1; }
+  $('fontSize').addEventListener('input', e=> document.documentElement.style.fontSize = e.target.value + 'px');
+  $('themeColor').addEventListener('input', e=> document.documentElement.style.setProperty('--accent', e.target.value));
+  $('appBrightness').addEventListener('input', e=> document.documentElement.style.setProperty('--app-brightness', e.target.value));
+  $('saveSettings').addEventListener('pointerup', ()=>{
+    const cfg = { fontSize: Number($('fontSize').value), theme: $('themeColor').value, appBrightness: Number($('appBrightness').value) };
+    saveSettings(cfg);
+    applySettings(cfg);
+    alert('Settings saved');
+    toggleSettings(false);
+  });
+})();
 
-/* ---------- Chatbot (50 jokes + 50 tips) ---------- */
+/* ---------------- Chatbot content (50 jokes, 50 tips) ---------------- */
 const jokes = [
-"Why don’t skeletons fight? They don’t have the guts!","Why did the math book look sad? It had too many problems.","Why can’t your nose be 12 inches long? Because then it would be a foot!",
-"Why did the scarecrow win an award? He was outstanding in his field!","What do you call fake spaghetti? An impasta!","Why did the bicycle fall over? It was two-tired!",
-"Why don’t eggs tell jokes? They’d crack each other up!","What do you call cheese that isn’t yours? Nacho cheese!","Why did the golfer bring two pairs of pants? In case he got a hole in one!",
-"Why did the tomato blush? It saw the salad dressing!","Why don’t scientists trust atoms? Because they make up everything!","Why did the cookie go to the doctor? It was feeling crummy!",
-"Why did the computer go to therapy? It had too many bytes!","Why did the student eat his homework? The teacher said it was a piece of cake!","Why did the cat sit on the computer? To keep an eye on the mouse!",
-"Why did the banana go to the party? Because it was a-peeling!","Why did the chicken join a band? Because it had the drumsticks!","Why did the fish blush? Because it saw the ocean’s bottom!",
-"Why did the frog take the bus? His car got toad!","Why did the bee get married? Because he found his honey!","Why did the pencil go to the principal’s office? It had a point to make!",
-"Why did the broom get a promotion? It swept the competition!","Why did the grape stop in the road? It ran out of juice!","Why did the light bulb go to school? To get a little brighter!",
-"Why did the duck get a job? He was tired of winging it!","Why did the elephant bring a suitcase? He was going on a trunk trip!","Why did the calendar apply for a job? It wanted to work full time!",
-"Why did the robot go on vacation? It needed to recharge!","Why did the donut go to therapy? It felt empty inside!","Why did the dog sit in the shade? He didn’t want to be a hot dog!",
-"Why did the astronaut break up? He needed space!","Why did the fish get bad grades? Because it was below sea level!","Why did the cow go to space? To see the moooon!",
-"Why did the skeleton skip the dance? He had no body to go with!","Why did the kangaroo stop coffee? It made him too jumpy!","Why did the snowman call a cab? He had a meltdown!",
-"Why did the pirate buy an eye patch? He couldn’t afford an iPhone!","Why did the balloon go near the needle? To pop the question!","Why did the horse go behind the tree? To change his jockeys!",
-"Why did the snail paint an S on his car? So people would say, ‘Look at that S-car go!’","Why did the giraffe get bad grades? He had his head in the clouds!","Why did the owl get promoted? He was a real hoot!",
-"Why did the mirror fail the test? It couldn’t reflect well!","Why did the volcano get a promotion? It was on fire!","Why did the sandwich go to the gym? To get shredded!"
+"Why don’t skeletons fight? They don’t have the guts!","Why did the math book look sad? It had too many problems.","Why can’t your nose be 12 inches long? Because then it would be a foot!","Why did the scarecrow win an award? He was outstanding in his field!","What do you call fake spaghetti? An impasta!","Why did the bicycle fall over? It was two-tired!","Why don’t eggs tell jokes? They’d crack each other up!","What do you call cheese that isn’t yours? Nacho cheese!","Why did the golfer bring two pairs of pants? In case he got a hole in one!","Why did the tomato blush? It saw the salad dressing!","Why don’t scientists trust atoms? Because they make up everything!","Why did the cookie go to the doctor? It was feeling crummy!","Why did the computer go to therapy? It had too many bytes!","Why did the student eat his homework? The teacher said it was a piece of cake!","Why did the cat sit on the computer? To keep an eye on the mouse!","Why did the banana go to the party? Because it was a-peeling!","Why did the chicken join a band? Because it had the drumsticks!","Why did the fish blush? Because it saw the ocean’s bottom!","Why did the frog take the bus? His car got toad!","Why did the bee get married? Because he found his honey!","Why did the pencil go to the principal’s office? It had a point to make!","Why did the broom get a promotion? It swept the competition!","Why did the grape stop in the road? It ran out of juice!","Why did the light bulb go to school? To get a little brighter!","Why did the duck get a job? He was tired of winging it!","Why did the elephant bring a suitcase? He was going on a trunk trip!","Why did the calendar apply for a job? It wanted to work full time!","Why did the robot go on vacation? It needed to recharge!","Why did the donut go to therapy? It felt empty inside!","Why did the dog sit in the shade? He didn’t want to be a hot dog!","Why did the astronaut break up? He needed space!","Why did the fish get bad grades? Because it was below sea level!","Why did the cow go to space? To see the moooon!","Why did the skeleton skip the dance? He had no body to go with!","Why did the kangaroo stop coffee? It made him too jumpy!","Why did the snowman call a cab? He had a meltdown!","Why did the pirate buy an eye patch? He couldn’t afford an iPhone!","Why did the balloon go near the needle? To pop the question!","Why did the horse go behind the tree? To change his jockeys!","Why did the snail paint an S on his car? So people would say, ‘Look at that S-car go!’","Why did the giraffe get bad grades? He had his head in the clouds!","Why did the owl get promoted? He was a real hoot!","Why did the mirror fail the test? It couldn’t reflect well!","Why did the volcano get a promotion? It was on fire!","Why did the sandwich go to the gym? To get shredded!"
 ];
 const studyTips = [
 "Break study sessions into 25-minute chunks with 5-minute breaks.","Teach what you learn — explaining helps retention.","Use flashcards for active recall.","Review material within 24 hours.","Create a distraction-free study space.","Set clear goals for each session.","Use mnemonic devices.","Practice past papers under timed conditions.","Summarize notes in your own words.","Use diagrams and mind maps.","Sleep well — memory consolidates during rest.","Stay hydrated and eat brain-friendly foods.","Avoid multitasking.","Use spaced repetition.","Study at your peak energy time.","Group study for tough topics.","Use apps like Anki or Quizlet.","Record yourself explaining topics.","Color-code notes.","Reward yourself after tasks.","Spread learning over days, not cramming.","Apply the Feynman technique.","Take movement/stretch breaks.","Turn off notifications.","Use background music if it helps.","Make a weekly checklist.","Start with the hardest subject.","Use real-world examples.","Ask questions to deepen understanding.","Use sticky notes for key facts.","Teach a friend or sibling.","Watch short explainer videos.","Keep a study journal.","Visualize exam success.","Don’t hesitate to ask for help.","Stay consistent with daily effort.","Use analogies to simplify.","Practice writing essays.","Limit social media.","Use timers to stay on track.","Keep your desk tidy.","Drink water before and during study.","Use site blockers for focus.","Make your own quizzes.","Combine words + visuals (dual coding).","Celebrate small wins.","Stay positive — mindset matters.","Track your time to find patterns.","Reflect on what worked and what didn’t.","Balance study with exercise and relaxation."
 ];
-$('btnWeather').addEventListener('pointerup', ()=> appendChat("What's the weather?", "Sunny and 28°C (example)."));
-$('btnJoke').addEventListener('pointerup', ()=> appendChat("Tell me a joke", jokes[Math.floor(Math.random()*jokes.length)]));
-$('btnTip').addEventListener('pointerup', ()=> appendChat("Give me a study tip", studyTips[Math.floor(Math.random()*studyTips.length)]));
-function appendChat(user, bot){ const box=$('chatbox'); box.innerHTML += `<p style="margin:6px 0"><strong>You:</strong> ${escapeHtml(user)}</p><p style="margin:6px 0"><strong>Bot:</strong> ${escapeHtml(bot)}</p>`; box.scrollTop = box.scrollHeight; }
+$('btnJoke').addEventListener('pointerup', ()=> appendChat('Joke', jokes[Math.floor(Math.random()*jokes.length)]));
+$('btnTip').addEventListener('pointerup', ()=> appendChat('Tip', studyTips[Math.floor(Math.random()*studyTips.length)]));
+function appendChat(label, text){
+  const box = $('chatbox');
+  const el = document.createElement('div');
+  el.style.margin = '8px 0';
+  el.innerHTML = `<div style="font-weight:700">${esc(label)}:</div><div style="margin-top:6px">${esc(text)}</div>`;
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
 
-/* ---------- Reminders ---------- */
-$('addRemBtn').addEventListener('pointerup', ()=> {
-  const t=$('remText').value.trim(); if(!t) return;
-  const div=document.createElement('div'); div.className='todo-item';
-  div.innerHTML = `<div>${escapeHtml(t)}</div><div><button class="btn" style="background:#ef4444" onclick="this.closest('.todo-item').remove()">Delete</button></div>`;
-  $('remList').prepend(div); $('remText').value='';
+/* ---------------- Reminders ---------------- */
+$('addRemBtn').addEventListener('pointerup', ()=>{
+  const t = $('remText').value.trim(); if(!t) return alert('Enter reminder');
+  const r = document.createElement('div'); r.className='todo-item';
+  r.innerHTML = `<div>${esc(t)}</div><div><button class="btn" data-action="del-rem" style="background:#ef4444">Delete</button></div>`;
+  $('remList').prepend(r); $('remText').value='';
+});
+document.getElementById('remList').addEventListener('pointerup', e=>{
+  const b = e.target.closest('button[data-action="del-rem"]'); if(!b) return; b.closest('.todo-item').remove();
 });
 
-/* ---------- Timer (10 ringtones) ---------- */
-const ringtoneList = [
-  {id:'alarm1',label:'Beep'},{id:'alarm2',label:'Marimba'},{id:'alarm3',label:'Bell'},
-  {id:'alarm4',label:'Digital'},{id:'alarm5',label:'Chime'},{id:'alarm6',label:'Tone A'},
-  {id:'alarm7',label:'Tone B'},{id:'alarm8',label:'Pluck'},{id:'alarm9',label:'Ping'},{id:'alarm10',label:'Alert'}
+/* ---------------- Timer (10 ringtones) ---------------- */
+const ringtones = [
+  {id:'r1',label:'Beep',src:'https://actions.google.com/sounds/v1/alarms/beep_short.ogg'},
+  {id:'r2',label:'Marimba',src:'https://cdn.pixabay.com/download/audio/2022/03/15/audio_2e6f3e9b4b.mp3'},
+  {id:'r3',label:'Bell',src:'https://cdn.pixabay.com/download/audio/2021/09/30/audio_2c9b5f3b3d.mp3'},
+  {id:'r4',label:'Digital',src:'https://cdn.pixabay.com/download/audio/2022/12/06/audio_7d2a6f9c6f.mp3'},
+  {id:'r5',label:'Chime',src:'https://cdn.pixabay.com/download/audio/2021/08/04/audio_24c7b3d98b.mp3'},
+  {id:'r6',label:'Tone A',src:'https://cdn.pixabay.com/download/audio/2022/08/03/audio_7f8f6f1a37.mp3'},
+  {id:'r7',label:'Tone B',src:'https://cdn.pixabay.com/download/audio/2022/12/08/audio_2c2f5e4b6a.mp3'},
+  {id:'r8',label:'Pluck',src:'https://cdn.pixabay.com/download/audio/2023/01/13/audio_9c8d9e89ab.mp3'},
+  {id:'r9',label:'Ping',src:'https://cdn.pixabay.com/download/audio/2021/10/11/audio_3e67b1d9c2.mp3'},
+  {id:'r10',label:'Alert',src:'https://cdn.pixabay.com/download/audio/2022/02/20/audio_ab3a610f7f.mp3'}
 ];
 const alarmSelect = $('alarmSelect');
-ringtoneList.forEach(r=>{ const o=document.createElement('option'); o.value=r.id; o.textContent=r.label; alarmSelect.appendChild(o); });
-let timerInterval=null;
+ringtones.forEach(r=>{ const o = document.createElement('option'); o.value=r.id; o.textContent=r.label; alarmSelect.appendChild(o); const a = document.createElement('audio'); a.id = r.id; a.preload='auto'; a.src = r.src; document.body.appendChild(a); });
+let timerInterval = null;
 $('startTimerBtn').addEventListener('pointerup', ()=>{
-  const mins=Number($('minutes').value||0); if(!mins||mins<=0) return alert('Enter minutes');
-  let seconds=Math.round(mins*60); const countdown=$('countdown'); const choice=alarmSelect.value;
+  const mins = Number($('minutes').value||0); if(!mins||mins<=0) return alert('Enter minutes');
+  let secs = Math.round(mins*60); const disp = $('countdown'); const choice = alarmSelect.value;
   if(timerInterval) clearInterval(timerInterval);
-  timerInterval=setInterval(()=>{ const m=Math.floor(seconds/60), s=seconds%60; countdown.textContent=`${m}:${s<10?'0':''}${s}`; if(seconds--<=0){ clearInterval(timerInterval); timerInterval=null; countdown.textContent='Done'; playAlarm(choice); } },1000);
+  timerInterval = setInterval(()=>{ const m = Math.floor(secs/60), s = secs%60; disp.textContent = `${m}:${s<10?'0':''}${s}`; if(secs-- <= 0){ clearInterval(timerInterval); timerInterval=null; disp.textContent='Done'; try{ const a = document.getElementById(choice); if(a){ a.currentTime=0; a.play().catch(()=>{}); } }catch(e){} } },1000);
 });
-function playAlarm(id){ try{ const a=$(id); if(!a) return; a.currentTime=0; a.play().catch(()=>{}); }catch(e){} }
+$('stopTimerBtn').addEventListener('pointerup', ()=>{ if(timerInterval){ clearInterval(timerInterval); timerInterval=null; $('countdown').textContent='Stopped'; } });
 
-/* ---------- Hydration ---------- */
-let hydrationTimer=null;
-(function initHyd(){ try{ window._lt_water=Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water=0; } $('waterConsumed').textContent=window._lt_water; $('waterRemaining').textContent=Math.max(Number($('goalWater').value||0)-window._lt_water,0); drawWater(); })();
-$('addWaterBtn').addEventListener('pointerup', ()=>{ const v=Number($('logWater').value||0); if(!v||v<=0) return alert('Enter ml'); window._lt_water=(window._lt_water||0)+v; try{ localStorage.setItem('lt_water', String(window._lt_water)); }catch(e){} $('waterConsumed').textContent=window._lt_water; $('waterRemaining').textContent=Math.max(Number($('goalWater').value||0)-window._lt_water,0); drawWater(); });
-$('startHydBtn').addEventListener('pointerup', ()=>{ const m=Number($('waterInterval').value||0); if(!m||m<=0) return alert('Enter minutes'); if(hydrationTimer) clearInterval(hydrationTimer); hydrationTimer=setInterval(()=> alert('Hydration reminder'), m*60000); alert('Hydration reminders started'); });
+/* ---------------- Hydration ---------------- */
+let hydrationTimer = null;
+(function initHyd(){
+  try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water = 0; }
+  $('waterConsumed').textContent = window._lt_water;
+  $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0) - window._lt_water,0);
+  drawWater();
+  updateLeftTotals();
+})();
+$('addWaterBtn').addEventListener('pointerup', ()=>{ const v = Number($('logWater').value||0); if(!v) return alert('Enter ml'); window._lt_water = (window._lt_water||0) + v; localStorage.setItem('lt_water', String(window._lt_water)); $('waterConsumed').textContent = window._lt_water; $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0) - window._lt_water,0); drawWater(); updateLeftTotals(); });
+$('startHydBtn').addEventListener('pointerup', ()=>{ const mins = Number($('waterInterval').value||0); if(!mins) return alert('Enter minutes'); if(hydrationTimer) clearInterval(hydrationTimer); hydrationTimer = setInterval(()=> alert('Hydration reminder'), mins*60000); alert('Hydration reminders started'); });
 $('stopHydBtn').addEventListener('pointerup', ()=>{ if(hydrationTimer){ clearInterval(hydrationTimer); hydrationTimer=null; alert('Hydration reminders stopped'); }});
-function drawWater(){ const c=$('waterCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal=Number($('goalWater').value||0); const consumed=Number(window._lt_water||0); const ratio=goal>0?Math.min(consumed/goal,1):0; const w=(c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20,c.height/2-10,w,20); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w,c.height/2-10,c.width-40-w,20); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`,20,c.height/2-18); }
+function drawWater(){ const c = $('waterCanvas'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal = Number($('goalWater').value||0); const consumed = Number(window._lt_water||0); const ratio = goal>0?Math.min(consumed/goal,1):0; const w = (c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20,c.height/2-12,w,24); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w,c.height/2-12,c.width-40-w,24); ctx.fillStyle='#334155'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`,20,c.height/2-18); }
 
-/* ---------- Sleep ---------- */
-let sleepLogs=[];
-$('logSleepBtn').addEventListener('pointerup', ()=>{ const s=$('sleepTime').value, w=$('wakeTime').value; if(!s||!w) return alert('Select times'); const [sh,sm]=s.split(':').map(Number), [wh,wm]=w.split(':').map(Number); let start=sh*60+sm, end=wh*60+wm; if(end<=start) end+=24*60; const mins=end-start, hours=mins/60; $('lastSleepDuration').textContent=`${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`; const today=new Date().toISOString().slice(0,10); sleepLogs.push({date:today,hours}); const last7=sleepLogs.slice(-7); const avg= last7.reduce((a,b)=>a+b.hours,0)/(last7.length||1); $('avgSleepDuration').textContent=`${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`; drawSleep(); });
-function drawSleep(){ const c=$('sleepChart'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7=sleepLogs.slice(-7); if(!last7.length) return; const barW=Math.max(12,(c.width-40)/last7.length - 6); last7.forEach((l,i)=>{ const h=Math.min(12,l.hours)/12*(c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+6), c.height-12-h, barW, h); ctx.fillStyle='#333'; ctx.font='10px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+6), c.height-2); }); }
+/* ---------------- Sleep ---------------- */
+let sleepLogs = [];
+$('logSleepBtn').addEventListener('pointerup', ()=>{
+  const s = $('sleepTime').value, w = $('wakeTime').value; if(!s||!w) return alert('Select times'); const [sh,sm] = s.split(':').map(Number), [wh,wm] = w.split(':').map(Number); let start = sh*60+sm, end = wh*60+wm; if(end<=start) end+=24*60; const mins = end-start, hours = mins/60; $('lastSleepDuration').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`; const today = new Date().toISOString().slice(0,10); sleepLogs.push({date:today,hours}); const last7 = sleepLogs.slice(-7); const avg = last7.reduce((a,b)=>a+b.hours,0)/(last7.length||1); $('avgSleepDuration').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`; drawSleep(); });
+function drawSleep(){ const c = $('sleepChart'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7 = sleepLogs.slice(-7); if(!last7.length) return; const barW = Math.max(18,(c.width-40)/last7.length - 8); last7.forEach((l,i)=>{ const h = Math.min(12,l.hours)/12*(c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+8), c.height-12-h, barW, h); ctx.fillStyle='#334155'; ctx.font='11px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+8), c.height-2); }); }
 
-/* ---------- Meals (mobile-fixed) ---------- */
+/* ---------------- Meals ---------------- */
 function mealsKey(){ return 'lt_meals_' + (new Date()).toISOString().slice(0,10); }
 function loadMeals(){ try{ return JSON.parse(localStorage.getItem(mealsKey())||'[]'); }catch(e){ return []; } }
 function saveMeals(list){ try{ localStorage.setItem(mealsKey(), JSON.stringify(list)); }catch(e){} }
-function renderMeals(){ const list=loadMeals(); const container=$('mealList'); container.innerHTML=''; let totalCalories=0, totalPortions=0; list.slice().reverse().forEach(m=>{ const row=document.createElement('div'); row.className='todo-item'; row.innerHTML = `<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div style="font-size:12px;color:${'#6b7280'}">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div><div><button class="btn" style="background:#ef4444" data-delete="${m.id}">Delete</button></div>`; container.appendChild(row); totalCalories += Number(m.calories||0); totalPortions += Number(m.portion||0); }); $('todayCalories').textContent=totalCalories; $('todayPortions').textContent=totalPortions; drawMealsPie(totalCalories); }
-$('addMealBtn').addEventListener('pointerup', ()=>{ const name=$('mealName').value.trim(); const portion=Number($('mealPortion').value||0); const calories=Number($('mealCalories').value||0); if(!name) return alert('Enter meal name'); const list=loadMeals(); list.push({id:Date.now(), name, portion, calories, ts:Date.now()}); saveMeals(list); $('mealName').value=''; $('mealPortion').value=''; $('mealCalories').value=''; renderMeals(); if(document.activeElement) document.activeElement.blur(); });
-$('mealList').addEventListener('pointerup', function(e){ const btn=e.target.closest('button[data-delete]'); if(!btn) return; const id=Number(btn.getAttribute('data-delete')); if(!id) return; let list=loadMeals(); list=list.filter(m=>m.id!==id); saveMeals(list); renderMeals(); });
-function drawMealsPie(totalCalories){ const c=$('mealsPie'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const target=2000; const consumed=Math.max(0,Math.min(totalCalories||0,target)); const remaining=Math.max(0,target-consumed); const slices=[{label:'Consumed',value:consumed,color:'#ff9f43'},{label:'Remaining',value:remaining,color:'#e9eefb'}]; const total=Math.max(1,slices.reduce((s,x)=>s+x.value,0)); const cx=c.width/2, cy=c.height/2, r=Math.min(c.width,c.height)*0.38; let start=-Math.PI/2; slices.forEach(s=>{ const ang=(s.value/total)*Math.PI*2; const end=start+ang; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=s.color; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); start=end; }); ctx.fillStyle='#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14); const lx=12, ly=12; slices.forEach((s,i)=>{ const y=ly+i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); }); }
+function renderMeals(){
+  const list = loadMeals(); const container = $('mealList'); container.innerHTML=''; let totalC=0, totalP=0;
+  list.slice().reverse().forEach(m=>{
+    const row = document.createElement('div'); row.className='todo-item';
+    row.innerHTML = `<div style="text-align:left"><strong>${esc(m.name)}</strong><div style="font-size:12px;color:var(--muted)">${esc(m.portion)} unit • ${esc(m.calories)} kcal</div></div><div><button class="btn" style="background:#ef4444" data-delete="${m.id}">Delete</button></div>`;
+    container.appendChild(row);
+    totalC += Number(m.calories||0); totalP += Number(m.portion||0);
+  });
+  $('todayCalories').textContent = totalC; $('todayPortions').textContent = totalP; updateLeftTotals(); drawMealsPie(totalC);
+}
+$('addMealBtn').addEventListener('pointerup', ()=>{ const name = $('mealName').value.trim(); const portion = Number($('mealPortion').value||0); const calories = Number($('mealCalories').value||0); if(!name) return alert('Enter meal name'); const list = loadMeals(); list.push({id:Date.now(), name, portion, calories, ts:Date.now()}); saveMeals(list); $('mealName').value=''; $('mealPortion').value=''; $('mealCalories').value=''; renderMeals(); });
+$('mealList').addEventListener('pointerup', function(e){ const btn = e.target.closest('button[data-delete]'); if(!btn) return; const id = Number(btn.getAttribute('data-delete')); let list = loadMeals(); list = list.filter(m=>m.id !== id); saveMeals(list); renderMeals(); });
+function drawMealsPie(totalCalories){
+  const c = $('mealsPie'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  const target = 2000; const consumed = Math.max(0,Math.min(totalCalories||0,target)); const remaining = Math.max(0,target-consumed);
+  const slices = [{label:'Consumed',value:consumed,color:'#ff9f43'},{label:'Remaining',value:remaining,color:'#e9eefb'}];
+  const total = Math.max(1,slices.reduce((s,x)=>s+x.value,0)); const cx=c.width/2, cy=c.height/2, r=Math.min(c.width,c.height)*0.38; let start=-Math.PI/2;
+  slices.forEach(s=>{ const ang=(s.value/total)*Math.PI*2; const end=start+ang; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=s.color; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); start=end; });
+  ctx.fillStyle='#111827'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14);
+  const lx=12, ly=12; slices.forEach((s,i)=>{ const y=ly+i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#111827'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); });
+}
 
-/* ---------- Tips ---------- */
+/* ---------------- Healthy food tips (50) ---------------- */
 const mealTips = [
 "Eat a colorful plate — fruits and vegetables of different colors.","Include lean protein with every meal (eggs, legumes, fish, chicken).","Choose whole grains over refined grains.","Snack on nuts and seeds instead of chips.","Drink water before meals to prevent overeating.","Favor cooking at home to control ingredients.","Keep portion sizes moderate and consistent.","Include a source of healthy fat (avocado, olive oil).","Limit sugary drinks and choose water or herbal tea.","Eat fiber-rich foods to support digestion and satiety.","Plan meals ahead to avoid impulsive fast food.","Start the day with a balanced breakfast.","Combine protein and carbs for sustained energy.","Add vegetables to sandwiches and omelettes.","Use spices and herbs to flavor instead of salt.","Opt for low-fat dairy or dairy alternatives if needed.","Choose grilled, baked, or steamed foods over fried.","Choose fresh fruit or yogurt for dessert.","Include legumes as a low-cost protein option.","Rotate your protein sources for variety.","Read labels and avoid trans fats or excessive sugar.","Use healthy swaps like zucchini noodles for pasta.","Prepare simple salads with mixed greens and seeds.","Use hummus or Greek yogurt dips for veggies.","Keep healthy snacks visible and accessible.","Reduce processed meat intake; choose lean options.","Balance treats with healthier daily choices.","Have a small protein-rich snack before workouts.","Limit late-night heavy meals that disrupt sleep.","Add chia or flax seeds to smoothies for omega-3s.","Use brown rice or quinoa instead of white rice.","Include fermented foods for gut health (yogurt, idli).","Avoid skipping meals which can lead to overeating later.","Cook in batches and freeze portions for busy days.","Use baking, grilling or air-frying instead of deep frying.","Pick whole fruit instead of fruit juice.","Incorporate leafy greens daily (spinach, kale).","Opt for unsweetened nut butters and spreads.","Be mindful when eating — chew slowly and enjoy.","Limit sugary cereals; choose oats or muesli.","Choose beans and lentils as protein-rich mains.","Use citrus and vinegar for dressings instead of heavy creams.","Try meatless meals a few times a week.","Rotate seasonal vegetables for freshness and nutrients.","Store pre-cut veggies for faster healthy snacking.","Watch portion sizes of calorie-dense foods like nuts.","Seek balance: carbs, protein, fats, fiber every meal.","Plan a weekly menu to reduce decision fatigue."
 ];
-$('toggleTipsBtn').addEventListener('pointerup', ()=>{ const c=$('tipsCont'); if(c.style.display==='block'){ c.style.display='none'; c.innerHTML=''; return; } c.innerHTML = mealTips.map((t,i)=>`<div style="padding:6px 4px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${escapeHtml(t)}</div>`).join(''); c.style.display='block'; });
-
-/* ---------- File handling purely in HTML (input + drag/drop + manual URL/base64) ---------- */
-const fileStore = []; // {name,type,size,blob,url}
-function showFilesUI(){ const container = $('fileList'); if(!container) return; container.style.display='block'; container.innerHTML=''; fileStore.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; const name = escapeHtml(f.name); const size = Math.round((f.size||0)/1024); const type = escapeHtml(f.type||'unknown'); row.innerHTML = `<div><div style="font-weight:800">${name}</div><div style="font-size:12px;color:#6b7280">${size} KB • ${type}</div></div>`; const actions=document.createElement('div'); const v=document.createElement('button'); v.className='view'; v.textContent='Preview'; v.addEventListener('pointerup', ()=>{ if(f.url) { try{ window.open(f.url,'_blank'); }catch(e){ alert('Preview not available'); } } else { alert('No preview available'); } }); const r=document.createElement('button'); r.className='rem'; r.textContent='Remove'; r.addEventListener('pointerup', ()=>{ // revoke blob url if any
-      if(f.url && f.url.startsWith('blob:')) URL.revokeObjectURL(f.url);
-      fileStore.splice(i,1);
-      showFilesUI();
-    }); actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); container.appendChild(row); }); }
-
-// Click / native picker
-function openPicker(){ const input=$('fileInput'); try{ input.value=''; input.click(); // if blocked: user can use dropzone or manual URL
-    setTimeout(()=>{ if(!input.files.length) { /* picker may be blocked in some WebViews; user can drag/drop or paste URL below */ } },600);
-  }catch(e){ /* fallback */ } }
-$('fileInput').addEventListener('change', function(){ const files=Array.from(this.files||[]); if(!files.length) return; files.forEach(f=>{ const url = URL.createObjectURL(f); fileStore.push({name:f.name,type:f.type,size:f.size,blob:f,url}); }); showFilesUI(); });
-
-// Drag & drop
-const drop = $('settingsPanel') ? (function(){ const dz=$('dropzone'); if(!dz) return null; dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.background='#eef2ff'; }); dz.addEventListener('dragleave', e=>{ e.preventDefault(); dz.style.background='#fff'; }); dz.addEventListener('drop', e=>{ e.preventDefault(); dz.style.background='#fff'; const dt = e.dataTransfer; if(!dt) return; const files = Array.from(dt.files||[]); files.forEach(f=>{ const url = URL.createObjectURL(f); fileStore.push({name:f.name,type:f.type,size:f.size,blob:f,url}); }); showFilesUI(); }); return dz; })() : null;
-
-// Manual URL / base64 input
-$('addManual').addEventListener('pointerup', async ()=>{
-  const v = $('manualUrl').value.trim();
-  if(!v) { $('manualStatus').textContent = 'Paste a file URL or data:...'; return; }
-  $('manualStatus').textContent = 'Adding...';
-  try{
-    if(v.startsWith('data:')){ // base64 data URI
-      // parse and convert to blob
-      const match = v.match(/^data:([^;]+);base64,(.*)$/);
-      if(!match) { $('manualStatus').textContent='Invalid data URI'; return; }
-      const mime = match[1]; const b64 = match[2]; const bytes = atob(b64); const arr = new Uint8Array(bytes.length); for(let i=0;i<bytes.length;i++) arr[i]=bytes.charCodeAt(i); const blob = new Blob([arr], {type:mime}); const name = 'pasted-file.' + (mime.split('/')[1]||'bin'); const url = URL.createObjectURL(blob); fileStore.push({name, type:mime, size:blob.size, blob, url}); $('manualStatus').textContent = 'Added base64 file: ' + name; showFilesUI(); return;
-    }
-    // treat as URL: try fetch and create blob
-    const resp = await fetch(v);
-    if(!resp.ok) { $('manualStatus').textContent = 'Failed to fetch URL'; return; }
-    const blob = await resp.blob(); const name = v.split('/').pop().split('?')[0] || ('file-'+Date.now()); const url = URL.createObjectURL(blob); fileStore.push({name, type:blob.type, size:blob.size, blob, url}); $('manualStatus').textContent = 'Added URL file: ' + name; showFilesUI();
-  }catch(err){ $('manualStatus').textContent = 'Could not add file: ' + (err && err.message ? err.message : 'error'); }
-  $('manualUrl').value='';
+$('toggleTipsBtn').addEventListener('pointerup', ()=>{
+  const c = $('tipsCont');
+  if(c.style.display === 'block'){ c.style.display='none'; c.innerHTML=''; return; }
+  c.innerHTML = mealTips.map((t,i)=>`<div style="padding:8px 6px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${esc(t)}</div>`).join('');
+  c.style.display = 'block';
 });
 
-// Expose files to host app if needed (JSON metadata)
-function exportFilesMetadata(){ return fileStore.map(f=>({name:f.name,size:f.size,type:f.type,url:f.url||''})); }
+/* ---------------- File picker (pure HTML + AppInventor signal) ---------------- */
+const fileStore = []; // {name,type,size,blob,url}
+function showFileList(){
+  const container = $('fileList');
+  container.innerHTML = '';
+  fileStore.forEach((f,i)=>{
+    const row = document.createElement('div'); row.className='file-row';
+    row.innerHTML = `<div><div style="font-weight:700">${esc(f.name)}</div><div style="font-size:12px;color:var(--muted)">${Math.round((f.size||0)/1024)} KB • ${esc(f.type||'unknown')}</div></div>`;
+    const actions = document.createElement('div');
+    const v = document.createElement('button'); v.className='btn'; v.textContent='Preview'; v.style.marginRight='8px';
+    v.addEventListener('pointerup', ()=>{ if(f.url){ try{ window.open(f.url,'_blank'); }catch(e){ alert('Preview failed'); } } else alert('No preview'); });
+    const r = document.createElement('button'); r.className='btn'; r.style.background='#ef4444'; r.textContent='Remove';
+    r.addEventListener('pointerup', ()=>{ if(f.url && f.url.startsWith('blob:')) URL.revokeObjectURL(f.url); fileStore.splice(i,1); showFileList(); sendFilesToApp(); });
+    actions.appendChild(v); actions.appendChild(r); row.appendChild(actions);
+    container.appendChild(row);
+  });
+  container.style.display = fileStore.length ? 'block' : 'none';
+}
+function openPicker(){
+  const input = document.createElement('input'); input.type='file'; input.multiple=true;
+  input.accept='.pdf,.jpg,.jpeg,.png,.doc,.docx,.txt';
+  input.addEventListener('change', ()=>{
+    const files = Array.from(input.files||[]);
+    files.forEach(f=>{
+      const url = URL.createObjectURL(f);
+      fileStore.push({name:f.name,type:f.type,size:f.size,blob:f,url});
+    });
+    showFileList();
+    sendFilesToApp(); // notify host
+  });
+  try{ input.click(); setTimeout(()=>{ if(!input.files.length) { notifyFilePickerBlocked(); } },700); }catch(e){ notifyFilePickerBlocked(); }
+}
+function notifyFilePickerBlocked(){
+  // Tell host App Inventor the picker was blocked so it can open native picker and post back file info
+  const msg = JSON.stringify({action:'REQUEST_FILE_PICKER'});
+  try{ if(window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') window.AppInventor.setWebViewString(msg); }catch(e){}
+  try{ if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor) window.webkit.messageHandlers.AppInventor.postMessage(msg); }catch(e){}
+  // also try postMessage for other bridges
+  try{ window.postMessage(msg); }catch(e){}
+}
+function sendFilesToApp(){
+  const meta = fileStore.map(f=>({name:f.name,size:f.size,type:f.type,url:f.url||''}));
+  const msg = JSON.stringify({action:'FILES_SELECTED', files:meta});
+  try{ if(window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') window.AppInventor.setWebViewString(msg); }catch(e){}
+  try{ if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor) window.webkit.messageHandlers.AppInventor.postMessage(msg); }catch(e){}
+  try{ window.postMessage(msg); }catch(e){}
+}
+const dz = $('dropzone');
+if(dz){
+  dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.background='#eef8ff'; });
+  dz.addEventListener('dragleave', e=>{ e.preventDefault(); dz.style.background=''; });
+  dz.addEventListener('drop', e=>{ e.preventDefault(); dz.style.background=''; const files = Array.from(e.dataTransfer.files||[]); files.forEach(f=>{ const url = URL.createObjectURL(f); fileStore.push({name:f.name,type:f.type,size:f.size,blob:f,url}); }); showFileList(); sendFilesToApp(); });
+}
+$('addManual').addEventListener('pointerup', async ()=>{
+  const v = $('manualUrl').value.trim();
+  if(!v){ $('manualStatus').textContent = 'Paste file URL or data URI'; return; }
+  $('manualStatus').textContent = 'Adding...';
+  try{
+    if(v.startsWith('data:')){
+      const match = v.match(/^data:([^;]+);base64,(.*)$/);
+      if(!match){ $('manualStatus').textContent = 'Invalid data URI'; return; }
+      const mime = match[1], b64 = match[2]; const bytes = atob(b64); const arr = new Uint8Array(bytes.length); for(let i=0;i<bytes.length;i++) arr[i]=bytes.charCodeAt(i);
+      const blob = new Blob([arr], {type:mime}); const name = 'pasted.' + (mime.split('/')[1]||'bin'); const url = URL.createObjectURL(blob);
+      fileStore.push({name,type:mime,size:blob.size,blob,url}); $('manualStatus').textContent = 'Added base64 file: ' + name; showFileList(); sendFilesToApp(); return;
+    }
+    const resp = await fetch(v);
+    if(!resp.ok){ $('manualStatus').textContent = 'Failed to fetch URL'; return; }
+    const blob = await resp.blob(); const name = v.split('/').pop().split('?')[0] || ('file-'+Date.now()); const url = URL.createObjectURL(blob);
+    fileStore.push({name,type:blob.type,size:blob.size,blob,url}); $('manualStatus').textContent = 'Added file: ' + name; showFileList(); sendFilesToApp();
+  }catch(err){ $('manualStatus').textContent = 'Error: ' + (err && err.message?err.message:'unknown'); }
+  $('manualUrl').value='';
+});
+$('clearFiles').addEventListener('pointerup', ()=>{ fileStore.forEach(f=>{ if(f.url && f.url.startsWith('blob:')) URL.revokeObjectURL(f.url); }); fileStore.length = 0; showFileList(); $('manualStatus').textContent = 'Cleared'; sendFilesToApp(); });
 
-/* ---------- File fallback note:
-   - This solution uses native file input (works in browsers).
-   - If WebViewer blocks the OS picker, the drag/drop and manual URL/base64 allow files to be added using HTML alone.
-   - For large files from remote URLs, the fetch() will download them into memory (mind mobile limits).
-*/
-
-/* ---------- Small visuals: mood, water, sleep ---------- */
-function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const value=Number($('moodValue').textContent||5); const w=(value/10)*(c.width-40); ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#5063f2'; ctx.fillRect(20,c.height/2-16,w,32); ctx.fillStyle='#333'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${value}`,20,c.height/2-26); }
-$('enterMood').addEventListener('pointerup', ()=>{ const v=prompt('Enter mood 1-10','5'); const n=Number(v); if(n>=1 && n<=10){ $('moodValue').textContent = n; drawMood(); } else alert('Enter a number 1-10'); });
-
-function drawWater(){ const c=$('waterCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal=Number($('goalWater').value||0); const consumed=Number(window._lt_water||0); const ratio=goal>0?Math.min(consumed/goal,1):0; const w=(c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20,c.height/2-10,w,20); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w,c.height/2-10,c.width-40-w,20); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`,20,c.height/2-18); }
-
-function drawMealsPie(totalCalories){ const c=$('mealsPie'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const target=2000; const consumed=Math.max(0,Math.min(totalCalories||0,target)); const remaining=Math.max(0,target-consumed); const slices=[{label:'Consumed',value:consumed,color:'#ff9f43'},{label:'Remaining',value:remaining,color:'#e9eefb'}]; const tot=Math.max(1,slices.reduce((s,x)=>s+x.value,0)); const cx=c.width/2, cy=c.height/2, r=Math.min(c.width,c.height)*0.38; let start=-Math.PI/2; slices.forEach(s=>{ const ang=(s.value/tot)*Math.PI*2; const end=start+ang; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=s.color; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); start=end; }); ctx.fillStyle='#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14); const lx=12, ly=12; slices.forEach((s,i)=>{ const y=ly+i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); }); }
-
-/* ---------- Initialization: hydration, meals, settings ---------- */
-(function boot(){
-  try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water = 0; }
-  $('waterConsumed').textContent = window._lt_water; $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0)-window._lt_water,0);
-  renderMeals(); drawWater(); drawMealsPie(0); drawMood(); drawSleep();
-})();
-
-/* ---------- Hook up meal delete via delegation already done in renderMeals listener above ---------- */
-/* ---------- Ensure cards are keyboard accessible ---------- */
-document.querySelectorAll('.card').forEach(card=> card.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); card.click(); } }));
-
-// Export metadata API if host app wants to read selected files
-window.getSelectedFilesMetadata = function(){ return exportFilesMetadata(); };
-
-// Allow host app to postMessage back to page with files metadata (if needed)
+/* Host -> Page: allow App Inventor to post back files metadata via postMessage or WebViewString (AppInventor blocks use WebViewStringChange) */
 window.addEventListener('message', e=>{
   try{
     const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
     if(data && data.action === 'IMPORT_FILES' && Array.isArray(data.files)){
-      // data.files expected: [{name,size,type,uri (optional)}]
-      data.files.forEach(f=>{
-        fileStore.push({name:f.name,type:f.type,size:f.size, url:f.uri||''});
-      });
-      showFilesUI();
+      data.files.forEach(f=>{ fileStore.push({name:f.name,type:f.type,size:f.size, url:f.uri||''}); });
+      showFileList();
     }
   }catch(err){}
 });
+// Also attempt to read WebViewString via polling (some App Inventor patterns set webview string that the page can read via URL or bridge; this depends on your App Inventor blocks).
+// Many App Inventor setups instead use WebViewer.WebViewStringChanged to get messages from page and then App Inventor calls WebViewer.GoToUrl('javascript:...') to call page functions.
 
+function updateLeftTotals(){ $('todayCaloriesLeft').textContent = $('todayCalories').textContent || '0'; $('waterConsumedLeft').textContent = $('waterConsumed').textContent || '0'; }
+
+/* ---------------- Boot visuals and initialization ---------------- */
+function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const v = Number($('moodValue').textContent||5); const w = (v/10)*(c.width-40); ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#2163ff'; ctx.fillRect(20,c.height/2-18,w,36); ctx.fillStyle='#0f1724'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${v}`,22,c.height/2-24); }
+function drawMealsPie(totalCalories){ const c=$('mealsPie'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const target=2000; const consumed=Math.max(0,Math.min(totalCalories||0,target)); const remaining=Math.max(0,target-consumed); const slices=[{label:'Consumed',value:consumed,color:'#ff9f43'},{label:'Remaining',value:remaining,color:'#e9eefb'}]; const total = Math.max(1,slices.reduce((s,x)=>s+x.value,0)); const cx=c.width/2, cy=c.height/2, r=Math.min(c.width,c.height)*0.38; let start=-Math.PI/2; slices.forEach(s=>{ const ang=(s.value/total)*Math.PI*2; const end=start+ang; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=s.color; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); start=end; }); ctx.fillStyle='#111827'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`,cx,cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`,cx,cy+14); }
+function drawWater(){ const c=$('waterCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal = Number($('goalWater').value||0); const consumed = Number(window._lt_water||0); const ratio = goal>0?Math.min(consumed/goal,1):0; const w = (c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20,c.height/2-12,w,24); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w,c.height/2-12,c.width-40-w,24); ctx.fillStyle='#334155'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`,20,c.height/2-18); }
+function drawSleep(){ const c=$('sleepChart'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7 = sleepLogs.slice(-7); if(!last7.length) return; const barW = Math.max(18,(c.width-40)/last7.length - 8); last7.forEach((l,i)=>{ const h = Math.min(12,l.hours)/12*(c.height-30); ctx.fillStyle = '#7b61ff'; ctx.fillRect(20 + i*(barW+8), c.height-12-h, barW, h); ctx.fillStyle = '#334155'; ctx.font='11px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+8), c.height-2); }); }
+
+(function boot(){
+  // Hydration init
+  try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water = 0; }
+  $('waterConsumed').textContent = window._lt_water;
+  $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0)-window._lt_water,0);
+
+  // Meals init
+  renderMeals();
+  drawMealsPie(0);
+  drawWater();
+  drawMood();
+  drawSleep();
+  showFileList();
+
+  // make tiles keyboard accessible
+  document.querySelectorAll('.tile').forEach(t => t.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); t.click(); } }));
+})();
+
+/* Expose helper for App Inventor to call page functions (if needed) */
+window.LifeTrack = {
+  getFilesMetadata: ()=> fileStore.map(f=>({name:f.name,type:f.type,size:f.size,url:f.url||''})),
+  importFiles: function(list){ // list: [{name,size,type,uri}]
+    (list||[]).forEach(i=> { fileStore.push({name:i.name,type:i.type,size:i.size,url:i.uri||''}); });
+    showFileList();
+  }
+};
 </script>
 </body>
 </html>
