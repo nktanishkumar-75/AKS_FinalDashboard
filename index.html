@@ -14,16 +14,14 @@
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:var(--bg);font-family:var(--ui-font);font-size:var(--ui-font-size);color:var(--text);-webkit-font-smoothing:antialiased}
 .container{max-width:920px;margin:14px auto;padding:16px;filter:brightness(var(--app-brightness))}
-.header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
-.title{font-weight:800;font-size:18px}
+.title{font-weight:800;font-size:18px;margin-left:12px;display:inline-block;vertical-align:middle}
 .layout{display:grid;grid-template-columns:320px 1fr;gap:16px}
 .left{position:sticky;top:12px;height:fit-content}
 .card{background:var(--surface);border-radius:12px;padding:12px;border:1px solid var(--card);box-shadow:0 10px 30px rgba(16,24,40,0.06)}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .tile{background:linear-gradient(180deg,#fff,#fbfdff);border-radius:8px;padding:12px;cursor:pointer;border:1px solid #eef4ff;min-height:66px;display:flex;flex-direction:column;justify-content:center}
 .tile .label{font-weight:700}
-.controls{display:flex;gap:8px;flex-wrap:wrap}
 .btn{background:var(--accent);border:0;color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:700}
 input,select,textarea{width:100%;padding:9px;border-radius:8px;border:1px solid var(--card);background:linear-gradient(180deg,#fff,#fbfdff)}
 .screen{display:none;margin-bottom:12px}
@@ -40,26 +38,25 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
 </head>
 <body>
   <div class="container" id="app">
-    <div class="header">
+    <div style="display:flex;align-items:center">
       <div class="logo">LT</div>
-      <div>
-        <div class="title">LIFE TRACK DASHBOARD - WELCOME USER</div>
-      </div>
+      <div class="title">LIFE TRACK DASHBOARD - WELCOME USER</div>
     </div>
 
-    <div class="layout">
+    <div class="layout" style="margin-top:12px">
       <div class="left">
         <div class="card">
           <div style="display:flex;justify-content:space-between;align-items:center">
-            <strong>Quick actions</strong>
-            <div><button class="btn" id="settingsToggle">Settings</button></div>
+            <div style="font-weight:700">Quick actions</div>
+            <div><button class="btn" id="settingsToggle">App settings</button></div>
           </div>
+
           <div style="margin-top:12px" class="grid" id="quickGrid" role="list">
             <div class="tile" data-target="chat"><div class="label">💬 Chatbot</div></div>
             <div class="tile" data-target="mood"><div class="label">📊 Mood</div></div>
             <div class="tile" data-target="rem"><div class="label">✅ Reminders</div></div>
             <div class="tile" data-target="timer"><div class="label">⏱ Timer</div></div>
-            <div class="tile" id="uploadBtn"><div class="label">📂 Choose files</div></div>
+            <div class="tile" id="settingsTile"><div class="label">⚙️ App settings</div></div>
             <div class="tile" data-target="hydration"><div class="label">💧 Hydration</div></div>
             <div class="tile" data-target="sleep"><div class="label">🌙 Sleep</div></div>
             <div class="tile" data-target="meals"><div class="label">🍽 Meals</div></div>
@@ -69,47 +66,38 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
         <div style="height:12px"></div>
 
         <div class="card">
-          <strong>Totals</strong>
+          <div style="font-weight:700">Totals</div>
           <div style="margin-top:8px">Today calories: <strong id="todayCaloriesLeft">0</strong> kcal</div>
           <div>Water consumed: <strong id="waterConsumedLeft">0</strong> ml</div>
         </div>
       </div>
 
       <main>
-        <!-- Chat -->
         <section class="card screen visible" id="chat">
-          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Chatbot</strong></div>
           <div id="chatbox" class="chatbox" aria-live="polite"></div>
-          <div class="controls" style="margin-top:10px">
+          <div style="display:flex;gap:8px;margin-top:10px">
             <button class="btn" id="btnJoke">Random joke</button>
             <button class="btn" id="btnTip">Study tip</button>
           </div>
         </section>
 
-        <!-- Mood -->
         <section class="card screen" id="mood">
-          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Mood</strong></div>
           <div style="margin-top:8px">
             <button class="btn" id="enterMood">Enter mood (1-10)</button>
             <div style="margin-top:8px">Current: <strong id="moodValue">5</strong></div>
-            <canvas id="moodCanvas" width="720" height="140"></canvas>
+            <canvas id="moodCanvas" width="720" height="140" style="margin-top:8px"></canvas>
           </div>
         </section>
 
-        <!-- Reminders -->
         <section class="card screen" id="rem">
-          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Reminders</strong></div>
           <input id="remText" placeholder="Reminder text" />
           <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="addRemBtn">Add</button></div>
           <div id="remList" style="margin-top:8px"></div>
         </section>
 
-        <!-- Timer -->
         <section class="card screen" id="timer">
-          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Timer</strong></div>
           <input id="minutes" type="number" placeholder="Minutes" />
-          <label class="small">Choose ringtone</label>
-          <select id="alarmSelect"></select>
+          <select id="alarmSelect" style="margin-top:8px"></select>
           <div style="display:flex;gap:8px;margin-top:8px">
             <button class="btn" id="startTimerBtn">Start</button>
             <button class="btn" id="stopTimerBtn" style="background:#ef4444">Stop</button>
@@ -117,12 +105,10 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
           <div id="countdown" style="margin-top:12px;font-weight:700"></div>
         </section>
 
-        <!-- Hydration -->
         <section class="card screen" id="hydration">
-          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Hydration</strong></div>
           <input id="goalWater" type="number" placeholder="Daily goal (ml)" value="2000" />
           <input id="logWater" type="number" placeholder="Log intake (ml)" value="250" />
-          <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="addWaterBtn">Add</button></div>
+          <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="addWaterBtn">Add intake</button></div>
           <div style="display:flex;justify-content:space-between;margin-top:8px">
             <div>Consumed: <strong id="waterConsumed">0</strong> ml</div>
             <div>Remaining: <strong id="waterRemaining">2000</strong> ml</div>
@@ -132,19 +118,15 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
           <canvas id="waterCanvas" width="720" height="100" style="margin-top:8px"></canvas>
         </section>
 
-        <!-- Sleep -->
         <section class="card screen" id="sleep">
-          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Sleep</strong></div>
           <input id="sleepTime" type="time" />
           <input id="wakeTime" type="time" />
           <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="logSleepBtn">Log sleep</button></div>
-          <div style="margin-top:8px">Last duration: <strong id="lastSleepDuration">0h 0m</strong> · 7-day average: <strong id="avgSleepDuration">0h 0m</strong></div>
+          <div style="margin-top:8px">Last duration: <strong id="lastSleepDuration">0h 0m</strong> · 7-day avg: <strong id="avgSleepDuration">0h 0m</strong></div>
           <canvas id="sleepChart" width="720" height="120" style="margin-top:8px"></canvas>
         </section>
 
-        <!-- Meals -->
         <section class="card screen" id="meals">
-          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Meals</strong></div>
           <input id="mealName" placeholder="Meal name" />
           <input id="mealPortion" type="number" placeholder="Portion (g or ml)" />
           <input id="mealCalories" type="number" placeholder="Calories (kcal)" />
@@ -162,15 +144,13 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
     </div>
   </div>
 
-  <!-- Settings -->
   <div class="settings-panel card" id="settingsPanel" aria-hidden="true">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <strong>App settings</strong>
+      <div style="font-weight:700">App settings</div>
       <div style="display:flex;gap:8px"><button class="btn" id="saveSettings">Save</button><button class="btn" id="closeSettings" style="background:#ef4444">Close</button></div>
     </div>
 
     <div style="margin-top:10px;display:grid;gap:8px">
-      <label class="small">Font style</label>
       <select id="fontStyle">
         <option value="system-ui, -apple-system, 'Segoe UI', Roboto, Arial">System</option>
         <option value="'Inter', system-ui, -apple-system, Roboto">Inter</option>
@@ -184,29 +164,21 @@ canvas{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
         <option value="'Open Sans', system-ui, sans-serif">Open Sans</option>
       </select>
 
-      <label class="small">Font size (px)</label>
       <input id="fontSize" type="range" min="12" max="22" value="16" />
-
-      <label class="small">App brightness</label>
       <input id="appBrightness" type="range" min="0.5" max="1.3" step="0.05" value="1" />
-
-      <hr/>
-
-      <label class="small">File picker (native / drag-drop / manual URL or base64)</label>
-      <div class="dropzone" id="dropzone">Drag & drop files here, or use Choose files tile; or paste URL/data below</div>
-      <input id="manualUrl" placeholder="Paste file URL or data:..." />
-      <div style="display:flex;gap:8px"><button class="btn" id="addManual">Add</button><button class="btn" id="clearFiles" style="background:#ef4444">Clear</button></div>
-      <div id="manualStatus" class="small" style="margin-top:6px;color:var(--muted)"></div>
-      <div id="fileList" style="margin-top:8px"></div>
     </div>
   </div>
 
 <script>
-/* ---------- helpers ---------- */
+/* Core: removed upload/medical file flow and replaced tile with App settings.
+   Focus fixes for mobile meal add: robust handlers, read values directly on tap/click,
+   clear inputs after storing, persist meals to localStorage per-day.
+*/
+
 const $ = id => document.getElementById(id);
 function esc(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-/* ---------- Screen open/close single-screen behavior ---------- */
+/* Screen open/close */
 document.getElementById('quickGrid').addEventListener('pointerup', e=>{
   const tile = e.target.closest('.tile');
   if(!tile) return;
@@ -216,7 +188,7 @@ document.getElementById('quickGrid').addEventListener('pointerup', e=>{
     const screen = document.getElementById(target);
     if(!screen) return;
     screen.classList.add('visible');
-    const closer = (ev)=>{
+    const closer = (ev) => {
       const interactive = ev.target.closest('button,input,select,textarea,.todo-item,.file-row,.tile');
       if(interactive) return;
       screen.removeEventListener('pointerup', closer);
@@ -224,14 +196,21 @@ document.getElementById('quickGrid').addEventListener('pointerup', e=>{
     };
     screen.addEventListener('pointerup', closer);
     screen.scrollIntoView({behavior:'smooth',block:'center'});
-  } else if(tile.id === 'uploadBtn'){
-    openPicker();
-    toggleSettings(true);
   }
 });
 
-/* ---------- Settings (font style, size, brightness) ---------- */
-const SETTINGS_KEY = 'lt_settings_v5';
+/* Settings open from both header and tile */
+$('settingsToggle').addEventListener('pointerup', ()=> toggleSettings(true));
+$('settingsTile').addEventListener('pointerup', ()=> toggleSettings(true));
+$('closeSettings').addEventListener('pointerup', ()=> toggleSettings(false));
+function toggleSettings(force){
+  const p = $('settingsPanel');
+  p.style.display = (force === true) ? 'block' : (p.style.display === 'block' ? 'none' : 'block');
+  p.setAttribute('aria-hidden', p.style.display !== 'block');
+}
+
+/* Persisted settings */
+const SETTINGS_KEY = 'lt_settings_final_v1';
 function loadSettings(){ try{ return JSON.parse(localStorage.getItem(SETTINGS_KEY)||'null'); }catch(e){ return null; } }
 function saveSettings(cfg){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(cfg)); }catch(e){} }
 function applySettings(cfg){
@@ -240,14 +219,6 @@ function applySettings(cfg){
   if(cfg.fontSize) document.documentElement.style.setProperty('--ui-font-size', cfg.fontSize + 'px');
   if(cfg.appBrightness) document.documentElement.style.setProperty('--app-brightness', cfg.appBrightness);
 }
-function toggleSettings(force){
-  const p = $('settingsPanel');
-  if(typeof force === 'boolean') p.style.display = force ? 'block' : 'none';
-  else p.style.display = (p.style.display === 'block') ? 'none' : 'block';
-  p.setAttribute('aria-hidden', p.style.display !== 'block');
-}
-$('settingsToggle').addEventListener('pointerup', ()=> toggleSettings());
-$('closeSettings').addEventListener('pointerup', ()=> toggleSettings(false));
 (function initSettings(){
   const s = loadSettings();
   if(s){ applySettings(s); $('fontStyle').value = s.fontStyle || getComputedStyle(document.documentElement).getPropertyValue('--ui-font'); $('fontSize').value = s.fontSize || 16; $('appBrightness').value = s.appBrightness || 1; }
@@ -258,33 +229,24 @@ $('closeSettings').addEventListener('pointerup', ()=> toggleSettings(false));
     const cfg = { fontStyle: $('fontStyle').value, fontSize: Number($('fontSize').value), appBrightness: Number($('appBrightness').value) };
     saveSettings(cfg); applySettings(cfg); toggleSettings(false);
   });
-  $('clearFiles').addEventListener('pointerup', ()=>{ clearFileStore(); });
 })();
 
-/* ---------- 50 jokes and 50 study tips ---------- */
+/* 50 jokes and 50 study tips */
 const jokes = [
 "Why don’t skeletons fight? They don’t have the guts!","Why did the math book look sad? It had too many problems.","Why can’t your nose be 12 inches long? Because then it would be a foot!","Why did the scarecrow win an award? He was outstanding in his field!","What do you call fake spaghetti? An impasta!","Why did the bicycle fall over? It was two-tired!","Why don’t eggs tell jokes? They’d crack each other up!","What do you call cheese that isn’t yours? Nacho cheese!","Why did the golfer bring two pairs of pants? In case he got a hole in one!","Why did the tomato blush? It saw the salad dressing!","Why don’t scientists trust atoms? Because they make up everything!","Why did the cookie go to the doctor? It was feeling crummy!","Why did the computer go to therapy? It had too many bytes!","Why did the student eat his homework? The teacher said it was a piece of cake!","Why did the cat sit on the computer? To keep an eye on the mouse!","Why did the banana go to the party? Because it was a-peeling!","Why did the chicken join a band? Because it had the drumsticks!","Why did the fish blush? Because it saw the ocean’s bottom!","Why did the frog take the bus? His car got toad!","Why did the bee get married? Because he found his honey!","Why did the pencil go to the principal’s office? It had a point to make!","Why did the broom get a promotion? It swept the competition!","Why did the grape stop in the road? It ran out of juice!","Why did the light bulb go to school? To get a little brighter!","Why did the duck get a job? He was tired of winging it!","Why did the elephant bring a suitcase? He was going on a trunk trip!","Why did the calendar apply for a job? It wanted to work full time!","Why did the robot go on vacation? It needed to recharge!","Why did the donut go to therapy? It felt empty inside!","Why did the dog sit in the shade? He didn’t want to be a hot dog!","Why did the astronaut break up? He needed space!","Why did the fish get bad grades? Because it was below sea level!","Why did the cow go to space? To see the moooon!","Why did the skeleton skip the dance? He had no body to go with!","Why did the kangaroo stop coffee? It made him too jumpy!","Why did the snowman call a cab? He had a meltdown!","Why did the pirate buy an eye patch? He couldn’t afford an iPhone!","Why did the balloon go near the needle? To pop the question!","Why did the horse go behind the tree? To change his jockeys!","Why did the snail paint an S on his car? So people would say, ‘Look at that S-car go!’","Why did the giraffe get bad grades? He had his head in the clouds!","Why did the owl get promoted? He was a real hoot!","Why did the mirror fail the test? It couldn’t reflect well!","Why did the volcano get a promotion? It was on fire!","Why did the sandwich go to the gym? To get shredded!"
 ];
 const studyTips = [
 "Break study sessions into 25-minute chunks with 5-minute breaks.","Teach what you learn — explaining helps retention.","Use flashcards for active recall.","Review material within 24 hours.","Create a distraction-free study space.","Set clear goals for each session.","Use mnemonic devices.","Practice past papers under timed conditions.","Summarize notes in your own words.","Use diagrams and mind maps.","Sleep well — memory consolidates during rest.","Stay hydrated and eat brain-friendly foods.","Avoid multitasking.","Use spaced repetition.","Study at your peak energy time.","Group study for tough topics.","Use apps like Anki or Quizlet.","Record yourself explaining topics.","Color-code notes.","Reward yourself after tasks.","Spread learning over days, not cramming.","Apply the Feynman technique.","Take movement/stretch breaks.","Turn off notifications.","Use background music if it helps.","Make a weekly checklist.","Start with the hardest subject.","Use real-world examples.","Ask questions to deepen understanding.","Use sticky notes for key facts.","Teach a friend or sibling.","Watch short explainer videos.","Keep a study journal.","Visualize exam success.","Don’t hesitate to ask for help.","Stay consistent with daily effort.","Use analogies to simplify.","Practice writing essays.","Limit social media.","Use timers to stay on track.","Keep your desk tidy.","Drink water before and during study.","Use site blockers for focus.","Make your own quizzes.","Combine words + visuals (dual coding).","Celebrate small wins.","Stay positive — mindset matters.","Track your time to find patterns.","Reflect on what worked and what didn’t.","Balance study with exercise and relaxation."
 ];
+function appendChat(label, text){ const box=$('chatbox'); const el=document.createElement('div'); el.style.margin='8px 0'; el.innerHTML=`<div style="font-weight:700">${esc(label)}:</div><div style="margin-top:6px">${esc(text)}</div>`; box.appendChild(el); box.scrollTop = box.scrollHeight; }
 $('btnJoke').addEventListener('pointerup', ()=> appendChat('Joke', jokes[Math.floor(Math.random()*jokes.length)]));
 $('btnTip').addEventListener('pointerup', ()=> appendChat('Tip', studyTips[Math.floor(Math.random()*studyTips.length)]));
-function appendChat(label, text){
-  const box = $('chatbox'); const el = document.createElement('div'); el.style.margin='8px 0';
-  el.innerHTML = `<div style="font-weight:700">${esc(label)}:</div><div style="margin-top:6px">${esc(text)}</div>`; box.appendChild(el); box.scrollTop = box.scrollHeight;
-}
 
-/* ---------- Reminders ---------- */
-$('addRemBtn').addEventListener('pointerup', ()=>{
-  const t = $('remText').value.trim(); if(!t) return;
-  const div = document.createElement('div'); div.className='todo-item';
-  div.innerHTML = `<div>${esc(t)}</div><div><button class="btn" data-action="del-rem" style="background:#ef4444">Delete</button></div>`;
-  $('remList').prepend(div); $('remText').value='';
-});
-$('remList').addEventListener('pointerup', e=>{ const b = e.target.closest('button[data-action="del-rem"]'); if(!b) return; b.closest('.todo-item').remove(); });
+/* Reminders */
+$('addRemBtn').addEventListener('pointerup', ()=>{ const t=$('remText').value.trim(); if(!t) return; const r=document.createElement('div'); r.className='todo-item'; r.innerHTML=`<div>${esc(t)}</div><div><button class="btn" data-action="del-rem" style="background:#ef4444">Delete</button></div>`; $('remList').prepend(r); $('remText').value=''; });
+$('remList').addEventListener('pointerup', e=>{ const b=e.target.closest('button[data-action="del-rem"]'); if(!b) return; b.closest('.todo-item').remove(); });
 
-/* ---------- Timer & ringtones (10) ---------- */
+/* Timer & ringtones */
 const ringtones = [
   {id:'r1',label:'Beep',src:'https://actions.google.com/sounds/v1/alarms/beep_short.ogg'},
   {id:'r2',label:'Marimba',src:'https://cdn.pixabay.com/download/audio/2022/03/15/audio_2e6f3e9b4b.mp3'},
@@ -300,15 +262,10 @@ const ringtones = [
 const alarmSelect = $('alarmSelect');
 ringtones.forEach(r=>{ const o=document.createElement('option'); o.value=r.id; o.textContent=r.label; alarmSelect.appendChild(o); const a=document.createElement('audio'); a.id=r.id; a.preload='auto'; a.src=r.src; document.body.appendChild(a); });
 let timerInterval = null;
-$('startTimerBtn').addEventListener('pointerup', ()=>{
-  const mins = Number($('minutes').value||0); if(!mins||mins<=0) return alert('Enter minutes');
-  let secs = Math.round(mins*60), disp = $('countdown'), choice = alarmSelect.value;
-  if(timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(()=>{ const m=Math.floor(secs/60), s=secs%60; disp.textContent=`${m}:${s<10?'0':''}${s}`; if(secs-- <= 0){ clearInterval(timerInterval); timerInterval=null; disp.textContent='Done'; try{ const a=document.getElementById(choice); if(a){ a.currentTime=0; a.play().catch(()=>{}); } }catch(e){} } },1000);
-});
+$('startTimerBtn').addEventListener('pointerup', ()=>{ const mins=Number($('minutes').value||0); if(!mins||mins<=0) return alert('Enter minutes'); let secs=Math.round(mins*60), disp=$('countdown'), choice=alarmSelect.value; if(timerInterval) clearInterval(timerInterval); timerInterval=setInterval(()=>{ const m=Math.floor(secs/60), s=secs%60; disp.textContent=`${m}:${s<10?'0':''}${s}`; if(secs-- <=0){ clearInterval(timerInterval); timerInterval=null; disp.textContent='Done'; try{ const a=document.getElementById(choice); if(a){ a.currentTime=0; a.play().catch(()=>{}); } }catch(e){} } },1000); });
 $('stopTimerBtn').addEventListener('pointerup', ()=>{ if(timerInterval){ clearInterval(timerInterval); timerInterval=null; $('countdown').textContent='Stopped'; } });
 
-/* ---------- Hydration ---------- */
+/* Hydration */
 let hydrationTimer = null;
 (function initHyd(){ try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water=0 } $('waterConsumed').textContent = window._lt_water; $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0)-window._lt_water,0); drawWater(); updateLeftTotals(); })();
 $('addWaterBtn').addEventListener('pointerup', ()=>{ const v=Number($('logWater').value||0); if(!v) return alert('Enter ml'); window._lt_water=(window._lt_water||0)+v; localStorage.setItem('lt_water', String(window._lt_water)); $('waterConsumed').textContent=window._lt_water; $('waterRemaining').textContent=Math.max(Number($('goalWater').value||0)-window._lt_water,0); drawWater(); updateLeftTotals(); });
@@ -316,59 +273,120 @@ $('startHydBtn').addEventListener('pointerup', ()=>{ const mins=Number($('waterI
 $('stopHydBtn').addEventListener('pointerup', ()=>{ if(hydrationTimer){ clearInterval(hydrationTimer); hydrationTimer=null; alert('Hydration reminders stopped'); }});
 function drawWater(){ const c=$('waterCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal=Number($('goalWater').value||0); const consumed=Number(window._lt_water||0); const ratio=goal>0?Math.min(consumed/goal,1):0; const w=(c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20,c.height/2-12,w,24); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w,c.height/2-12,c.width-40-w,24); ctx.fillStyle='#334155'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`,20,c.height/2-18); }
 
-/* ---------- Sleep ---------- */
+/* Sleep */
 let sleepLogs = [];
 $('logSleepBtn').addEventListener('pointerup', ()=>{ const s=$('sleepTime').value, w=$('wakeTime').value; if(!s||!w) return alert('Select times'); const [sh,sm]=s.split(':').map(Number), [wh,wm]=w.split(':').map(Number); let start=sh*60+sm, end=wh*60+wm; if(end<=start) end+=24*60; const mins=end-start, hours=mins/60; $('lastSleepDuration').textContent=`${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`; const today=new Date().toISOString().slice(0,10); sleepLogs.push({date:today,hours}); const last7=sleepLogs.slice(-7); const avg=last7.reduce((a,b)=>a+b.hours,0)/(last7.length||1); $('avgSleepDuration').textContent=`${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`; drawSleep(); });
 function drawSleep(){ const c=$('sleepChart'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7=sleepLogs.slice(-7); if(!last7.length) return; const barW=Math.max(18,(c.width-40)/last7.length - 8); last7.forEach((l,i)=>{ const h=Math.min(12,l.hours)/12*(c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+8), c.height-12-h, barW, h); ctx.fillStyle='#334155'; ctx.font='11px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+8), c.height-2); }); }
 
-/* ---------- Meals ---------- */
+/* Meals - robust mobile-friendly implementation */
 function mealsKey(){ return 'lt_meals_' + (new Date()).toISOString().slice(0,10); }
 function loadMeals(){ try{ return JSON.parse(localStorage.getItem(mealsKey())||'[]'); }catch(e){ return []; } }
 function saveMeals(list){ try{ localStorage.setItem(mealsKey(), JSON.stringify(list)); }catch(e){} }
-function renderMeals(){ const list=loadMeals(); const c=$('mealList'); c.innerHTML=''; let totalC=0, totalP=0; list.slice().reverse().forEach(m=>{ const row=document.createElement('div'); row.className='todo-item'; row.innerHTML=`<div style="text-align:left"><strong>${esc(m.name)}</strong><div style="font-size:12px;color:var(--muted)">${esc(m.portion)} unit • ${esc(m.calories)} kcal</div></div><div><button class="btn" style="background:#ef4444" data-delete="${m.id}">Delete</button></div>`; c.appendChild(row); totalC+=Number(m.calories||0); totalP+=Number(m.portion||0); }); $('todayCalories').textContent=totalC; $('todayPortions').textContent=totalP; updateLeftTotals(); drawMealsPie(totalC); }
-$('addMealBtn').addEventListener('pointerup', ()=>{ const name=$('mealName').value.trim(); const portion=Number($('mealPortion').value||0); const calories=Number($('mealCalories').value||0); if(!name) return alert('Enter meal name'); const list=loadMeals(); list.push({id:Date.now(),name,portion,calories,ts:Date.now()}); saveMeals(list); $('mealName').value=''; $('mealPortion').value=''; $('mealCalories').value=''; renderMeals(); });
-$('mealList').addEventListener('pointerup', function(e){ const btn=e.target.closest('button[data-delete]'); if(!btn) return; const id=Number(btn.getAttribute('data-delete')); let list=loadMeals(); list=list.filter(m=>m.id!==id); saveMeals(list); renderMeals(); });
-function drawMealsPie(totalCalories){ const c=$('mealsPie'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const target=2000; const consumed=Math.max(0,Math.min(totalCalories||0,target)); const remaining=Math.max(0,target-consumed); const slices=[{label:'Consumed',value:consumed,color:'#ff9f43'},{label:'Remaining',value:remaining,color:'#e9eefb'}]; const total=Math.max(1,slices.reduce((s,x)=>s+x.value,0)); const cx=c.width/2, cy=c.height/2, r=Math.min(c.width,c.height)*0.38; let start=-Math.PI/2; slices.forEach(s=>{ const ang=(s.value/total)*Math.PI*2; const end=start+ang; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=s.color; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); start=end; }); ctx.fillStyle='#111827'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`,cx,cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`,cx,cy+14); }
+function renderMeals(){
+  const list = loadMeals(); const container = $('mealList'); container.innerHTML=''; let totalC=0, totalP=0;
+  list.slice().reverse().forEach(m=>{
+    const row = document.createElement('div'); row.className='todo-item';
+    row.innerHTML = `<div style="text-align:left"><strong>${esc(m.name)}</strong><div style="font-size:12px;color:var(--muted)">${esc(m.portion)} unit • ${esc(m.calories)} kcal</div></div><div><button class="btn" style="background:#ef4444" data-delete="${m.id}">Delete</button></div>`;
+    container.appendChild(row);
+    totalC += Number(m.calories||0); totalP += Number(m.portion||0);
+  });
+  $('todayCalories').textContent = totalC; $('todayPortions').textContent = totalP; updateLeftTotals(); drawMealsPie(totalC);
+}
 
-/* ---------- Healthy tips (50) ---------- */
+/* The handler below is written carefully to address WebViewer/mobile quirks:
+   - Reads values synchronously when user taps Add
+   - Validates name and numeric fields
+   - Saves to localStorage keyed by today's date
+   - Clears inputs after saving
+   - Uses both pointerup and click to maximize compatibility
+*/
+function addMealHandler(){
+  // Read values directly
+  const nameEl = $('mealName');
+  const portionEl = $('mealPortion');
+  const caloriesEl = $('mealCalories');
+
+  // On some WebView setups, input composition may require finalizing; small delay if composition present
+  // But we must not depend on async; read current values
+  const name = (nameEl.value || '').trim();
+  const portion = Number(portionEl.value || 0);
+  const calories = Number(caloriesEl.value || 0);
+
+  if(!name){ alert('Enter meal name'); nameEl.focus(); return; }
+
+  const list = loadMeals();
+  const item = { id: Date.now(), name, portion, calories, ts: Date.now() };
+  list.push(item);
+  saveMeals(list);
+
+  // Clear inputs (avoids some WebView retaining previous input and confusing user)
+  nameEl.value = '';
+  portionEl.value = '';
+  caloriesEl.value = '';
+
+  // Re-render and provide immediate feedback
+  renderMeals();
+  // Small visual confirmation
+  try{ appendChat('System', `Added meal "${item.name}" (${item.calories} kcal)`); }catch(e){}
+}
+
+// Attach both pointerup and click to be safe
+$('addMealBtn').addEventListener('pointerup', addMealHandler);
+$('addMealBtn').addEventListener('click', addMealHandler);
+
+/* Delete meal */
+$('mealList').addEventListener('pointerup', function(e){
+  const btn = e.target.closest('button[data-delete]');
+  if(!btn) return;
+  const id = Number(btn.getAttribute('data-delete'));
+  let list = loadMeals(); list = list.filter(m=>m.id !== id); saveMeals(list); renderMeals();
+});
+
+/* Draw meals pie */
+function drawMealsPie(totalCalories){
+  const c = $('mealsPie'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  const target = 2000; const consumed = Math.max(0, Math.min(totalCalories||0,target)); const remaining = Math.max(0,target-consumed);
+  const slices = [{label:'Consumed',value:consumed,color:'#ff9f43'},{label:'Remaining',value:remaining,color:'#e9eefb'}];
+  const total = Math.max(1, slices.reduce((s,x)=>s+x.value,0)); const cx = c.width/2, cy = c.height/2, r = Math.min(c.width,c.height)*0.38; let start = -Math.PI/2;
+  slices.forEach(s=>{
+    const ang = (s.value/total) * Math.PI*2; const end = start + ang;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle = s.color; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.stroke(); start = end;
+  });
+  ctx.fillStyle = '#111827'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14);
+}
+
+/* Tips (50) */
 const mealTips = [
 "Eat a colorful plate — fruits and vegetables of different colors.","Include lean protein with every meal (eggs, legumes, fish, chicken).","Choose whole grains over refined grains.","Snack on nuts and seeds instead of chips.","Drink water before meals to prevent overeating.","Favor cooking at home to control ingredients.","Keep portion sizes moderate and consistent.","Include a source of healthy fat (avocado, olive oil).","Limit sugary drinks and choose water or herbal tea.","Eat fiber-rich foods to support digestion and satiety.","Plan meals ahead to avoid impulsive fast food.","Start the day with a balanced breakfast.","Combine protein and carbs for sustained energy.","Add vegetables to sandwiches and omelettes.","Use spices and herbs to flavor instead of salt.","Opt for low-fat dairy or dairy alternatives if needed.","Choose grilled, baked, or steamed foods over fried.","Choose fresh fruit or yogurt for dessert.","Include legumes as a low-cost protein option.","Rotate your protein sources for variety.","Read labels and avoid trans fats or excessive sugar.","Use healthy swaps like zucchini noodles for pasta.","Prepare simple salads with mixed greens and seeds.","Use hummus or Greek yogurt dips for veggies.","Keep healthy snacks visible and accessible.","Reduce processed meat intake; choose lean options.","Balance treats with healthier daily choices.","Have a small protein-rich snack before workouts.","Limit late-night heavy meals that disrupt sleep.","Add chia or flax seeds to smoothies for omega-3s.","Use brown rice or quinoa instead of white rice.","Include fermented foods for gut health (yogurt, idli).","Avoid skipping meals which can lead to overeating later.","Cook in batches and freeze portions for busy days.","Use baking, grilling or air-frying instead of deep frying.","Pick whole fruit instead of fruit juice.","Incorporate leafy greens daily (spinach, kale).","Opt for unsweetened nut butters and spreads.","Be mindful when eating — chew slowly and enjoy.","Limit sugary cereals; choose oats or muesli.","Choose beans and lentils as protein-rich mains.","Use citrus and vinegar for dressings instead of heavy creams.","Try meatless meals a few times a week.","Rotate seasonal vegetables for freshness and nutrients.","Store pre-cut veggies for faster healthy snacking.","Watch portion sizes of calorie-dense foods like nuts.","Seek balance: carbs, protein, fats, fiber every meal.","Plan a weekly menu to reduce decision fatigue."
 ];
 $('toggleTipsBtn').addEventListener('pointerup', ()=>{
-  const c=$('tipsCont'); if(c.style.display==='block'){ c.style.display='none'; c.innerHTML=''; return; } c.innerHTML = mealTips.map((t,i)=>`<div style="padding:8px 6px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${esc(t)}</div>`).join(''); c.style.display='block';
+  const c = $('tipsCont'); if(c.style.display === 'block'){ c.style.display='none'; c.innerHTML=''; return; } c.innerHTML = mealTips.map((t,i)=>`<div style="padding:8px 6px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${esc(t)}</div>`).join(''); c.style.display='block';
 });
 
-/* ---------- File picker (native + drag/drop + manual) ---------- */
-const fileStore = [];
-function showFileList(){ const container=$('fileList'); container.innerHTML=''; fileStore.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML=`<div><div style="font-weight:700">${esc(f.name)}</div><div style="font-size:12px;color:var(--muted)">${Math.round((f.size||0)/1024)} KB • ${esc(f.type||'unknown')}</div></div>`; const actions=document.createElement('div'); const v=document.createElement('button'); v.className='btn'; v.textContent='Preview'; v.style.marginRight='8px'; v.addEventListener('pointerup', ()=>{ if(f.url) try{ window.open(f.url,'_blank'); }catch(e){ alert('Preview failed'); } else alert('No preview'); }); const r=document.createElement('button'); r.className='btn'; r.style.background='#ef4444'; r.textContent='Remove'; r.addEventListener('pointerup', ()=>{ if(f.url && f.url.startsWith('blob:')) URL.revokeObjectURL(f.url); fileStore.splice(i,1); showFileList(); sendFilesToApp(); }); actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); container.appendChild(row); }); container.style.display = fileStore.length ? 'block' : 'none'; }
-function openPicker(){ const input=document.createElement('input'); input.type='file'; input.multiple=true; input.accept='.pdf,.jpg,.jpeg,.png,.doc,.docx,.txt'; input.addEventListener('change', ()=>{ const files=Array.from(input.files||[]); files.forEach(f=>{ const url=URL.createObjectURL(f); fileStore.push({name:f.name,type:f.type,size:f.size,blob:f,url}); }); showFileList(); sendFilesToApp(); }); try{ input.click(); setTimeout(()=>{ if(!input.files || !input.files.length) notifyFilePickerBlocked(); },700); }catch(e){ notifyFilePickerBlocked(); } }
-function notifyFilePickerBlocked(){ const msg=JSON.stringify({action:'REQUEST_FILE_PICKER'}); try{ if(window.AppInventor && typeof window.AppInventor.setWebViewString==='function') window.AppInventor.setWebViewString(msg); }catch(e){} try{ window.postMessage(msg); }catch(e){} }
-function sendFilesToApp(){ const meta=fileStore.map(f=>({name:f.name,size:f.size,type:f.type,url:f.url||''})); const msg=JSON.stringify({action:'FILES_SELECTED',files:meta}); try{ if(window.AppInventor && typeof window.AppInventor.setWebViewString==='function') window.AppInventor.setWebViewString(msg); }catch(e){} try{ window.postMessage(msg); }catch(e){} }
-const dz=$('dropzone'); if(dz){ dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.background='#eef8ff'; }); dz.addEventListener('dragleave', e=>{ e.preventDefault(); dz.style.background=''; }); dz.addEventListener('drop', e=>{ e.preventDefault(); dz.style.background=''; const files=Array.from(e.dataTransfer.files||[]); files.forEach(f=>{ const url=URL.createObjectURL(f); fileStore.push({name:f.name,type:f.type,size:f.size,blob:f,url}); }); showFileList(); sendFilesToApp(); }); }
-$('addManual').addEventListener('pointerup', async ()=>{ const v=$('manualUrl').value.trim(); if(!v){ $('manualStatus').textContent='Paste file URL or data URI'; return; } $('manualStatus').textContent='Adding...'; try{ if(v.startsWith('data:')){ const match=v.match(/^data:([^;]+);base64,(.*)$/); if(!match){ $('manualStatus').textContent='Invalid data URI'; return; } const mime=match[1], b64=match[2]; const bytes=atob(b64); const arr=new Uint8Array(bytes.length); for(let i=0;i<bytes.length;i++) arr[i]=bytes.charCodeAt(i); const blob=new Blob([arr], {type:mime}); const name='pasted.'+(mime.split('/')[1]||'bin'); const url=URL.createObjectURL(blob); fileStore.push({name,type:mime,size:blob.size,blob,url}); $('manualStatus').textContent='Added base64 file: '+name; showFileList(); sendFilesToApp(); return; } const resp=await fetch(v); if(!resp.ok){ $('manualStatus').textContent='Failed to fetch URL'; return; } const blob=await resp.blob(); const name=v.split('/').pop().split('?')[0] || ('file-'+Date.now()); const url=URL.createObjectURL(blob); fileStore.push({name,type:blob.type,size:blob.size,blob,url}); $('manualStatus').textContent='Added file: '+name; showFileList(); sendFilesToApp(); }catch(err){ $('manualStatus').textContent='Error: '+(err && err.message?err.message:'unknown'); } $('manualUrl').value=''; });
-function clearFileStore(){ fileStore.forEach(f=>{ if(f.url && f.url.startsWith('blob:')) URL.revokeObjectURL(f.url); }); fileStore.length=0; showFileList(); $('manualStatus').textContent='Cleared'; sendFilesToApp(); }
+/* Minor visuals & boot */
+function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const v = Number($('moodValue').textContent||5); const w = (v/10)*(c.width-40); ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#2163ff'; ctx.fillRect(20, c.height/2-18, w, 36); ctx.fillStyle='#0f1724'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${v}`,22,c.height/2-24); }
+function drawSleep(){ const c=$('sleepChart'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7 = sleepLogs.slice(-7); if(!last7.length) return; const barW = Math.max(18, (c.width-40)/last7.length - 8); last7.forEach((l,i)=>{ const h = Math.min(12,l.hours)/12 * (c.height-30); ctx.fillStyle = '#7b61ff'; ctx.fillRect(20 + i*(barW+8), c.height-12-h, barW, h); ctx.fillStyle = '#334155'; ctx.font='11px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+8), c.height-2); }); }
 
-/* ---------- small visuals ---------- */
-function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const v=Number($('moodValue').textContent||5); const w=(v/10)*(c.width-40); ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#2163ff'; ctx.fillRect(20,c.height/2-18,w,36); ctx.fillStyle='#0f1724'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${v}`,22,c.height/2-24); }
-function drawMealsPie(totalCalories){ const c=$('mealsPie'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const target=2000; const consumed=Math.max(0,Math.min(totalCalories||0,target)); const remaining=Math.max(0,target-consumed); const slices=[{label:'Consumed',value:consumed,color:'#ff9f43'},{label:'Remaining',value:remaining,color:'#e9eefb'}]; const total=Math.max(1,slices.reduce((s,x)=>s+x.value,0)); const cx=c.width/2, cy=c.height/2, r=Math.min(c.width,c.height)*0.38; let start=-Math.PI/2; slices.forEach(s=>{ const ang=(s.value/total)*Math.PI*2; const end=start+ang; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=s.color; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); start=end; }); ctx.fillStyle='#111827'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`,cx,cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`,cx,cy+14); }
-function drawWater(){ const c=$('waterCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal=Number($('goalWater').value||0); const consumed=Number(window._lt_water||0); const ratio=goal>0?Math.min(consumed/goal,1):0; const w=(c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20,c.height/2-12,w,24); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w,c.height/2-12,c.width-40-w,24); ctx.fillStyle='#334155'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`,20,c.height/2-18); }
-
-/* ---------- boot ---------- */
+/* Boot */
 (function boot(){
-  try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water=0; }
+  try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water = 0; }
   $('waterConsumed').textContent = window._lt_water;
-  $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0)-window._lt_water,0);
-  renderMeals(); drawMealsPie(0); drawWater(); drawMood(); drawSleep(); showFileList();
-  document.querySelectorAll('.tile').forEach(t=>t.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); t.click(); } }));
+  $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0) - window._lt_water, 0);
+  renderMeals();
+  drawMealsPie(Number($('todayCalories').textContent || 0));
+  drawWater();
+  drawMood();
+  drawSleep();
+  document.querySelectorAll('.tile').forEach(t => t.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); t.click(); } }));
 })();
 
-/* ---------- small helpers ---------- */
 function updateLeftTotals(){ $('todayCaloriesLeft').textContent = $('todayCalories').textContent || '0'; $('waterConsumedLeft').textContent = $('waterConsumed').textContent || '0'; }
 
-/* ---------- optional AppInventor bridge ---------- */
+/* Simple bridging object for host if needed */
 window.LifeTrack = {
-  getFilesMetadata: ()=> fileStore.map(f=>({name:f.name,type:f.type,size:f.size,url:f.url||''})),
-  importFiles: function(list){ (list||[]).forEach(i=> { fileStore.push({name:i.name,type:i.type,size:i.size,url:i.uri||''}); }); showFileList(); }
+  getMealsKey: mealsKey,
+  getMeals: loadMeals,
+  importMeals: function(list){ const current = loadMeals(); (list||[]).forEach(i=> current.push(i)); saveMeals(current); renderMeals(); }
 };
 </script>
 </body>
