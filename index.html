@@ -1,41 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>LifeTrack — Mobile Fixed</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Life track dashboard welcome user</title>
 <style>
-  :root{ --accent:#5063f2; --bg:#f6f8fb; --card:#e6e8f2; --text:#0f1724; --muted:#6b7280; --font:system-ui,-apple-system,Segoe UI,Roboto; }
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);font-family:var(--font);-webkit-tap-highlight-color:transparent}
-  .wrap{max-width:420px;margin:12px auto;padding:12px;position:relative}
-  .top{display:flex;gap:10px;align-items:center;margin-bottom:12px}
-  .gear{width:44px;height:44px;border-radius:10px;background:#fff;border:1px solid var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
-  .header{flex:1;padding:10px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7b61ff);color:#fff;text-align:center}
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
-  .card{background:#fff;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;min-height:70px;cursor:pointer;border:1px solid var(--card);font-weight:700;touch-action:manipulation}
-  .screen{display:none;background:#fff;padding:12px;border-radius:10px;border:1px solid var(--card);margin-bottom:12px}
-  .visible{display:block}
-  .btn{display:block;width:100%;max-width:340px;margin:8px auto;padding:11px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;touch-action:manipulation}
-  input,select,textarea{display:block;width:100%;max-width:340px;margin:8px auto;padding:10px;border-radius:8px;border:1px solid var(--card)}
-  .chatbox{height:200px;overflow:auto;border:1px solid #eef2ff;padding:10px;border-radius:8px;background:#fbfdff}
-  .meta-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-  #tipsCont,#fileList{display:none;max-height:300px;overflow:auto;border:1px solid var(--card);padding:8px;border-radius:8px;background:#fff}
-  .file-row{display:flex;justify-content:space-between;align-items:center;padding:8px 6px;border-bottom:1px dashed #f1f5ff}
-  .file-row button{margin-left:8px;padding:6px 8px;border-radius:8px;border:0;cursor:pointer}
-  .view{background:#2b6ef6;color:#fff}
-  .rem{background:#ef4444;color:#fff}
-  .todo-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--card);border-radius:8px;margin:8px 0;background:#fff}
-  canvas{display:block;margin:10px auto;max-width:100%}
-  .settings-panel{position:fixed;left:12px;right:12px;top:60px;background:#fff;border:1px solid var(--card);padding:12px;border-radius:12px;box-shadow:0 12px 30px rgba(16,24,40,0.12);z-index:999;display:none;max-width:420px;margin:0 auto}
-  .small{font-size:13px;color:var(--muted)}
+:root{--accent:#5063f2;--bg:#f6f8fb;--card:#e6e8f2;--text:#0f1724;--muted:#6b7280;font-family:system-ui,-apple-system,Segoe UI,Roboto}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text)}
+.wrap{max-width:480px;margin:12px auto;padding:12px}
+.top{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.gear{width:44px;height:44px;border-radius:10px;background:#fff;border:1px solid var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
+.header{flex:1;padding:10px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7b61ff);color:#fff;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+.card{background:#fff;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;min-height:66px;cursor:pointer;border:1px solid var(--card);font-weight:700;touch-action:manipulation}
+.screen{display:none;background:#fff;padding:12px;border-radius:10px;border:1px solid var(--card);margin-bottom:12px}
+.visible{display:block}
+.btn{display:block;width:100%;max-width:420px;margin:8px auto;padding:11px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;touch-action:manipulation}
+input,select,textarea{display:block;width:100%;max-width:420px;margin:8px auto;padding:10px;border-radius:8px;border:1px solid var(--card)}
+.chatbox{height:200px;overflow:auto;border:1px solid #eef2ff;padding:10px;border-radius:8px;background:#fbfdff}
+.meta-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#tipsCont,#fileList{display:none;max-height:320px;overflow:auto;border:1px solid var(--card);padding:8px;border-radius:8px;background:#fff}
+.file-row{display:flex;justify-content:space-between;align-items:center;padding:8px 6px;border-bottom:1px dashed #f1f5ff}
+.file-row button{margin-left:8px;padding:6px 8px;border-radius:8px;border:0;cursor:pointer}
+.view{background:#2b6ef6;color:#fff}
+.rem{background:#ef4444;color:#fff}
+.todo-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--card);border-radius:8px;margin:8px 0;background:#fff}
+canvas{display:block;margin:10px auto;max-width:100%}
+.settings-panel{position:fixed;left:12px;right:12px;top:60px;background:#fff;border:1px solid var(--card);padding:12px;border-radius:12px;box-shadow:0 12px 30px rgba(16,24,40,0.12);z-index:999;display:none;max-width:480px;margin:0 auto}
+.small{font-size:13px;color:var(--muted)}
+.dropzone{border:2px dashed #dbeafe;border-radius:8px;padding:12px;text-align:center;color:#374151;background:#fff;margin:8px 0}
+.file-preview{font-size:13px;color:#374151}
 </style>
 </head>
 <body>
 <div class="wrap" id="app">
   <div class="top">
     <div class="gear" id="settingsToggle" role="button" tabindex="0" aria-label="Settings">⚙️</div>
-    <div class="header"><h2 style="margin:0">LifeTrack</h2><div style="opacity:0.95;font-weight:600">Mobile ready</div></div>
+    <div class="header">
+      <h2 style="margin:0">Life track dashboard welcome user</h2>
+      <div style="opacity:0.95;font-weight:600">Mobile ready</div>
+    </div>
   </div>
 
   <div class="grid" id="quickGrid" role="list">
@@ -43,16 +48,17 @@
     <div class="card" data-target="mood" role="listitem" tabindex="0">📊 Mood</div>
     <div class="card" data-target="rem" role="listitem" tabindex="0">✅ Reminders</div>
     <div class="card" data-target="timer" role="listitem" tabindex="0">⏱ Timer</div>
-    <div class="card" id="uploadBtn" role="listitem" tabindex="0">📂 Upload Medical Files</div>
+    <div class="card" id="uploadBtn" role="listitem" tabindex="0">📂 Choose files</div>
     <div class="card" data-target="hydration" role="listitem" tabindex="0">💧 Hydration</div>
     <div class="card" data-target="sleep" role="listitem" tabindex="0">🌙 Sleep</div>
     <div class="card" data-target="meals" role="listitem" tabindex="0">🍽 Meals</div>
   </div>
 
-  <input id="fileInput" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" style="display:none"/>
+  <input id="fileInput" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" style="display:none">
+
   <div id="fileList" aria-live="polite"></div>
 
-  <!-- Screens -->
+  <!-- Chat -->
   <section class="screen visible" id="chat">
     <h3>Chatbot</h3>
     <div id="chatbox" class="chatbox"></div>
@@ -61,6 +67,7 @@
     <button class="btn" id="btnTip">📚 Study Tip</button>
   </section>
 
+  <!-- Mood -->
   <section class="screen" id="mood">
     <h3>Mood</h3>
     <p class="small">Log mood 1–10</p>
@@ -69,16 +76,18 @@
     <canvas id="moodCanvas" width="360" height="120"></canvas>
   </section>
 
+  <!-- Reminders -->
   <section class="screen" id="rem">
     <h3>Reminders</h3>
-    <input id="remText" type="text" placeholder="Reminder text"/>
+    <input id="remText" type="text" placeholder="Reminder text">
     <button class="btn" id="addRemBtn">Add</button>
     <div id="remList"></div>
   </section>
 
+  <!-- Timer -->
   <section class="screen" id="timer">
     <h3>Focus Timer</h3>
-    <input id="minutes" type="number" placeholder="Minutes"/>
+    <input id="minutes" type="number" placeholder="Minutes">
     <label class="small">Choose ringtone</label>
     <select id="alarmSelect" aria-label="Alarm ringtone"></select>
     <button class="btn" id="startTimerBtn">Start</button>
@@ -97,33 +106,36 @@
     <audio id="alarm10" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/02/20/audio_ab3a610f7f.mp3"></audio>
   </section>
 
+  <!-- Hydration -->
   <section class="screen" id="hydration">
     <h3>Hydration</h3>
-    <input id="goalWater" type="number" placeholder="Daily goal (ml)" value="2000"/>
-    <input id="logWater" type="number" placeholder="Log intake (ml)" value="250"/>
+    <input id="goalWater" type="number" placeholder="Daily goal (ml)" value="2000">
+    <input id="logWater" type="number" placeholder="Log intake (ml)" value="250">
     <button class="btn" id="addWaterBtn">Add intake</button>
     <div class="meta-row"><div>Consumed: <strong id="waterConsumed">0</strong> ml</div><div>Remaining: <strong id="waterRemaining">2000</strong> ml</div></div>
-    <input id="waterInterval" type="number" placeholder="Reminder interval (minutes)" value="60"/>
+    <input id="waterInterval" type="number" placeholder="Reminder interval (minutes)" value="60">
     <button class="btn" id="startHydBtn">Start reminders</button>
     <button class="btn" id="stopHydBtn">Stop reminders</button>
     <canvas id="waterCanvas" width="360" height="100"></canvas>
   </section>
 
+  <!-- Sleep -->
   <section class="screen" id="sleep">
     <h3>Sleep Analytics</h3>
-    <input id="sleepTime" type="time"/>
-    <input id="wakeTime" type="time"/>
+    <input id="sleepTime" type="time">
+    <input id="wakeTime" type="time">
     <button class="btn" id="logSleepBtn">Log sleep</button>
     <p>Last duration: <strong id="lastSleepDuration">0h 0m</strong></p>
     <p>7-day average: <strong id="avgSleepDuration">0h 0m</strong></p>
     <canvas id="sleepChart" width="360" height="100"></canvas>
   </section>
 
+  <!-- Meals -->
   <section class="screen" id="meals">
     <h3>Meal Tracking</h3>
-    <input id="mealName" type="text" placeholder="Meal name"/>
-    <input id="mealPortion" type="number" placeholder="Portion (ml or g)"/>
-    <input id="mealCalories" type="number" placeholder="Calories (kcal)"/>
+    <input id="mealName" type="text" placeholder="Meal name">
+    <input id="mealPortion" type="number" placeholder="Portion (ml or g)">
+    <input id="mealCalories" type="number" placeholder="Calories (kcal)">
     <button class="btn" id="addMealBtn">Add meal</button>
     <div class="meta-row"><div>Today kcal: <strong id="todayCalories">0</strong></div><div>Today portions: <strong id="todayPortions">0</strong></div></div>
     <p>Recent entries</p><div id="mealList"></div>
@@ -133,31 +145,34 @@
   </section>
 </div>
 
-<!-- Settings panel -->
+<!-- Settings -->
 <div class="settings-panel" id="settingsPanel" role="dialog" aria-hidden="true">
   <h3 style="margin:0 0 8px 0">App Settings</h3>
   <div class="small">Font size</div>
-  <input id="fontSize" type="range" min="12" max="20" value="16"/>
+  <input id="fontSize" type="range" min="12" max="20" value="16">
   <div class="small">Theme color</div>
-  <input id="themeColor" type="color" value="#5063f2"/>
+  <input id="themeColor" type="color" value="#5063f2">
   <div style="display:flex;gap:8px;margin-top:10px">
     <button class="btn" id="saveSettings">Save</button>
     <button class="btn" id="resetSettings" style="background:#ef4444">Reset</button>
   </div>
+  <hr>
+  <div class="small" style="margin-top:8px">Choose files (pure HTML fallbacks)</div>
+  <div class="dropzone" id="dropzone">Drag & drop files here, or tap "Choose files" above. You can also paste a file URL or paste base64 data below.</div>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <input id="manualUrl" type="text" placeholder="Paste file URL or base64 (data:...)" />
+    <button class="btn" id="addManual" style="width:120px">Add</button>
+  </div>
+  <div id="manualStatus" class="file-preview" style="margin-top:8px"></div>
 </div>
 
 <script>
 /* ---------- Helpers ---------- */
 const $ = id => document.getElementById(id);
 function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('visible'));
-  const el = $(id);
-  if(el){ el.classList.add('visible'); el.style.display='block'; el.scrollIntoView({behavior:'smooth',block:'start'}); }
-  hideSettings(); hideTips(); hideFiles();
-}
+function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('visible')); const el=$(id); if(el){ el.classList.add('visible'); el.scrollIntoView({behavior:'smooth',block:'start'}); } hideSettings(); hideTips(); hideFiles(); }
 
-/* ---------- Make grid cards responsive on mobile ---------- */
+/* ---------- Grid card tap handling (pointer) ---------- */
 document.getElementById('quickGrid').addEventListener('pointerup', function(e){
   const card = e.target.closest('.card');
   if(!card) return;
@@ -166,32 +181,19 @@ document.getElementById('quickGrid').addEventListener('pointerup', function(e){
   else if(card.id === 'uploadBtn') openPicker();
 });
 document.getElementById('quickGrid').addEventListener('keydown', function(e){
-  if(e.key==='Enter' || e.key===' ') { e.preventDefault(); const card = e.target.closest('.card'); if(card){ const target = card.getAttribute('data-target'); if(target) showScreen(target); else if(card.id==='uploadBtn') openPicker(); } }
+  if(e.key==='Enter' || e.key===' ') { e.preventDefault(); const card = e.target.closest('.card'); if(card){ const t = card.getAttribute('data-target'); if(t) showScreen(t); else if(card.id==='uploadBtn') openPicker(); } }
 });
 
-/* ---------- Settings panel ---------- */
-const settingsPanel = $('settingsPanel');
-function showSettings(){ settingsPanel.style.display='block'; settingsPanel.setAttribute('aria-hidden','false'); }
-function hideSettings(){ settingsPanel.style.display='none'; settingsPanel.setAttribute('aria-hidden','true'); }
-$('settingsToggle').addEventListener('pointerup', ()=> settingsPanel.style.display==='block' ? hideSettings() : showSettings());
-$('settingsToggle').addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); settingsPanel.style.display==='block' ? hideSettings() : showSettings(); } });
-
-const SETTINGS_KEY = 'lt_settings_v2';
-function loadSettings(){ try{ const s = localStorage.getItem(SETTINGS_KEY); return s ? JSON.parse(s) : null; }catch(e){ return null; } }
+/* ---------- Settings ---------- */
+function showSettings(){ $('settingsPanel').style.display='block'; $('settingsPanel').setAttribute('aria-hidden','false'); }
+function hideSettings(){ $('settingsPanel').style.display='none'; $('settingsPanel').setAttribute('aria-hidden','true'); }
+$('settingsToggle').addEventListener('pointerup', ()=> $('settingsPanel').style.display==='block' ? hideSettings() : showSettings());
+$('settingsToggle').addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); $('settingsPanel').style.display==='block' ? hideSettings() : showSettings(); }});
+const SETTINGS_KEY = 'lt_settings_full_v1';
+function loadSettings(){ try{ return JSON.parse(localStorage.getItem(SETTINGS_KEY)||'null'); }catch(e){ return null; } }
 function saveSettings(cfg){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(cfg)); }catch(e){} }
-function applySettings(cfg){
-  if(!cfg) return;
-  if(cfg.fontSize) document.documentElement.style.fontSize = cfg.fontSize + 'px';
-  if(cfg.themeColor) document.documentElement.style.setProperty('--accent', cfg.themeColor);
-}
-(function initSettings(){
-  const s = loadSettings();
-  if(s){ applySettings(s); $('fontSize').value = s.fontSize || 16; $('themeColor').value = s.themeColor || '#5063f2'; }
-  $('fontSize').addEventListener('input', e=> document.documentElement.style.fontSize = e.target.value + 'px');
-  $('themeColor').addEventListener('input', e=> document.documentElement.style.setProperty('--accent', e.target.value));
-  $('saveSettings').addEventListener('pointerup', ()=>{ const cfg = { fontSize:Number($('fontSize').value), themeColor:$('themeColor').value }; saveSettings(cfg); applySettings(cfg); alert('Settings saved'); hideSettings(); });
-  $('resetSettings').addEventListener('pointerup', ()=>{ localStorage.removeItem(SETTINGS_KEY); location.reload(); });
-})();
+function applySettings(cfg){ if(!cfg) return; if(cfg.fontSize) document.documentElement.style.fontSize = cfg.fontSize + 'px'; if(cfg.themeColor) document.documentElement.style.setProperty('--accent', cfg.themeColor); }
+(function initSettings(){ const s=loadSettings(); if(s){ applySettings(s); $('fontSize').value = s.fontSize || 16; $('themeColor').value = s.themeColor || '#5063f2'; } $('fontSize').addEventListener('input', e=> document.documentElement.style.fontSize = e.target.value + 'px'); $('themeColor').addEventListener('input', e=> document.documentElement.style.setProperty('--accent', e.target.value)); $('saveSettings').addEventListener('pointerup', ()=>{ const cfg={fontSize:Number($('fontSize').value), themeColor:$('themeColor').value}; saveSettings(cfg); applySettings(cfg); alert('Settings saved'); hideSettings(); }); $('resetSettings').addEventListener('pointerup', ()=>{ localStorage.removeItem(SETTINGS_KEY); location.reload(); }); })();
 
 /* ---------- Chatbot (50 jokes + 50 tips) ---------- */
 const jokes = [
@@ -214,222 +216,146 @@ const jokes = [
 const studyTips = [
 "Break study sessions into 25-minute chunks with 5-minute breaks.","Teach what you learn — explaining helps retention.","Use flashcards for active recall.","Review material within 24 hours.","Create a distraction-free study space.","Set clear goals for each session.","Use mnemonic devices.","Practice past papers under timed conditions.","Summarize notes in your own words.","Use diagrams and mind maps.","Sleep well — memory consolidates during rest.","Stay hydrated and eat brain-friendly foods.","Avoid multitasking.","Use spaced repetition.","Study at your peak energy time.","Group study for tough topics.","Use apps like Anki or Quizlet.","Record yourself explaining topics.","Color-code notes.","Reward yourself after tasks.","Spread learning over days, not cramming.","Apply the Feynman technique.","Take movement/stretch breaks.","Turn off notifications.","Use background music if it helps.","Make a weekly checklist.","Start with the hardest subject.","Use real-world examples.","Ask questions to deepen understanding.","Use sticky notes for key facts.","Teach a friend or sibling.","Watch short explainer videos.","Keep a study journal.","Visualize exam success.","Don’t hesitate to ask for help.","Stay consistent with daily effort.","Use analogies to simplify.","Practice writing essays.","Limit social media.","Use timers to stay on track.","Keep your desk tidy.","Drink water before and during study.","Use site blockers for focus.","Make your own quizzes.","Combine words + visuals (dual coding).","Celebrate small wins.","Stay positive — mindset matters.","Track your time to find patterns.","Reflect on what worked and what didn’t.","Balance study with exercise and relaxation."
 ];
-
-function appendChat(user, bot){
-  const box = $('chatbox');
-  box.innerHTML += `<p style="margin:6px 0"><strong>You:</strong> ${escapeHtml(user)}</p><p style="margin:6px 0"><strong>Bot:</strong> ${escapeHtml(bot)}</p>`;
-  box.scrollTop = box.scrollHeight;
-}
 $('btnWeather').addEventListener('pointerup', ()=> appendChat("What's the weather?", "Sunny and 28°C (example)."));
 $('btnJoke').addEventListener('pointerup', ()=> appendChat("Tell me a joke", jokes[Math.floor(Math.random()*jokes.length)]));
 $('btnTip').addEventListener('pointerup', ()=> appendChat("Give me a study tip", studyTips[Math.floor(Math.random()*studyTips.length)]));
+function appendChat(user, bot){ const box=$('chatbox'); box.innerHTML += `<p style="margin:6px 0"><strong>You:</strong> ${escapeHtml(user)}</p><p style="margin:6px 0"><strong>Bot:</strong> ${escapeHtml(bot)}</p>`; box.scrollTop = box.scrollHeight; }
 
 /* ---------- Reminders ---------- */
 $('addRemBtn').addEventListener('pointerup', ()=> {
-  const txt = $('remText').value.trim(); if(!txt) return;
-  const el = document.createElement('div'); el.className='todo-item';
-  el.innerHTML = `<div>${escapeHtml(txt)}</div><div><button class="btn" style="background:#ef4444" onclick="this.closest('.todo-item').remove()">Delete</button></div>`;
-  $('remList').prepend(el); $('remText').value='';
+  const t=$('remText').value.trim(); if(!t) return;
+  const div=document.createElement('div'); div.className='todo-item';
+  div.innerHTML = `<div>${escapeHtml(t)}</div><div><button class="btn" style="background:#ef4444" onclick="this.closest('.todo-item').remove()">Delete</button></div>`;
+  $('remList').prepend(div); $('remText').value='';
 });
 
-/* ---------- Timer & ringtones (10) ---------- */
+/* ---------- Timer (10 ringtones) ---------- */
 const ringtoneList = [
-  {id:'alarm1', label:'Beep'}, {id:'alarm2', label:'Marimba'}, {id:'alarm3', label:'Bell'},
-  {id:'alarm4', label:'Digital'}, {id:'alarm5', label:'Chime'}, {id:'alarm6', label:'Tone A'},
-  {id:'alarm7', label:'Tone B'}, {id:'alarm8', label:'Pluck'}, {id:'alarm9', label:'Ping'}, {id:'alarm10', label:'Alert'}
+  {id:'alarm1',label:'Beep'},{id:'alarm2',label:'Marimba'},{id:'alarm3',label:'Bell'},
+  {id:'alarm4',label:'Digital'},{id:'alarm5',label:'Chime'},{id:'alarm6',label:'Tone A'},
+  {id:'alarm7',label:'Tone B'},{id:'alarm8',label:'Pluck'},{id:'alarm9',label:'Ping'},{id:'alarm10',label:'Alert'}
 ];
 const alarmSelect = $('alarmSelect');
-ringtoneList.forEach(r=>{ const opt = document.createElement('option'); opt.value = r.id; opt.textContent = r.label; alarmSelect.appendChild(opt); });
-
-let timerInterval = null;
-$('startTimerBtn').addEventListener('pointerup', ()=> {
-  const mins = Number($('minutes').value||0); if(!mins || mins<=0) return alert('Enter minutes');
-  let seconds = Math.round(mins*60);
-  const countdown = $('countdown');
-  const choice = alarmSelect.value;
+ringtoneList.forEach(r=>{ const o=document.createElement('option'); o.value=r.id; o.textContent=r.label; alarmSelect.appendChild(o); });
+let timerInterval=null;
+$('startTimerBtn').addEventListener('pointerup', ()=>{
+  const mins=Number($('minutes').value||0); if(!mins||mins<=0) return alert('Enter minutes');
+  let seconds=Math.round(mins*60); const countdown=$('countdown'); const choice=alarmSelect.value;
   if(timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(()=>{
-    const m = Math.floor(seconds/60), s = seconds%60;
-    countdown.textContent = `${m}:${s<10?'0':''}${s}`;
-    if(seconds-- <= 0){
-      clearInterval(timerInterval); timerInterval = null; countdown.textContent = 'Done';
-      playAlarm(choice);
-    }
-  },1000);
+  timerInterval=setInterval(()=>{ const m=Math.floor(seconds/60), s=seconds%60; countdown.textContent=`${m}:${s<10?'0':''}${s}`; if(seconds--<=0){ clearInterval(timerInterval); timerInterval=null; countdown.textContent='Done'; playAlarm(choice); } },1000);
 });
-function playAlarm(id){
-  try{
-    const a = $(id);
-    if(!a) return;
-    a.currentTime = 0;
-    a.play().catch(()=>{ /* WebView may block autoplay until user gesture; start button is a gesture */ });
-  }catch(e){}
-}
+function playAlarm(id){ try{ const a=$(id); if(!a) return; a.currentTime=0; a.play().catch(()=>{}); }catch(e){} }
 
 /* ---------- Hydration ---------- */
-let hydrationTimer = null;
-(function initHydration(){
-  try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water = 0; }
-  $('waterConsumed').textContent = window._lt_water;
-  $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0) - window._lt_water, 0);
-})();
-$('addWaterBtn').addEventListener('pointerup', ()=>{
-  const v = Number($('logWater').value||0); if(!v || v<=0) return alert('Enter ml');
-  window._lt_water = (window._lt_water || 0) + v;
-  try{ localStorage.setItem('lt_water', String(window._lt_water)); }catch(e){}
-  $('waterConsumed').textContent = window._lt_water;
-  $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0) - window._lt_water, 0);
-  drawWater();
-});
-$('startHydBtn').addEventListener('pointerup', ()=>{
-  const mins = Number($('waterInterval').value||0); if(!mins || mins<=0) return alert('Enter minutes');
-  if(hydrationTimer) clearInterval(hydrationTimer);
-  hydrationTimer = setInterval(()=> alert('Hydration reminder'), mins*60000);
-  alert('Hydration reminders started');
-});
+let hydrationTimer=null;
+(function initHyd(){ try{ window._lt_water=Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water=0; } $('waterConsumed').textContent=window._lt_water; $('waterRemaining').textContent=Math.max(Number($('goalWater').value||0)-window._lt_water,0); drawWater(); })();
+$('addWaterBtn').addEventListener('pointerup', ()=>{ const v=Number($('logWater').value||0); if(!v||v<=0) return alert('Enter ml'); window._lt_water=(window._lt_water||0)+v; try{ localStorage.setItem('lt_water', String(window._lt_water)); }catch(e){} $('waterConsumed').textContent=window._lt_water; $('waterRemaining').textContent=Math.max(Number($('goalWater').value||0)-window._lt_water,0); drawWater(); });
+$('startHydBtn').addEventListener('pointerup', ()=>{ const m=Number($('waterInterval').value||0); if(!m||m<=0) return alert('Enter minutes'); if(hydrationTimer) clearInterval(hydrationTimer); hydrationTimer=setInterval(()=> alert('Hydration reminder'), m*60000); alert('Hydration reminders started'); });
 $('stopHydBtn').addEventListener('pointerup', ()=>{ if(hydrationTimer){ clearInterval(hydrationTimer); hydrationTimer=null; alert('Hydration reminders stopped'); }});
-function drawWater(){
-  const c = $('waterCanvas'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
-  const goal = Number($('goalWater').value||0); const consumed = Number(window._lt_water||0);
-  const ratio = goal>0? Math.min(consumed/goal,1):0; const w = (c.width-40)*ratio;
-  ctx.fillStyle = '#34d399'; ctx.fillRect(20, c.height/2-10, w, 20);
-  ctx.fillStyle = '#e6e8f2'; ctx.fillRect(20+w, c.height/2-10, c.width-40-w,20);
-  ctx.fillStyle = '#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`, 20, c.height/2-18);
-}
+function drawWater(){ const c=$('waterCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal=Number($('goalWater').value||0); const consumed=Number(window._lt_water||0); const ratio=goal>0?Math.min(consumed/goal,1):0; const w=(c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20,c.height/2-10,w,20); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w,c.height/2-10,c.width-40-w,20); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`,20,c.height/2-18); }
 
 /* ---------- Sleep ---------- */
-let sleepLogs = [];
-$('logSleepBtn').addEventListener('pointerup', ()=>{
-  const s = $('sleepTime').value, w = $('wakeTime').value; if(!s||!w) return alert('Select times');
-  const [sh,sm]=s.split(':').map(Number), [wh,wm]=w.split(':').map(Number);
-  let start = sh*60+sm, end = wh*60+wm; if(end<=start) end+=24*60;
-  const mins = end-start, hours = mins/60;
-  $('lastSleepDuration').textContent = `${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`;
-  const today = new Date().toISOString().slice(0,10);
-  sleepLogs.push({date:today, hours});
-  const last7 = sleepLogs.slice(-7); const avg = last7.reduce((a,b)=>a+b.hours,0)/(last7.length||1);
-  $('avgSleepDuration').textContent = `${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`;
-  drawSleep();
-});
-function drawSleep(){
-  const c = $('sleepChart'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
-  const last7 = sleepLogs.slice(-7); if(!last7.length) return;
-  const barW = Math.max(12, (c.width-40)/last7.length - 6);
-  last7.forEach((l,i)=>{ const h = Math.min(12,l.hours)/12 * (c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+6), c.height-12-h, barW, h); ctx.fillStyle='#333'; ctx.font='10px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+6), c.height-2); });
-}
+let sleepLogs=[];
+$('logSleepBtn').addEventListener('pointerup', ()=>{ const s=$('sleepTime').value, w=$('wakeTime').value; if(!s||!w) return alert('Select times'); const [sh,sm]=s.split(':').map(Number), [wh,wm]=w.split(':').map(Number); let start=sh*60+sm, end=wh*60+wm; if(end<=start) end+=24*60; const mins=end-start, hours=mins/60; $('lastSleepDuration').textContent=`${Math.floor(hours)}h ${Math.round((hours%1)*60)}m`; const today=new Date().toISOString().slice(0,10); sleepLogs.push({date:today,hours}); const last7=sleepLogs.slice(-7); const avg= last7.reduce((a,b)=>a+b.hours,0)/(last7.length||1); $('avgSleepDuration').textContent=`${Math.floor(avg)}h ${Math.round((avg%1)*60)}m`; drawSleep(); });
+function drawSleep(){ const c=$('sleepChart'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const last7=sleepLogs.slice(-7); if(!last7.length) return; const barW=Math.max(12,(c.width-40)/last7.length - 6); last7.forEach((l,i)=>{ const h=Math.min(12,l.hours)/12*(c.height-30); ctx.fillStyle='#7b61ff'; ctx.fillRect(20 + i*(barW+6), c.height-12-h, barW, h); ctx.fillStyle='#333'; ctx.font='10px system-ui'; ctx.fillText(l.date.slice(5), 20 + i*(barW+6), c.height-2); }); }
 
-/* ---------- Meals (persisted, mobile-fixed) ---------- */
+/* ---------- Meals (mobile-fixed) ---------- */
 function mealsKey(){ return 'lt_meals_' + (new Date()).toISOString().slice(0,10); }
 function loadMeals(){ try{ return JSON.parse(localStorage.getItem(mealsKey())||'[]'); }catch(e){ return []; } }
-function saveMeals(list){ localStorage.setItem(mealsKey(), JSON.stringify(list)); }
-function renderMeals(){
-  const list = loadMeals(); const container = $('mealList'); container.innerHTML=''; let totalCalories=0, totalPortions=0;
-  list.slice().reverse().forEach(m=>{
-    const row = document.createElement('div'); row.className='todo-item';
-    row.innerHTML = `<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div style="font-size:12px;color:${'#6b7280'}">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div><div><button class="btn" style="background:#ef4444" data-delete="${m.id}">Delete</button></div>`;
-    container.appendChild(row);
-    totalCalories += Number(m.calories||0);
-    totalPortions += Number(m.portion||0);
-  });
-  $('todayCalories').textContent = totalCalories;
-  $('todayPortions').textContent = totalPortions;
-  drawMealsPie(totalCalories);
-}
-/* event delegation for delete buttons to work on mobile */
-$('mealList').addEventListener('pointerup', function(e){
-  const btn = e.target.closest('button[data-delete]');
-  if(!btn) return;
-  const id = Number(btn.getAttribute('data-delete'));
-  removeMeal(id);
-});
-$('addMealBtn').addEventListener('pointerup', ()=>{
-  const name = $('mealName').value.trim(); const portion = Number($('mealPortion').value||0); const calories = Number($('mealCalories').value||0);
-  if(!name) return alert('Enter meal name');
-  const list = loadMeals(); list.push({id: Date.now(), name, portion, calories, ts: Date.now()}); saveMeals(list);
-  $('mealName').value=''; $('mealPortion').value=''; $('mealCalories').value='';
-  renderMeals();
-});
-function removeMeal(id){
-  let list = loadMeals(); list = list.filter(m=>m.id !== id); saveMeals(list); renderMeals();
-}
-function drawMealsPie(totalCalories){
-  const c = $('mealsPie'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
-  const target = 2000; const consumed = Math.max(0, Math.min(totalCalories||0, target)); const remaining = Math.max(0, target - consumed);
-  const slices = [{label:'Consumed', value:consumed, color:'#ff9f43'},{label:'Remaining', value:remaining, color:'#e9eefb'}];
-  const total = Math.max(1, slices.reduce((s,x)=>s+x.value,0));
-  const cx = c.width/2, cy = c.height/2, r = Math.min(c.width, c.height)*0.38; let start = -Math.PI/2;
-  slices.forEach(s=>{
-    const ang = (s.value/total)*Math.PI*2; const end = start + ang;
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath();
-    ctx.fillStyle = s.color; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.stroke();
-    start = end;
-  });
-  ctx.fillStyle = '#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14);
-  const lx=12, ly=12; slices.forEach((s,i)=>{ const y = ly + i*20; ctx.fillStyle = s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); });
-}
+function saveMeals(list){ try{ localStorage.setItem(mealsKey(), JSON.stringify(list)); }catch(e){} }
+function renderMeals(){ const list=loadMeals(); const container=$('mealList'); container.innerHTML=''; let totalCalories=0, totalPortions=0; list.slice().reverse().forEach(m=>{ const row=document.createElement('div'); row.className='todo-item'; row.innerHTML = `<div style="text-align:left"><strong>${escapeHtml(m.name)}</strong><div style="font-size:12px;color:${'#6b7280'}">${escapeHtml(m.portion)} unit • ${escapeHtml(m.calories)} kcal</div></div><div><button class="btn" style="background:#ef4444" data-delete="${m.id}">Delete</button></div>`; container.appendChild(row); totalCalories += Number(m.calories||0); totalPortions += Number(m.portion||0); }); $('todayCalories').textContent=totalCalories; $('todayPortions').textContent=totalPortions; drawMealsPie(totalCalories); }
+$('addMealBtn').addEventListener('pointerup', ()=>{ const name=$('mealName').value.trim(); const portion=Number($('mealPortion').value||0); const calories=Number($('mealCalories').value||0); if(!name) return alert('Enter meal name'); const list=loadMeals(); list.push({id:Date.now(), name, portion, calories, ts:Date.now()}); saveMeals(list); $('mealName').value=''; $('mealPortion').value=''; $('mealCalories').value=''; renderMeals(); if(document.activeElement) document.activeElement.blur(); });
+$('mealList').addEventListener('pointerup', function(e){ const btn=e.target.closest('button[data-delete]'); if(!btn) return; const id=Number(btn.getAttribute('data-delete')); if(!id) return; let list=loadMeals(); list=list.filter(m=>m.id!==id); saveMeals(list); renderMeals(); });
+function drawMealsPie(totalCalories){ const c=$('mealsPie'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const target=2000; const consumed=Math.max(0,Math.min(totalCalories||0,target)); const remaining=Math.max(0,target-consumed); const slices=[{label:'Consumed',value:consumed,color:'#ff9f43'},{label:'Remaining',value:remaining,color:'#e9eefb'}]; const total=Math.max(1,slices.reduce((s,x)=>s+x.value,0)); const cx=c.width/2, cy=c.height/2, r=Math.min(c.width,c.height)*0.38; let start=-Math.PI/2; slices.forEach(s=>{ const ang=(s.value/total)*Math.PI*2; const end=start+ang; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=s.color; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); start=end; }); ctx.fillStyle='#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14); const lx=12, ly=12; slices.forEach((s,i)=>{ const y=ly+i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); }); }
 
-/* ---------- Tips display ---------- */
+/* ---------- Tips ---------- */
 const mealTips = [
 "Eat a colorful plate — fruits and vegetables of different colors.","Include lean protein with every meal (eggs, legumes, fish, chicken).","Choose whole grains over refined grains.","Snack on nuts and seeds instead of chips.","Drink water before meals to prevent overeating.","Favor cooking at home to control ingredients.","Keep portion sizes moderate and consistent.","Include a source of healthy fat (avocado, olive oil).","Limit sugary drinks and choose water or herbal tea.","Eat fiber-rich foods to support digestion and satiety.","Plan meals ahead to avoid impulsive fast food.","Start the day with a balanced breakfast.","Combine protein and carbs for sustained energy.","Add vegetables to sandwiches and omelettes.","Use spices and herbs to flavor instead of salt.","Opt for low-fat dairy or dairy alternatives if needed.","Choose grilled, baked, or steamed foods over fried.","Choose fresh fruit or yogurt for dessert.","Include legumes as a low-cost protein option.","Rotate your protein sources for variety.","Read labels and avoid trans fats or excessive sugar.","Use healthy swaps like zucchini noodles for pasta.","Prepare simple salads with mixed greens and seeds.","Use hummus or Greek yogurt dips for veggies.","Keep healthy snacks visible and accessible.","Reduce processed meat intake; choose lean options.","Balance treats with healthier daily choices.","Have a small protein-rich snack before workouts.","Limit late-night heavy meals that disrupt sleep.","Add chia or flax seeds to smoothies for omega-3s.","Use brown rice or quinoa instead of white rice.","Include fermented foods for gut health (yogurt, idli).","Avoid skipping meals which can lead to overeating later.","Cook in batches and freeze portions for busy days.","Use baking, grilling or air-frying instead of deep frying.","Pick whole fruit instead of fruit juice.","Incorporate leafy greens daily (spinach, kale).","Opt for unsweetened nut butters and spreads.","Be mindful when eating — chew slowly and enjoy.","Limit sugary cereals; choose oats or muesli.","Choose beans and lentils as protein-rich mains.","Use citrus and vinegar for dressings instead of heavy creams.","Try meatless meals a few times a week.","Rotate seasonal vegetables for freshness and nutrients.","Store pre-cut veggies for faster healthy snacking.","Watch portion sizes of calorie-dense foods like nuts.","Seek balance: carbs, protein, fats, fiber every meal.","Plan a weekly menu to reduce decision fatigue."
 ];
-$('toggleTipsBtn').addEventListener('pointerup', ()=>{
-  const c = $('tipsCont'); if(c.style.display==='block'){ c.style.display='none'; c.innerHTML=''; return; }
-  c.innerHTML = mealTips.map((t,i)=>`<div style="padding:6px 4px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${escapeHtml(t)}</div>`).join('');
-  c.style.display='block';
+$('toggleTipsBtn').addEventListener('pointerup', ()=>{ const c=$('tipsCont'); if(c.style.display==='block'){ c.style.display='none'; c.innerHTML=''; return; } c.innerHTML = mealTips.map((t,i)=>`<div style="padding:6px 4px;border-bottom:1px solid #f1f5ff"><strong>${i+1}.</strong> ${escapeHtml(t)}</div>`).join(''); c.style.display='block'; });
+
+/* ---------- File handling purely in HTML (input + drag/drop + manual URL/base64) ---------- */
+const fileStore = []; // {name,type,size,blob,url}
+function showFilesUI(){ const container = $('fileList'); if(!container) return; container.style.display='block'; container.innerHTML=''; fileStore.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; const name = escapeHtml(f.name); const size = Math.round((f.size||0)/1024); const type = escapeHtml(f.type||'unknown'); row.innerHTML = `<div><div style="font-weight:800">${name}</div><div style="font-size:12px;color:#6b7280">${size} KB • ${type}</div></div>`; const actions=document.createElement('div'); const v=document.createElement('button'); v.className='view'; v.textContent='Preview'; v.addEventListener('pointerup', ()=>{ if(f.url) { try{ window.open(f.url,'_blank'); }catch(e){ alert('Preview not available'); } } else { alert('No preview available'); } }); const r=document.createElement('button'); r.className='rem'; r.textContent='Remove'; r.addEventListener('pointerup', ()=>{ // revoke blob url if any
+      if(f.url && f.url.startsWith('blob:')) URL.revokeObjectURL(f.url);
+      fileStore.splice(i,1);
+      showFilesUI();
+    }); actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); container.appendChild(row); }); }
+
+// Click / native picker
+function openPicker(){ const input=$('fileInput'); try{ input.value=''; input.click(); // if blocked: user can use dropzone or manual URL
+    setTimeout(()=>{ if(!input.files.length) { /* picker may be blocked in some WebViews; user can drag/drop or paste URL below */ } },600);
+  }catch(e){ /* fallback */ } }
+$('fileInput').addEventListener('change', function(){ const files=Array.from(this.files||[]); if(!files.length) return; files.forEach(f=>{ const url = URL.createObjectURL(f); fileStore.push({name:f.name,type:f.type,size:f.size,blob:f,url}); }); showFilesUI(); });
+
+// Drag & drop
+const drop = $('settingsPanel') ? (function(){ const dz=$('dropzone'); if(!dz) return null; dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.background='#eef2ff'; }); dz.addEventListener('dragleave', e=>{ e.preventDefault(); dz.style.background='#fff'; }); dz.addEventListener('drop', e=>{ e.preventDefault(); dz.style.background='#fff'; const dt = e.dataTransfer; if(!dt) return; const files = Array.from(dt.files||[]); files.forEach(f=>{ const url = URL.createObjectURL(f); fileStore.push({name:f.name,type:f.type,size:f.size,blob:f,url}); }); showFilesUI(); }); return dz; })() : null;
+
+// Manual URL / base64 input
+$('addManual').addEventListener('pointerup', async ()=>{
+  const v = $('manualUrl').value.trim();
+  if(!v) { $('manualStatus').textContent = 'Paste a file URL or data:...'; return; }
+  $('manualStatus').textContent = 'Adding...';
+  try{
+    if(v.startsWith('data:')){ // base64 data URI
+      // parse and convert to blob
+      const match = v.match(/^data:([^;]+);base64,(.*)$/);
+      if(!match) { $('manualStatus').textContent='Invalid data URI'; return; }
+      const mime = match[1]; const b64 = match[2]; const bytes = atob(b64); const arr = new Uint8Array(bytes.length); for(let i=0;i<bytes.length;i++) arr[i]=bytes.charCodeAt(i); const blob = new Blob([arr], {type:mime}); const name = 'pasted-file.' + (mime.split('/')[1]||'bin'); const url = URL.createObjectURL(blob); fileStore.push({name, type:mime, size:blob.size, blob, url}); $('manualStatus').textContent = 'Added base64 file: ' + name; showFilesUI(); return;
+    }
+    // treat as URL: try fetch and create blob
+    const resp = await fetch(v);
+    if(!resp.ok) { $('manualStatus').textContent = 'Failed to fetch URL'; return; }
+    const blob = await resp.blob(); const name = v.split('/').pop().split('?')[0] || ('file-'+Date.now()); const url = URL.createObjectURL(blob); fileStore.push({name, type:blob.type, size:blob.size, blob, url}); $('manualStatus').textContent = 'Added URL file: ' + name; showFilesUI();
+  }catch(err){ $('manualStatus').textContent = 'Could not add file: ' + (err && err.message ? err.message : 'error'); }
+  $('manualUrl').value='';
 });
 
-/* ---------- File picker (browser + WebViewer signal) ---------- */
-function openPicker(){
-  const input = $('fileInput');
-  try{
-    input.value=''; input.click();
-    setTimeout(()=>{ if(!input.files.length) sendToApp({action:'REQUEST_FILE_PICKER'}); }, 600);
-  }catch(e){ sendToApp({action:'REQUEST_FILE_PICKER'}); }
-}
-$('fileInput').addEventListener('change', function(){
-  const files = Array.from(this.files||[]);
-  if(!files.length) return;
-  const box = $('fileList'); box.style.display='block'; box.innerHTML='';
-  files.forEach((f,i)=>{ const row=document.createElement('div'); row.className='file-row'; row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round(f.size/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div>`; const actions=document.createElement('div'); const v=document.createElement('button'); v.className='view'; v.textContent='View'; v.addEventListener('pointerup', ()=>{ try{ const url = URL.createObjectURL(f); window.open(url,'_blank'); setTimeout(()=>URL.revokeObjectURL(url),60000); }catch(e){ alert('Cannot open file preview'); } }); const r=document.createElement('button'); r.className='rem'; r.textContent='Remove'; r.addEventListener('pointerup', ()=>{ files.splice(i,1); row.remove(); sendToApp({medicalFiles: files.map(x=>({name:x.name,size:x.size,type:x.type}))}); }); actions.appendChild(v); actions.appendChild(r); row.appendChild(actions); box.appendChild(row); });
-  sendToApp({medicalFiles: files.map(f=>({name:f.name,size:f.size,type:f.type}))});
-});
-function sendToApp(obj){
-  const json = JSON.stringify(obj);
-  try{ if(window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') window.AppInventor.setWebViewString(json); }catch(e){}
-  try{ if(window.WebViewInterface && typeof window.WebViewInterface.postMessage === 'function') window.WebViewInterface.postMessage(json); }catch(e){}
-  try{ if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.AppInventor && typeof window.webkit.messageHandlers.AppInventor.postMessage === 'function') window.webkit.messageHandlers.AppInventor.postMessage(json); }catch(e){}
-}
+// Expose files to host app if needed (JSON metadata)
+function exportFilesMetadata(){ return fileStore.map(f=>({name:f.name,size:f.size,type:f.type,url:f.url||''})); }
+
+/* ---------- File fallback note:
+   - This solution uses native file input (works in browsers).
+   - If WebViewer blocks the OS picker, the drag/drop and manual URL/base64 allow files to be added using HTML alone.
+   - For large files from remote URLs, the fetch() will download them into memory (mind mobile limits).
+*/
+
+/* ---------- Small visuals: mood, water, sleep ---------- */
+function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const value=Number($('moodValue').textContent||5); const w=(value/10)*(c.width-40); ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#5063f2'; ctx.fillRect(20,c.height/2-16,w,32); ctx.fillStyle='#333'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${value}`,20,c.height/2-26); }
+$('enterMood').addEventListener('pointerup', ()=>{ const v=prompt('Enter mood 1-10','5'); const n=Number(v); if(n>=1 && n<=10){ $('moodValue').textContent = n; drawMood(); } else alert('Enter a number 1-10'); });
+
+function drawWater(){ const c=$('waterCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal=Number($('goalWater').value||0); const consumed=Number(window._lt_water||0); const ratio=goal>0?Math.min(consumed/goal,1):0; const w=(c.width-40)*ratio; ctx.fillStyle='#34d399'; ctx.fillRect(20,c.height/2-10,w,20); ctx.fillStyle='#e6e8f2'; ctx.fillRect(20+w,c.height/2-10,c.width-40-w,20); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`,20,c.height/2-18); }
+
+function drawMealsPie(totalCalories){ const c=$('mealsPie'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const target=2000; const consumed=Math.max(0,Math.min(totalCalories||0,target)); const remaining=Math.max(0,target-consumed); const slices=[{label:'Consumed',value:consumed,color:'#ff9f43'},{label:'Remaining',value:remaining,color:'#e9eefb'}]; const tot=Math.max(1,slices.reduce((s,x)=>s+x.value,0)); const cx=c.width/2, cy=c.height/2, r=Math.min(c.width,c.height)*0.38; let start=-Math.PI/2; slices.forEach(s=>{ const ang=(s.value/tot)*Math.PI*2; const end=start+ang; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=s.color; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); start=end; }); ctx.fillStyle='#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14); const lx=12, ly=12; slices.forEach((s,i)=>{ const y=ly+i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); }); }
+
+/* ---------- Initialization: hydration, meals, settings ---------- */
+(function boot(){
+  try{ window._lt_water = Number(localStorage.getItem('lt_water')||0); }catch(e){ window._lt_water = 0; }
+  $('waterConsumed').textContent = window._lt_water; $('waterRemaining').textContent = Math.max(Number($('goalWater').value||0)-window._lt_water,0);
+  renderMeals(); drawWater(); drawMealsPie(0); drawMood(); drawSleep();
+})();
+
+/* ---------- Hook up meal delete via delegation already done in renderMeals listener above ---------- */
+/* ---------- Ensure cards are keyboard accessible ---------- */
+document.querySelectorAll('.card').forEach(card=> card.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); card.click(); } }));
+
+// Export metadata API if host app wants to read selected files
+window.getSelectedFilesMetadata = function(){ return exportFilesMetadata(); };
+
+// Allow host app to postMessage back to page with files metadata (if needed)
 window.addEventListener('message', e=>{
   try{
     const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-    if(data && data.medicalFiles) displayFilesFromApp(data.medicalFiles);
+    if(data && data.action === 'IMPORT_FILES' && Array.isArray(data.files)){
+      // data.files expected: [{name,size,type,uri (optional)}]
+      data.files.forEach(f=>{
+        fileStore.push({name:f.name,type:f.type,size:f.size, url:f.uri||''});
+      });
+      showFilesUI();
+    }
   }catch(err){}
 });
-function displayFilesFromApp(list){
-  const container = $('fileList'); container.style.display='block'; container.innerHTML='';
-  list.forEach(f=>{
-    const row = document.createElement('div'); row.className='file-row';
-    row.innerHTML = `<div><div style="font-weight:800">${escapeHtml(f.name)}</div><div style="font-size:12px;color:${'#6b7280'}">${Math.round((f.size||0)/1024)} KB • ${escapeHtml(f.type||'unknown')}</div></div><div><button class="view" onclick="openUri('${escapeHtml(f.uri||'')}')">Open</button><button class="rem" onclick="this.closest('.file-row').remove()">Remove</button></div>`;
-    container.appendChild(row);
-  });
-}
-function openUri(u){ if(!u) return alert('No URI'); try{ window.open(u,'_blank'); }catch(e){ alert('Cannot open URI'); } }
 
-/* ---------- Initial render ---------- */
-renderMeals(); drawWater(); drawMealsPie(0); drawMood(); drawSleep();
-
-/* ---------- Small helper draws ---------- */
-function drawMood(){ const c=$('moodCanvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const value = Number($('moodValue').textContent||5); const w=(value/10)*(c.width-40); ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#5063f2'; ctx.fillRect(20,c.height/2-16,w,32); ctx.fillStyle='#333'; ctx.font='14px system-ui'; ctx.fillText(`Mood: ${value}`,20,c.height/2-26); }
-$('enterMood').addEventListener('pointerup', ()=>{ const v = prompt('Enter mood 1-10','5'); const n = Number(v); if(n>=1 && n<=10){ $('moodValue').textContent = n; drawMood(); } else alert('Enter a number 1-10'); });
-
-function drawMealsPie(totalCalories){ /* defined above but safe-call here to ensure exists */ const c = $('mealsPie'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const target = 2000; const consumed = Math.max(0, Math.min(totalCalories||0, target)); const remaining = Math.max(0, target - consumed); const slices = [{label:'Consumed', value:consumed, color:'#ff9f43'},{label:'Remaining', value:remaining, color:'#e9eefb'}]; const total = Math.max(1, slices.reduce((s,x)=>s+x.value,0)); const cx = c.width/2, cy = c.height/2, r = Math.min(c.width, c.height)*0.38; let start = -Math.PI/2; slices.forEach(s=>{ const ang=(s.value/total)*Math.PI*2; const end = start+ang; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=s.color; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); start=end; }); ctx.fillStyle='#333'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.fillText(`${consumed} kcal`, cx, cy-6); ctx.font='12px system-ui'; ctx.fillText(`of ${target} kcal`, cx, cy+14); const lx=12, ly=12; slices.forEach((s,i)=>{ const y=ly+i*20; ctx.fillStyle=s.color; ctx.fillRect(lx,y,12,12); ctx.fillStyle='#333'; ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.fillText(`${s.label} ${s.value} kcal`, lx+18, y+10); }); }
-
-function drawWater(){ const c = $('waterCanvas'); if(!c) return; const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const goal = Number($('goalWater').value||0); const consumed = Number(window._lt_water||0); const ratio = goal>0? Math.min(consumed/goal,1):0; const w = (c.width-40)*ratio; ctx.fillStyle = '#34d399'; ctx.fillRect(20, c.height/2-10, w, 20); ctx.fillStyle = '#e6e8f2'; ctx.fillRect(20+w, c.height/2-10, c.width-40-w, 20); ctx.fillStyle = '#333'; ctx.font='12px system-ui'; ctx.fillText(`Consumed ${consumed} ml / Goal ${goal} ml`, 20, c.height/2-18); }
-
-/* ---------- Expose small API ---------- */
-window.LifeTrack = { renderMeals, sendToApp };
-
-/* ---------- End ---------- */
 </script>
 </body>
 </html>
